@@ -28,7 +28,7 @@ import {
   Phone,
   ShieldCheck,
   UserPlus,
-  UserRound,
+  User,
   KeyRound,
   Hash,
   BadgeCheck,
@@ -277,7 +277,7 @@ export default function UserCreate() {
               <div className="space-y-2">
                 <Label htmlFor="name">Full name</Label>
                 <div className="relative">
-                  <UserRound className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
+                  <User className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
                   <Input
                     id="name"
                     value={form.name}

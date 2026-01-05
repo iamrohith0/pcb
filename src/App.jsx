@@ -10,6 +10,30 @@ import Dashboard from './pages/dashboard/Dashboard.jsx'
 import DashboardLayout from './components/layout/DashboardLayout.jsx'
 import NotFound from './pages/not-found/NotFound.jsx'
 
+// Admin Pages
+import UsersList from './pages/admin/users/UsersList.jsx'
+import UserCreate from './pages/admin/users/UserCreate.jsx'
+import UserDetails from './pages/admin/users/UserDetails.jsx'
+import UserEdit from './pages/admin/users/UserEdit.jsx'
+import RolesList from './pages/admin/roles/RolesList.jsx'
+import RoleCreate from './pages/admin/roles/RoleCreate.jsx'
+import RoleDetails from './pages/admin/roles/RoleDetails.jsx'
+import RoleEdit from './pages/admin/roles/RoleEdit.jsx'
+import PermissionsMatrix from './pages/admin/permissions/PermissionsMatrix.jsx'
+import PermissionCreate from './pages/admin/permissions/PermissionCreate.jsx'
+import PermissionAudit from './pages/admin/permissions/PermissionAudit.jsx'
+import AdminSettings from './pages/admin/settings/AdminSettings.jsx'
+import IntegrationsAdmin from './pages/admin/settings/IntegrationsAdmin.jsx'
+import IPWhitelist from './pages/admin/settings/IPWhitelist.jsx'
+import NotificationRules from './pages/admin/settings/NotificationRules.jsx'
+import MaterialMaster from './pages/admin/masters/MaterialMaster.jsx'
+import ProcessMaster from './pages/admin/masters/ProcessMaster.jsx'
+import UOMMaster from './pages/admin/masters/UOMMaster.jsx'
+import DefectCodes from './pages/admin/masters/DefectCodes.jsx'
+import AuditLogList from './pages/admin/audit-logs/AuditLogList.jsx'
+import AuditLogDetails from './pages/admin/audit-logs/AuditLogDetails.jsx'
+import ExportAuditLogs from './pages/admin/audit-logs/ExportAuditLogs.jsx'
+
 // Sales Pages
 import CustomersList from './pages/sales/customers/CustomersList.jsx'
 import CustomerCreate from './pages/sales/customers/CustomerCreate.jsx'
@@ -258,8 +282,29 @@ function App() {
             <Route path="procurement/purchase-orders" element={<div>Purchase Orders Page - Coming Soon</div>} />
             
             {/* Admin Routes */}
-            <Route path="admin/users" element={<div>Users Page - Coming Soon</div>} />
-            <Route path="admin/settings" element={<div>Settings Page - Coming Soon</div>} />
+            <Route path="admin/users" element={<UsersList />} />
+            <Route path="admin/users/create" element={<UserCreate />} />
+            <Route path="admin/users/:id" element={<UserDetails />} />
+            <Route path="admin/users/:id/edit" element={<UserEdit />} />
+            <Route path="admin/roles" element={<RolesList />} />
+            <Route path="admin/roles/create" element={<RoleCreate />} />
+            <Route path="admin/roles/:id" element={<RoleDetails />} />
+            <Route path="admin/roles/:id/edit" element={<RoleEdit />} />
+            <Route path="admin/permissions" element={<PermissionsMatrix />} />
+            <Route path="admin/permissions/create" element={<PermissionCreate />} />
+            <Route path="admin/permissions/audit" element={<PermissionAudit />} />
+            <Route path="admin/settings" element={<AdminSettings />} />
+            <Route path="admin/settings/integrations" element={<IntegrationsAdmin />} />
+            <Route path="admin/settings/ip-whitelist" element={<IPWhitelist />} />
+            <Route path="admin/settings/notifications" element={<NotificationRules />} />
+            <Route path="admin/masters" element={<MaterialMaster />} />
+            <Route path="admin/masters/materials" element={<MaterialMaster />} />
+            <Route path="admin/masters/processes" element={<ProcessMaster />} />
+            <Route path="admin/masters/uom" element={<UOMMaster />} />
+            <Route path="admin/masters/defects" element={<DefectCodes />} />
+            <Route path="admin/audit-logs" element={<AuditLogList />} />
+            <Route path="admin/audit-logs/:id" element={<AuditLogDetails />} />
+            <Route path="admin/audit-logs/export" element={<ExportAuditLogs />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

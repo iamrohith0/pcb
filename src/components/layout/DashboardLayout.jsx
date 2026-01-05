@@ -233,8 +233,9 @@ export default function DashboardLayout() {
       items: [
         { to: "/dashboard/admin/users", label: "Users", icon: UsersIcon },
         { to: "/dashboard/admin/roles", label: "Roles & Permissions", icon: ShieldCheck },
+        { to: "/dashboard/admin/permissions", label: "Permissions", icon: ShieldCheck },
         { to: "/dashboard/admin/settings", label: "Settings", icon: Settings },
-        { to: "/dashboard/admin/master-data", label: "Master Data", icon: BookOpen },
+        { to: "/dashboard/admin/masters", label: "Master Data", icon: BookOpen },
         { to: "/dashboard/admin/audit-logs", label: "Audit Logs", icon: FileText },
       ],
     };
