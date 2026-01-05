@@ -23,6 +23,18 @@ import SalesOrderCreate from './pages/sales/orders/SalesOrderCreate.jsx'
 import SalesOrderDetails from './pages/sales/orders/SalesOrderDetails.jsx'
 import SalesOrderEdit from './pages/sales/orders/SalesOrderEdit.jsx'
 
+// RFQ Pages
+import RFQList from './pages/sales/rfq/RFQList.jsx'
+import RFQCreate from './pages/sales/rfq/RFQCreate.jsx'
+import RFQDetails from './pages/sales/rfq/RFQDetails.jsx'
+import RFQEdit from './pages/sales/rfq/RFQEdit.jsx'
+
+// Invoice Pages
+import InvoiceList from './pages/sales/invoices/InvoiceList.jsx'
+import InvoiceCreate from './pages/sales/invoices/InvoiceCreate.jsx'
+import InvoiceDetails from './pages/sales/invoices/InvoiceDetails.jsx'
+import InvoicePrint from './pages/sales/invoices/InvoicePrint.jsx'
+
 // Protected route wrapper
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth()
@@ -80,6 +92,18 @@ function App() {
             <Route path="sales/orders/create" element={<SalesOrderCreate />} />
             <Route path="sales/orders/:id/edit" element={<SalesOrderEdit />} />
             <Route path="sales/orders/:id" element={<SalesOrderDetails />} />
+            
+            {/* RFQ Routes */}
+            <Route path="sales/rfq" element={<RFQList />} />
+            <Route path="sales/rfq/create" element={<RFQCreate />} />
+            <Route path="sales/rfq/:id" element={<RFQDetails />} />
+            <Route path="sales/rfq/:id/edit" element={<RFQEdit />} />
+            
+            {/* Invoice Routes */}
+            <Route path="sales/invoices" element={<InvoiceList />} />
+            <Route path="sales/invoices/create" element={<InvoiceCreate />} />
+            <Route path="sales/invoices/:id" element={<InvoiceDetails />} />
+            <Route path="sales/invoices/:id/print" element={<InvoicePrint />} />
             
             {/* Engineering Routes */}
             <Route path="engineering/dfm" element={<div>DFM Check Page - Coming Soon</div>} />

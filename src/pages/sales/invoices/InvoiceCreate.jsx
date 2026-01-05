@@ -29,7 +29,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 import customersService from "@/services/sales/customers.service";
 import invoicesService from "@/services/sales/invoices.service";
-import salesOrdersService from "@/services/sales/orders.service"; // optional: if you have sales orders
+import salesOrdersService from "@/services/sales/salesOrders.service"; // optional: if you have sales orders
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");

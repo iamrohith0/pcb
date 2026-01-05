@@ -22,8 +22,8 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
-import rfqApi from "@/services/rfq.service";
-import customersApi from "@/services/customers.service";
+import rfqApi from "@/services/sales/rfq.service";
+import customersApi from "@/services/sales/customers.service";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");

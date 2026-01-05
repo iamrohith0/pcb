@@ -24,7 +24,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
-import rfqApi from "@/services/rfq.service";
+import rfqApi from "@/services/sales/rfq.service";
 
 import {
   AlertDialog,

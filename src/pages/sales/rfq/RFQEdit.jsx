@@ -22,7 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
-import rfqApi from "@/services/rfq.service";
+import rfqApi from "@/services/sales/rfq.service";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");

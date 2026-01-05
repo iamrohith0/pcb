@@ -25,8 +25,8 @@ import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
-import rfqApi from "@/services/rfq.service";
-import ConfirmationDialog from "@/components/ConfirmationDialog.jsx";
+import rfqApi from "@/services/sales/rfq.service";
+import ConfirmationDialog from "@/components/dialogs/ConfirmationDialog.jsx";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
