@@ -41,7 +41,6 @@ import {
   Wrench,
   Settings2,
   Printer,
-  Drill,
   Droplet,
 } from "lucide-react";
 
@@ -87,7 +86,7 @@ const OP_ICON = {
   cam: Settings2,
   imaging: Printer,
   etching: Droplet,
-  drilling: Drill,
+  drilling: Wrench,
   pth: Wrench,
   plating: Layers,
   aoi: ScanEye,

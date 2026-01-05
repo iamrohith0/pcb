@@ -58,6 +58,28 @@ import StackupCreate from './pages/engineering/stackup/StackupCreate.jsx'
 import StackupDetails from './pages/engineering/stackup/StackupDetails.jsx'
 import MaterialRules from './pages/engineering/stackup/MaterialRules.jsx'
 
+// Production Pages
+import WorkOrdersList from './pages/production/work-orders/WorkOrdersList.jsx'
+import WorkOrderCreate from './pages/production/work-orders/WorkOrderCreate.jsx'
+import WorkOrderDetails from './pages/production/work-orders/WorkOrderDetails.jsx'
+import WorkOrderIssueMaterials from './pages/production/work-orders/WorkOrderIssueMaterials.jsx'
+import WIPDashboard from './pages/production/wip/WIPDashboard.jsx'
+import WIPHistory from './pages/production/wip/WIPHistory.jsx'
+import WIPHoldRelease from './pages/production/wip/WIPHoldRelease.jsx'
+import WIPMove from './pages/production/wip/WIPMove.jsx'
+import CapacityDashboard from './pages/production/capacity/CapacityDashboard.jsx'
+import BottleneckAnalysis from './pages/production/capacity/BottleneckAnalysis.jsx'
+import OEETracking from './pages/production/capacity/OEETracking.jsx'
+import UtilizationReport from './pages/production/capacity/UtilizationReport.jsx'
+import RoutingList from './pages/production/routing/RoutingList.jsx'
+import RoutingCreate from './pages/production/routing/RoutingCreate.jsx'
+import RoutingDetails from './pages/production/routing/RoutingDetails.jsx'
+import RoutingSteps from './pages/production/routing/RoutingSteps.jsx'
+import ScheduleBoard from './pages/production/scheduling/ScheduleBoard.jsx'
+import MachineAllocation from './pages/production/scheduling/MachineAllocation.jsx'
+import ProductionCalendar from './pages/production/scheduling/ProductionCalendar.jsx'
+import ShiftPlanning from './pages/production/scheduling/ShiftPlanning.jsx'
+
 // Inventory Pages
 import ItemsList from './pages/inventory/items/ItemsList.jsx'
 import ItemCreate from './pages/inventory/items/ItemCreate.jsx'
@@ -180,7 +202,26 @@ function App() {
             <Route path="engineering/bom" element={<Navigate to="/dashboard/inventory/bom" replace />} />
             
             {/* Production Routes */}
-            <Route path="production/work-orders" element={<div>Work Orders Page - Coming Soon</div>} />
+            <Route path="production/work-orders" element={<WorkOrdersList />} />
+            <Route path="production/work-orders/create" element={<WorkOrderCreate />} />
+            <Route path="production/work-orders/:id" element={<WorkOrderDetails />} />
+            <Route path="production/work-orders/:id/issue-materials" element={<WorkOrderIssueMaterials />} />
+            <Route path="production/wip" element={<WIPDashboard />} />
+            <Route path="production/wip/history" element={<WIPHistory />} />
+            <Route path="production/wip/hold-release" element={<WIPHoldRelease />} />
+            <Route path="production/wip/move" element={<WIPMove />} />
+            <Route path="production/capacity" element={<CapacityDashboard />} />
+            <Route path="production/capacity/bottleneck" element={<BottleneckAnalysis />} />
+            <Route path="production/capacity/oee" element={<OEETracking />} />
+            <Route path="production/capacity/utilization" element={<UtilizationReport />} />
+            <Route path="production/routing" element={<RoutingList />} />
+            <Route path="production/routing/create" element={<RoutingCreate />} />
+            <Route path="production/routing/:id" element={<RoutingDetails />} />
+            <Route path="production/routing/:id/steps" element={<RoutingSteps />} />
+            <Route path="production/scheduling" element={<ScheduleBoard />} />
+            <Route path="production/scheduling/machines" element={<MachineAllocation />} />
+            <Route path="production/scheduling/calendar" element={<ProductionCalendar />} />
+            <Route path="production/scheduling/shifts" element={<ShiftPlanning />} />
             
             {/* Quality Routes */}
             <Route path="quality/inspections" element={<div>Inspections Page - Coming Soon</div>} />
