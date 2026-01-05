@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCBxpress ERP - Local Server</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+            background-color: #f3f4f6;
+            color: #334155;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+        }
+        h1 {
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+        }
+        .instructions {
+            background-color: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        .warning {
+            background-color: #fef3c7;
+            border-left-color: #f59e0b;
+        }
+        .error {
+            background-color: #fee2e2;
+            border-left-color: #ef4444;
+        }
+        code {
+            background-color: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin: 10px;
+        }
+        .btn:hover {
+            background-color: #2563eb;
+        }
+        .btn-secondary {
+            background-color: #64748b;
+        }
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+        .status {
+            margin: 1rem 0;
+            font-weight: 500;
+        }
+        .success { color: #16a34a; }
+        .error-text { color: #dc2626; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 PCBxpress ERP Local Server</h1>
+        
+        <div class="instructions warning">
+            <strong>⚠️ Important:</strong> The error you're seeing occurs because browsers can't properly serve static assets when opening HTML files directly with <code>file://</code> protocol.
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Solutions:</h3>
+            
+            <h4>Option 1: Use a Local HTTP Server (Recommended)</h4>
+            <p>Open your terminal in the project directory and run one of these commands:</p>
+            
+            <div style="margin: 1rem 0;">
+                <button class="btn" onclick="copyCommand('python -m http.server 8000')">Python 3</button>
+                <button class="btn" onclick="copyCommand('python -m SimpleHTTPServer 8000')">Python 2</button>
+                <button class="btn" onclick="copyCommand('npx http-server -p 8000')">Node.js (http-server)</button>
+                <button class="btn" onclick="copyCommand('npx serve -s dist')">Node.js (serve)</button>
+            </div>
+            
+            <p>Then visit: <a href="http://localhost:8000" target="_blank">http://localhost:8000</a></p>
+
+            <h4>Option 2: Use VS Code Live Server</h4>
+            <p>If you have VS Code, install the "Live Server" extension and right-click on <code>dist/index.html</code> → "Open with Live Server"</p>
+
+            <h4>Option 3: Use Built-in PHP Server</h4>
+            <div style="margin: 1rem 0;">
+                <button class="btn" onclick="copyCommand('php -S localhost:8000')">PHP Server</button>
+            </div>
+        </div>
+
+        <div class="instructions error">
+            <h3>❌ Current Issue:</h3>
+            <p>The error <code>Refused to apply style from 'http://127.0.0.1:5500/assets/index-B-4hbJDj.css' because its MIME type ('text/html') is not a supported stylesheet MIME type</code> happens because:</p>
+            <ul style="text-align: left; margin-left: 20px;">
+                <li>The server is returning HTML content instead of CSS/JS files</li>
+                <li>This usually happens with incorrect routing or server configuration</li>
+                <li>The assets are being served with wrong MIME types</li>
+            </ul>
+        </div>
+
+        <div class="status" id="status"></div>
+
+        <div style="margin-top: 2rem;">
+            <button class="btn btn-secondary" onclick="checkFiles()">Check if dist files exist</button>
+            <button class="btn" onclick="window.open('dist/index.html', '_blank')">Open dist/index.html</button>
+        </div>
+    </div>
+
+    <script>
+        function copyCommand(command) {
+            navigator.clipboard.writeText(command).then(() => {
+                showStatus(`Command copied: ${command}`, 'success');
+            }).catch(err => {
+                showStatus('Failed to copy command', 'error-text');
+            });
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+
+        function checkFiles() {
+            const files = [
+                'dist/index.html',
+                'dist/assets/index-krDXi8oG.js',
+                'dist/assets/index-B-4hbJDj.css'
+            ];
+            
+            files.forEach(file => {
+                fetch(file, { method: 'HEAD' })
+                    .then(response => {
+                        if (response.ok) {
+                            showStatus(`${file}: ✓ Found`, 'success');
+                        } else {
+                            showStatus(`${file}: ✗ Not found (${response.status})`, 'error-text');
+                        }
+                    })
+                    .catch(err => {
+                        showStatus(`${file}: ✗ Error checking file`, 'error-text');
+                    });
+            });
+        }
+
+        // Check if we're running on a proper server
+        window.addEventListener('load', () => {
+            if (window.location.protocol === 'file:') {
+                showStatus('⚠️ Running on file:// protocol - use a local server for best results', 'error-text');
+            } else {
+                showStatus('✓ Running on proper server protocol', 'success');
+            }
+        });
+    </script>
+</body>
+</html>

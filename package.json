@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "serve:dist": "node serve-dist.js",
+    "serve:python": "python -m http.server 8000",
+    "serve:node": "npx http-server -p 8000",
+    "serve:live": "npx serve -s dist"
   },
   "dependencies": {
     "@mantine/core": "^8.2.7",
