@@ -118,6 +118,20 @@ import InvoiceCreate from './pages/sales/invoices/InvoiceCreate.jsx'
 import InvoiceDetails from './pages/sales/invoices/InvoiceDetails.jsx'
 import InvoicePrint from './pages/sales/invoices/InvoicePrint.jsx'
 
+// Logistics Pages
+import DispatchChecklist from './pages/logistics/dispatch/DispatchChecklist.jsx'
+import DispatchCreate from './pages/logistics/dispatch/DispatchCreate.jsx'
+import DispatchDetails from './pages/logistics/dispatch/DispatchDetails.jsx'
+import DispatchQueue from './pages/logistics/dispatch/DispatchQueue.jsx'
+import ShipmentsList from './pages/logistics/shipments/ShipmentsList.jsx'
+import ShipmentCreate from './pages/logistics/shipments/ShipmentCreate.jsx'
+import ShipmentDetails from './pages/logistics/shipments/ShipmentDetails.jsx'
+import ShipmentDocuments from './pages/logistics/shipments/ShipmentDocuments.jsx'
+import TrackingDashboard from './pages/logistics/tracking/TrackingDashboard.jsx'
+import DeliveryStatus from './pages/logistics/tracking/DeliveryStatus.jsx'
+import PODUpload from './pages/logistics/tracking/PODUpload.jsx'
+import CarrierIntegration from './pages/logistics/tracking/CarrierIntegration.jsx'
+
 // Engineering Pages
 import DFMQueue from './pages/engineering/dfm/DFMQueue.jsx'
 import DFMReview from './pages/engineering/dfm/DFMReview.jsx'
@@ -406,6 +420,20 @@ function App() {
             <Route path="procurement/pricing/rule-engine" element={<PriceRuleEngine />} />
             <Route path="procurement/pricing/lead-time" element={<LeadTimeMatrix />} />
             <Route path="procurement/pricing/cost-history" element={<CostHistory />} />
+            
+            {/* Logistics Routes */}
+            <Route path="logistics/dispatch" element={<DispatchChecklist />} />
+            <Route path="logistics/dispatch/create" element={<DispatchCreate />} />
+            <Route path="logistics/dispatch/queue" element={<DispatchQueue />} />
+            <Route path="logistics/dispatch/details" element={<DispatchDetails />} />
+            <Route path="logistics/shipments" element={<ShipmentsList />} />
+            <Route path="logistics/shipments/create" element={<ShipmentCreate />} />
+            <Route path="logistics/shipments/details" element={<ShipmentDetails />} />
+            <Route path="logistics/shipments/documents" element={<ShipmentDocuments />} />
+            <Route path="logistics/tracking" element={<TrackingDashboard />} />
+            <Route path="logistics/tracking/status" element={<DeliveryStatus />} />
+            <Route path="logistics/tracking/pod" element={<PODUpload />} />
+            <Route path="logistics/tracking/carriers" element={<CarrierIntegration />} />
             
             {/* Admin Routes */}
             <Route path="admin/users" element={<UsersList />} />
