@@ -393,7 +393,7 @@ export default function StackupCreate() {
       });
 
       // Navigate to list page (create later) or back.
-      navigate("/engineering/stackup", { replace: true });
+      navigate("/dashboard/engineering/stackup", { replace: true });
     } catch {
       toast({ title: "Save failed", description: "Could not save stackup template.", variant: "destructive" });
     } finally {

@@ -323,7 +323,7 @@ export default function StackupLibrary() {
             Refresh
           </Button>
 
-          <Link to="/engineering/stackup/create">
+          <Link to="/dashboard/engineering/stackup/create">
             <Button className="gap-2 bg-[#DC2551] hover:bg-[#B02045]">
               <Plus className="h-4 w-4" />
               New Stackup
@@ -639,7 +639,7 @@ export default function StackupLibrary() {
                             variant="outline"
                             size="sm"
                             className="gap-2"
-                            onClick={() => navigate(`/engineering/stackup/${r.id}`)}
+                            onClick={() => navigate(`/dashboard/engineering/stackup/${r.id}`)}
                           >
                             <Eye className="h-4 w-4" />
                             View

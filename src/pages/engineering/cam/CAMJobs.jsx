@@ -198,7 +198,7 @@ export default function CAMJobs() {
   const openDetails = (row) => {
     const jobId = row.id ?? row._id ?? row.cam_job_id;
     if (!jobId) return;
-    navigate(`/engineering/cam/${jobId}`);
+    navigate(`/dashboard/engineering/cam/${jobId}`);
   };
 
   const apply = () => {
@@ -258,7 +258,7 @@ export default function CAMJobs() {
           </Button>
 
           <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
-            <Link to="/engineering/cam/create">
+            <Link to="/dashboard/engineering/cam/create">
               <Plus className="h-4 w-4" />
               New CAM Job
             </Link>
@@ -427,7 +427,7 @@ export default function CAMJobs() {
               <p className="mt-1 text-sm text-gray-500">Try changing filters or create a new CAM job.</p>
               <div className="mt-4 flex justify-center">
                 <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
-                  <Link to="/engineering/cam/create">
+                  <Link to="/dashboard/engineering/cam/create">
                     <Plus className="h-4 w-4" />
                     New CAM Job
                   </Link>

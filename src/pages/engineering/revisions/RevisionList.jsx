@@ -332,12 +332,12 @@ export default function RevisionList() {
   };
 
   const goCreateFrom = (row) => {
-    navigate(`/engineering/revisions/new?job=${encodeURIComponent(row.jobCode)}&base=${encodeURIComponent(row.newRevision)}`);
+    navigate(`/dashboard/engineering/revisions/create?job=${encodeURIComponent(row.jobCode)}&base=${encodeURIComponent(row.newRevision)}`);
   };
 
   const goCompare = (row) => {
     // You said you are creating RevisionCompare.jsx – this route can match that page.
-    navigate(`/engineering/revisions/compare?job=${encodeURIComponent(row.jobCode)}&from=${encodeURIComponent(row.baseRevision)}&to=${encodeURIComponent(row.newRevision)}`);
+    navigate(`/dashboard/engineering/revisions/compare?job=${encodeURIComponent(row.jobCode)}&from=${encodeURIComponent(row.baseRevision)}&to=${encodeURIComponent(row.newRevision)}`);
   };
 
   return (
@@ -363,7 +363,7 @@ export default function RevisionList() {
           </Button>
 
           <Button asChild className="gap-2 bg-[#DC2551] hover:bg-[#B02045]">
-            <Link to="/engineering/revisions/new">
+            <Link to="/dashboard/engineering/revisions/create">
               <FilePlus2 className="h-4 w-4" />
               New Revision
             </Link>
@@ -625,7 +625,7 @@ export default function RevisionList() {
                             type="button"
                             size="sm"
                             className="gap-2 bg-[#DC2551] hover:bg-[#B02045]"
-                            onClick={() => navigate(`/engineering/revisions/${r.id}`)}
+                            onClick={() => navigate(`/dashboard/engineering/revisions/${r.id}`)}
                           >
                             <Eye className="h-4 w-4" />
                             View

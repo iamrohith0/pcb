@@ -326,7 +326,7 @@ export default function PanelCreate() {
 
       toast({ title: "Saved", description: "Panel created (mock). You can wire API later." });
       // Optional: navigate to details page when you have it
-      // navigate(`/engineering/panelization/${newId}`);
+      // navigate(`/dashboard/engineering/panelization/${newId}`);
     } catch (e) {
       toast({ title: "Save failed", description: "Could not create panel.", variant: "destructive" });
     } finally {
@@ -442,7 +442,7 @@ export default function PanelCreate() {
                 </Button>
 
                 <Link
-                  to={`/engineering/dfm/review?jobId=${encodeURIComponent(job?.jobId || jobId)}`}
+                  to={`/dashboard/engineering/dfm/review?jobId=${encodeURIComponent(job?.jobId || jobId)}`}
                   className="text-xs font-semibold text-[#dc2551] hover:underline"
                 >
                   Go to DFM Review →

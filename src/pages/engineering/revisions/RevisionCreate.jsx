@@ -230,7 +230,7 @@ export default function RevisionCreate() {
       });
 
       // You can change this to your RevisionDetails route later
-      navigate(`/engineering/revisions`, { replace: true });
+      navigate(`/dashboard/engineering/revisions`, { replace: true });
     } catch (err) {
       const status = err?.response?.status;
       const msg =
@@ -622,7 +622,7 @@ export default function RevisionCreate() {
           </div>
 
           <div className="flex flex-wrap items-center justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => navigate("/engineering/revisions")}>
+            <Button type="button" variant="outline" onClick={() => navigate("/dashboard/engineering/revisions")}>
               Cancel
             </Button>
 

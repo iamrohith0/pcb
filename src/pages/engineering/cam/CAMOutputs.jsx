@@ -186,7 +186,7 @@ export default function CAMOutputs() {
   const openDetails = (row) => {
     const id = row.id ?? row._id ?? row.output_id;
     if (!id) return;
-    navigate(`/engineering/cam/outputs/${id}`);
+    navigate(`/dashboard/engineering/cam/outputs/${id}`);
   };
 
   const handleDownload = async (row, e) => {
@@ -257,7 +257,7 @@ export default function CAMOutputs() {
           </Button>
 
           <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
-            <Link to="/engineering/cam/outputs/create">
+            <Link to="/dashboard/engineering/cam/outputs/create">
               <UploadCloud className="h-4 w-4" />
               Add Output
             </Link>
@@ -404,7 +404,7 @@ export default function CAMOutputs() {
               <p className="mt-1 text-sm text-gray-500">Try changing filters or add an output package.</p>
               <div className="mt-4 flex justify-center">
                 <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
-                  <Link to="/engineering/cam/outputs/create">
+                  <Link to="/dashboard/engineering/cam/outputs/create">
                     <UploadCloud className="h-4 w-4" />
                     Add Output
                   </Link>

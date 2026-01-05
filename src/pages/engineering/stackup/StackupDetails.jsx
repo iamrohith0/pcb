@@ -234,7 +234,7 @@ export default function StackupDetails() {
         description: "Stackup template not found.",
         variant: "destructive",
       });
-      navigate("/engineering/stackup", { replace: true });
+      navigate("/dashboard/engineering/stackup", { replace: true });
     } finally {
       setLoading(false);
     }
@@ -325,7 +325,7 @@ export default function StackupDetails() {
     try {
       await stackupService.remove(id);
       toast({ title: "Deleted", description: "Stackup template deleted." });
-      navigate("/engineering/stackup", { replace: true });
+      navigate("/dashboard/engineering/stackup", { replace: true });
     } catch {
       toast({ title: "Delete failed", description: "Could not delete stackup template.", variant: "destructive" });
     } finally {
@@ -339,7 +339,7 @@ export default function StackupDetails() {
     try {
       const res = await stackupService.duplicate(id);
       toast({ title: "Duplicated", description: "Created a copy of this stackup template." });
-      navigate(`/engineering/stackup/${res.data.id}`, { replace: true });
+      navigate(`/dashboard/engineering/stackup/${res.data.id}`, { replace: true });
     } catch {
       toast({ title: "Duplicate failed", description: "Could not duplicate template.", variant: "destructive" });
     } finally {

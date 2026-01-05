@@ -215,7 +215,7 @@ export default function PanelList() {
             Refresh
           </Button>
 
-          <Link to={jobId ? `/engineering/panelization/create?jobId=${encodeURIComponent(jobId)}` : "/engineering/panelization/create"}>
+          <Link to={jobId ? `/dashboard/engineering/panelization/create?jobId=${encodeURIComponent(jobId)}` : "/dashboard/engineering/panelization/create"}>
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
               New Panel
@@ -278,7 +278,7 @@ export default function PanelList() {
                     <div className="space-y-2">
                       <div className="flex flex-wrap items-center gap-2">
                         <Link
-                          to={`/engineering/panelization/${encodeURIComponent(p.id)}?jobId=${encodeURIComponent(p.jobId || "")}`}
+                          to={`/dashboard/engineering/panelization/${encodeURIComponent(p.id)}?jobId=${encodeURIComponent(p.jobId || "")}`}
                           className="text-base font-extrabold text-gray-900 hover:underline"
                         >
                           {p.panelName || p.id}
@@ -328,13 +328,13 @@ export default function PanelList() {
 
                     <div className="flex flex-wrap items-center gap-2 sm:justify-end">
                       <Link
-                        to={`/engineering/panelization/${encodeURIComponent(p.id)}?jobId=${encodeURIComponent(p.jobId || "")}`}
+                        to={`/dashboard/engineering/panelization/${encodeURIComponent(p.id)}?jobId=${encodeURIComponent(p.jobId || "")}`}
                         className="inline-flex"
                       >
                         <Button variant="outline">Open</Button>
                       </Link>
 
-                      <Link to={`/engineering/panelization/${encodeURIComponent(p.id)}/edit`} className="inline-flex">
+                      <Link to={`/dashboard/engineering/panelization/${encodeURIComponent(p.id)}/edit`} className="inline-flex">
                         <Button>Edit</Button>
                       </Link>
                     </div>

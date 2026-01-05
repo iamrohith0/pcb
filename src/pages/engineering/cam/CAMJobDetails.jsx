@@ -155,7 +155,7 @@ export default function CAMJobDetails() {
     try {
       await camJobsApi.remove(id);
       toast({ title: "Deleted", description: "CAM job deleted successfully." });
-      navigate("/engineering/cam", { replace: true });
+      navigate("/dashboard/engineering/cam", { replace: true });
     } catch (err) {
       const msg = err?.response?.data?.message || "Failed to delete CAM job.";
       toast({ title: "Delete failed", description: msg, variant: "destructive" });
@@ -397,7 +397,7 @@ export default function CAMJobDetails() {
             </div>
 
             <Button variant="outline" className="w-full gap-2" asChild>
-              <Link to={`/engineering/dfm/create?camJobId=${job.id}`}>
+              <Link to={`/dashboard/engineering/dfm`}>
                 <Send className="h-4 w-4" />
                 Create DFM from CAM
               </Link>

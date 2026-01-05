@@ -243,8 +243,8 @@ export default function GerberUpload() {
       });
 
       // Go to details if available, else back to list
-      if (createdId) navigate(`/engineering/cam/outputs/${createdId}`);
-      else navigate("/engineering/cam/outputs");
+      if (createdId) navigate(`/dashboard/engineering/cam/outputs/${createdId}`);
+      else navigate("/dashboard/engineering/cam/outputs");
     } catch (err) {
       toast({
         title: "Upload failed",
