@@ -377,7 +377,7 @@ export default function AdminSettings() {
             onClick={() => setConfirmResetOpen(true)}
             disabled={!isDirty || loading || saving}
           >
-            RefreshCw className="h-4 w-4" />
+            <RefreshCw className="h-4 w-4" />
             Reset
           </Button>
 
