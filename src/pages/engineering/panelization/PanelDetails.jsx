@@ -12,7 +12,7 @@ import {
   Pencil,
   RefreshCw,
   SquareStack,
-  TriangleAlert,
+  AlertTriangle,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
-import panelizationService from "@/services/panelization.service";
+import panelizationService from "@/services/engineering/panelization.service";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -495,7 +495,7 @@ export default function PanelDetails() {
                   warnings.map((msg, idx) => (
                     <div key={idx} className="rounded-xl border bg-amber-50 p-3 text-xs text-amber-900">
                       <div className="flex items-start gap-2">
-                        <TriangleAlert className="mt-0.5 h-4 w-4" />
+                        <AlertTriangle className="mt-0.5 h-4 w-4" />
                         <p>{msg}</p>
                       </div>
                     </div>

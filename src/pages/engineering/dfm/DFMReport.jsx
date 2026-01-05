@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
+  AlertTriangle,
   CheckCircle2,
   ClipboardCheck,
   Download,
@@ -12,7 +13,6 @@ import {
   Printer,
   RefreshCw,
   ShieldCheck,
-  TriangleAlert,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
-import dfmService from "@/services/dfm.service";
+import dfmService from "@/services/engineering/dfm.service";
 
 /**
  * PCBxpress - DFMReport.jsx
@@ -42,8 +42,8 @@ import dfmService from "@/services/dfm.service";
 
 const STATUS_META = {
   PASS: { label: "Pass", variant: "default", icon: CheckCircle2 },
-  WARN: { label: "Needs Review", variant: "secondary", icon: TriangleAlert },
-  FAIL: { label: "Fail", variant: "destructive", icon: TriangleAlert },
+  WARN: { label: "Needs Review", variant: "secondary", icon: AlertTriangle },
+  FAIL: { label: "Fail", variant: "destructive", icon: AlertTriangle },
   DRAFT: { label: "Draft", variant: "secondary", icon: FileText },
 };
 
@@ -488,7 +488,7 @@ export default function DFMReport() {
                 ) : (
                   report.risk.drivers.map((d, idx) => (
                     <div key={idx} className="flex items-start gap-2 rounded-xl border bg-white p-3 text-sm">
-                      <TriangleAlert className="mt-0.5 h-4 w-4 text-amber-600" />
+                      <AlertTriangle className="mt-0.5 h-4 w-4 text-amber-600" />
                       <p className="text-gray-700">{d}</p>
                     </div>
                   ))
@@ -598,7 +598,7 @@ export default function DFMReport() {
                                     {row.result === "PASS" ? (
                                       <CheckCircle2 className="h-3.5 w-3.5" />
                                     ) : (
-                                      <TriangleAlert className="h-3.5 w-3.5" />
+                                      <AlertTriangle className="h-3.5 w-3.5" />
                                     )}
                                     {row.result}
                                   </Badge>

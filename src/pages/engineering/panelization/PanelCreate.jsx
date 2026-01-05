@@ -16,7 +16,7 @@ import {
   Settings2,
   Shuffle,
   SquareStack,
-  TriangleAlert,
+  AlertTriangle,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
-import panelizationService from "@/services/panelization.service";
+import panelizationService from "@/services/engineering/panelization.service";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");

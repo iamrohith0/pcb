@@ -147,8 +147,6 @@ export default function DashboardLayout() {
         { to: "/dashboard/engineering/panelization", label: "Panelization", icon: LayoutGrid },
         { to: "/dashboard/engineering/stackup", label: "Stackup", icon: Layers },
         { to: "/dashboard/engineering/revisions", label: "Revisions", icon: GitCompare },
-        { to: "/dashboard/engineering/bom", label: "BOM", icon: ClipboardList },
-        { to: "/dashboard/engineering/routing", label: "Process Routing", icon: Route },
       ],
     };
 

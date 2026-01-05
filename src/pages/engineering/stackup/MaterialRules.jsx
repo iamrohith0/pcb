@@ -20,7 +20,7 @@ import {
 
 import {
   CheckCircle2,
-  CircleAlert,
+  AlertTriangle,
   ClipboardList,
   Copy,
   FileDown,
@@ -733,7 +733,7 @@ export default function MaterialRules() {
 
                             {warnings.length ? (
                               <div className="mt-0.5 inline-flex items-center gap-2 rounded-lg bg-amber-50 px-2 py-1 text-xs text-amber-800 ring-1 ring-inset ring-amber-200">
-                                <CircleAlert className="h-4 w-4" />
+                                <AlertTriangle className="h-4 w-4" />
                                 {warnings[0]}
                               </div>
                             ) : (

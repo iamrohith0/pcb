@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import {
   AlertTriangle,
   CheckCircle2,
-  CloudUpload,
   FileArchive,
   FileCode2,
   FileText,

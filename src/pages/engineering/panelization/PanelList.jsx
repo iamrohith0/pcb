@@ -20,7 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
-import panelizationService from "@/services/panelization.service";
+import panelizationService from "@/services/engineering/panelization.service";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");

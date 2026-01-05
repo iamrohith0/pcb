@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
+  AlertTriangle,
   ArrowLeft,
   ArrowRight,
   CheckCircle2,
@@ -26,7 +27,6 @@ import {
   RefreshCw,
   ShieldCheck,
   Shuffle,
-  TriangleAlert,
 } from "lucide-react";
 
 /**
@@ -374,7 +374,7 @@ export default function RevisionCompare() {
 
             {!canCompare && (
               <div className="md:col-span-12 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
-                <TriangleAlert className="h-4 w-4" />
+                <AlertTriangle className="h-4 w-4" />
                 Enter Job Code, From and To revisions (From and To must be different).
               </div>
             )}

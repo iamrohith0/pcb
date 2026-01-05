@@ -28,7 +28,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import ConfirmationDialog from "@/components/ConfirmationDialog.jsx";
+import ConfirmationDialog from "@/components/dialogs/ConfirmationDialog.jsx";
 
 import camJobsApi from "@/services/camJobs.service";
 

@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
-import dfmApi from "@/services/dfm.service";
+import dfmApi from "@/services/engineering/dfm.service";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");

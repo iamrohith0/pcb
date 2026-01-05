@@ -13,7 +13,7 @@ import {
   Save,
   Send,
   ShieldCheck,
-  TriangleAlert,
+  AlertTriangle,
   XCircle,
 } from "lucide-react";
 
@@ -25,7 +25,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
-import dfmService from "@/services/dfm.service";
+import dfmService from "@/services/engineering/dfm.service";
 
 /**
  * PCBxpress - DFMReview.jsx
@@ -52,7 +52,7 @@ function cx(...parts) {
 
 const RESULT_META = {
   PASS: { label: "Pass", badge: "bg-emerald-600 hover:bg-emerald-600", icon: CheckCircle2 },
-  WARN: { label: "Warn", badge: "bg-amber-600 hover:bg-amber-600", icon: TriangleAlert },
+  WARN: { label: "Warn", badge: "bg-amber-600 hover:bg-amber-600", icon: AlertTriangle },
   FAIL: { label: "Fail", badge: "bg-red-600 hover:bg-red-600", icon: XCircle },
 };
 
@@ -748,7 +748,7 @@ export default function DFMReview() {
 
                                 <div className="mt-2 rounded-xl border bg-gray-50 p-3 text-xs text-gray-600">
                                   <div className="flex items-start gap-2">
-                                    <TriangleAlert className="mt-0.5 h-4 w-4 text-amber-600" />
+                                    <AlertTriangle className="mt-0.5 h-4 w-4 text-amber-600" />
                                     <p>
                                       <span className="font-semibold">Tip:</span> Any <span className="font-semibold">FAIL</span>{" "}
                                       puts release on <span className="font-semibold">HOLD</span>.
