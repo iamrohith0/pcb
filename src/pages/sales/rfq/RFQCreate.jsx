@@ -255,7 +255,7 @@ export default function RFQCreate() {
 
         <div className="flex flex-wrap items-center gap-2">
           <Button variant="outline" className="gap-2" asChild>
-            <Link to="/sales/rfq">
+            <Link to="/dashboard/sales/rfq">
               <ArrowLeft className="h-4 w-4" />
               Back
             </Link>
@@ -658,7 +658,7 @@ export default function RFQCreate() {
         {/* Bottom actions */}
         <div className="flex flex-wrap items-center justify-end gap-2">
           <Button variant="outline" asChild>
-            <Link to="/sales/rfq">Cancel</Link>
+            <Link to="/dashboard/sales/rfq">Cancel</Link>
           </Button>
           <Button
             type="submit"

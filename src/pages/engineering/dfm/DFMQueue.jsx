@@ -255,7 +255,7 @@ export default function DFMQueue() {
 
           <Button
             className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
-            onClick={() => navigate("/engineering/dfm/checklist")}
+            onClick={() => navigate("/dashboard/engineering/dfm/checklist")}
           >
             <Plus className="h-4 w-4" />
             New Checklist
@@ -425,7 +425,7 @@ export default function DFMQueue() {
                         <Button
                           variant="outline"
                           className="gap-2"
-                          onClick={() => navigate("/engineering/dfm/checklist")}
+                          onClick={() => navigate("/dashboard/engineering/dfm/checklist")}
                           title="Open checklist"
                         >
                           <ClipboardCheck className="h-4 w-4 text-[#dc2551]" />
@@ -434,7 +434,7 @@ export default function DFMQueue() {
 
                         <Button
                           className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
-                          onClick={() => navigate(`/engineering/dfm/queue/${encodeURIComponent(r.id)}`)}
+                          onClick={() => navigate(`/dashboard/engineering/dfm/review?jobId=${encodeURIComponent(r.id)}`)}
                         >
                           <Eye className="h-4 w-4" />
                           View
@@ -459,7 +459,7 @@ export default function DFMQueue() {
                       <Button
                         variant="outline"
                         className="gap-2"
-                        onClick={() => navigate("/engineering/dfm/checklist")}
+                        onClick={() => navigate("/dashboard/engineering/dfm/checklist")}
                       >
                         <ClipboardCheck className="h-4 w-4 text-[#dc2551]" />
                         Checklist
@@ -467,7 +467,7 @@ export default function DFMQueue() {
 
                       <Button
                         className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
-                        onClick={() => navigate(`/engineering/dfm/queue/${encodeURIComponent(r.id)}`)}
+                        onClick={() => navigate(`/dashboard/engineering/dfm/review?jobId=${encodeURIComponent(r.id)}`)}
                       >
                         <ArrowRight className="h-4 w-4" />
                         View

@@ -26,19 +26,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import settingsApi from "@/services/settings.service";
-import serialsService from "@/services/serials.service";
+import serialsService from "@/services/inventory/serials.service";
 
 function cx(...p) {
   return p.filter(Boolean).join(" ");
@@ -559,115 +549,101 @@ export default function SerialRegister() {
       </Card>
 
       {/* Preview / Print dialog */}
-      <AlertDialog open={previewOpen} onOpenChange={setPreviewOpen}>
-        <AlertDialogContent className="max-w-3xl">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Print Options</AlertDialogTitle>
-            <AlertDialogDescription>
-              Print serial labels. For bulk printing, it’s best to use a dedicated bulk print page.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
-            <div className="md:col-span-6 rounded-xl border bg-gray-50 p-3">
-              <p className="text-xs font-semibold text-gray-700">Current Batch</p>
-              <div className="mt-2 grid grid-cols-2 gap-2 text-sm">
-                <div>
-                  <p className="text-xs text-gray-500">Plant</p>
-                  <p className="font-medium">{plant || "—"}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">Mfg Date</p>
-                  <p className="font-medium">{mfgDate || "—"}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">WO</p>
-                  <p className="font-medium">{workOrderNo || "—"}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">Lot</p>
-                  <p className="font-medium">{lotNo || "—"}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">Item</p>
-                  <p className="font-medium">{itemCode || "—"}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">Rev</p>
-                  <p className="font-medium">{revision || "—"}</p>
-                </div>
+      <ConfirmationDialog
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+        title="Print Options"
+        description="Print serial labels. For bulk printing, it's best to use a dedicated bulk print page."
+        confirmText="Done"
+        onConfirm={() => setPreviewOpen(false)}
+      >
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
+          <div className="md:col-span-6 rounded-xl border bg-gray-50 p-3">
+            <p className="text-xs font-semibold text-gray-700">Current Batch</p>
+            <div className="mt-2 grid grid-cols-2 gap-2 text-sm">
+              <div>
+                <p className="text-xs text-gray-500">Plant</p>
+                <p className="font-medium">{plant || "—"}</p>
               </div>
-
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                <Badge className="bg-[#DC2551]/10 text-[#DC2551] hover:bg-[#DC2551]/10">
-                  <Package className="mr-2 h-4 w-4" />
-                  Qty: {serials.length || 0}
-                </Badge>
-                <Badge className="bg-gray-100 text-gray-700 hover:bg-gray-100">
-                  <Settings2 className="mr-2 h-4 w-4" />
-                  Size: {labelSize} · Layout: {labelLayout}
-                </Badge>
+              <div>
+                <p className="text-xs text-gray-500">Mfg Date</p>
+                <p className="font-medium">{mfgDate || "—"}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">WO</p>
+                <p className="font-medium">{workOrderNo || "—"}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Lot</p>
+                <p className="font-medium">{lotNo || "—"}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Item</p>
+                <p className="font-medium">{itemCode || "—"}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Rev</p>
+                <p className="font-medium">{revision || "—"}</p>
               </div>
             </div>
 
-            <div className="md:col-span-6 rounded-xl border p-3">
-              <p className="text-xs font-semibold text-gray-700">Actions</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <Button
-                  className="bg-[#DC2551] hover:bg-[#B02045]"
-                  onClick={() => {
-                    setPreviewOpen(false);
-                    if (serials[0]) handleOpenPrintForOne(serials[0]);
-                  }}
-                  disabled={!serials.length}
-                >
-                  <Printer className="mr-2 h-4 w-4" />
-                  Print First Label
-                </Button>
-
-                <Button variant="outline" onClick={handlePrintAll} disabled={!serials.length}>
-                  <Printer className="mr-2 h-4 w-4" />
-                  Open Bulk Print
-                </Button>
-
-                <Link to="/inventory/serials/history" className="inline-flex">
-                  <Button variant="outline">
-                    <RefreshCw className="mr-2 h-4 w-4" />
-                    Go to History
-                  </Button>
-                </Link>
-              </div>
-
-              <div className="mt-3 rounded-lg bg-gray-50 p-2 text-xs text-gray-600">
-                If you want, I can create <span className="font-semibold">SerialBulkPrint.jsx</span> that prints all generated serials in a single print job.
-              </div>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <Badge className="bg-[#DC2551]/10 text-[#DC2551] hover:bg-[#DC2551]/10">
+                <Package className="mr-2 h-4 w-4" />
+                Qty: {serials.length || 0}
+              </Badge>
+              <Badge className="bg-gray-100 text-gray-700 hover:bg-gray-100">
+                <Settings2 className="mr-2 h-4 w-4" />
+                Size: {labelSize} · Layout: {labelLayout}
+              </Badge>
             </div>
           </div>
 
-          <AlertDialogFooter>
-            <AlertDialogCancel>Close</AlertDialogCancel>
-            <AlertDialogAction onClick={() => setPreviewOpen(false)}>Done</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+          <div className="md:col-span-6 rounded-xl border p-3">
+            <p className="text-xs font-semibold text-gray-700">Actions</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Button
+                className="bg-[#DC2551] hover:bg-[#B02045]"
+                onClick={() => {
+                  setPreviewOpen(false);
+                  if (serials[0]) handleOpenPrintForOne(serials[0]);
+                }}
+                disabled={!serials.length}
+              >
+                <Printer className="mr-2 h-4 w-4" />
+                Print First Label
+              </Button>
+
+              <Button variant="outline" onClick={handlePrintAll} disabled={!serials.length}>
+                <Printer className="mr-2 h-4 w-4" />
+                Open Bulk Print
+              </Button>
+
+              <Link to="/inventory/serials/history" className="inline-flex">
+                <Button variant="outline">
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Go to History
+                </Button>
+              </Link>
+            </div>
+
+            <div className="mt-3 rounded-lg bg-gray-50 p-2 text-xs text-gray-600">
+              If you want, I can create <span className="font-semibold">SerialBulkPrint.jsx</span> that prints all generated serials in a single print job.
+            </div>
+          </div>
+        </div>
+      </ConfirmationDialog>
 
       {/* Clear confirmation */}
-      <AlertDialog open={clearOpen} onOpenChange={setClearOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Clear generated list?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This only clears the list in this screen (it does not delete serials from the database).
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction className="bg-[#DC2551] hover:bg-[#B02045]" onClick={handleClear}>
-              Clear
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmationDialog
+        open={clearOpen}
+        onOpenChange={setClearOpen}
+        title="Clear generated list?"
+        description="This only clears the list in this screen (it does not delete serials from the database)."
+        confirmText="Clear"
+        confirmVariant="destructive"
+        onConfirm={handleClear}
+      />
     </div>
   );
 }

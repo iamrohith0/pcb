@@ -293,7 +293,7 @@ export default function InvoiceList() {
           </Button>
 
           <Button asChild className="bg-[#dc2551] hover:bg-[#B02045]">
-            <Link to="/sales/invoices/create">
+            <Link to="/dashboard/sales/invoices/create">
               <Plus className="mr-2 h-4 w-4" />
               New Invoice
             </Link>
@@ -449,7 +449,7 @@ export default function InvoiceList() {
                           <p className="text-sm font-semibold text-gray-800">No invoices found</p>
                           <p className="mt-1 text-xs text-gray-500">Try adjusting filters or create a new invoice.</p>
                           <Button asChild className="mt-3 bg-[#dc2551] hover:bg-[#B02045]">
-                            <Link to="/sales/invoices/create">
+                            <Link to="/dashboard/sales/invoices/create">
                               <Plus className="mr-2 h-4 w-4" />
                               Create Invoice
                             </Link>

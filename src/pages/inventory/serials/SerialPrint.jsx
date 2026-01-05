@@ -23,7 +23,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
-import serialsService from "@/services/serials.service";
+import serialsService from "@/services/inventory/serials.service";
 import settingsApi from "@/services/settings.service";
 
 function cx(...p) {
@@ -660,6 +660,3 @@ function LabelCard({ companyName, size, layout, fields, qrValue }) {
   );
 }
 
-function safeStr(v) {
-  return v === null || v === undefined ? "" : String(v);
-}

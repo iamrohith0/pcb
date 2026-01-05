@@ -213,7 +213,7 @@ export default function RFQDetails() {
         </div>
         <p className="text-sm text-gray-600">The RFQ you’re trying to view doesn’t exist or you don’t have access.</p>
         <Button asChild variant="outline" className="gap-2">
-          <Link to="/sales/rfq">
+          <Link to="/dashboard/sales/rfq">
             <ArrowLeft className="h-4 w-4" />
             Back to RFQs
           </Link>
@@ -245,7 +245,7 @@ export default function RFQDetails() {
 
         <div className="flex flex-wrap items-center gap-2">
           <Button variant="outline" className="gap-2" asChild>
-            <Link to="/sales/rfq">
+            <Link to="/dashboard/sales/rfq">
               <ArrowLeft className="h-4 w-4" />
               Back
             </Link>

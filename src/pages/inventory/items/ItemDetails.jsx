@@ -19,7 +19,7 @@ import {
   ShieldCheck,
   Tag,
   Trash2,
-  TriangleAlert,
+  AlertTriangle,
   Warehouse,
 } from "lucide-react";
 
@@ -29,7 +29,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import inventoryItemsService from "@/services/inventory/items.service";
-import ConfirmationDialog from "@/components/ConfirmationDialog";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -243,7 +243,7 @@ export default function ItemDetails() {
 
                 {belowReorder ? (
                   <Pill tone="red">
-                    <TriangleAlert className="h-4 w-4" />
+                    <AlertTriangle className="h-4 w-4" />
                     Below Reorder Level
                   </Pill>
                 ) : null}
@@ -354,7 +354,7 @@ export default function ItemDetails() {
                       <div className="rounded-xl border bg-gray-50 p-4 text-xs text-gray-600">
                         {belowReorder ? (
                           <div className="flex items-start gap-2 text-red-700">
-                            <TriangleAlert className="mt-0.5 h-4 w-4" />
+                            <AlertTriangle className="mt-0.5 h-4 w-4" />
                             Stock is at/below reorder level ({fmtNum(item.reorder_level)}). Consider raising PO.
                           </div>
                         ) : (

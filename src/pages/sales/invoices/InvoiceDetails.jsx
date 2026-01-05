@@ -267,7 +267,7 @@ export default function InvoiceDetails() {
     return (
       <div className="space-y-3">
         <Button asChild variant="outline">
-          <Link to="/sales/invoices">
+          <Link to="/dashboard/sales/invoices">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Invoices
           </Link>

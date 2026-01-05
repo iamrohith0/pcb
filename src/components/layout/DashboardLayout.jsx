@@ -143,6 +143,7 @@ export default function DashboardLayout() {
       title: "Engineering",
       items: [
         { to: "/dashboard/engineering/dfm", label: "DFM Check", icon: FileSearch2, badge: "CAM" },
+        { to: "/dashboard/engineering/dfm/checklist", label: "DFM Checklist", icon: ClipboardCheck },
         { to: "/dashboard/engineering/cam", label: "CAM Jobs", icon: FileSearch2 },
         { to: "/dashboard/engineering/panelization", label: "Panelization", icon: LayoutGrid },
         { to: "/dashboard/engineering/stackup", label: "Stackup", icon: Layers },
@@ -181,7 +182,6 @@ export default function DashboardLayout() {
         { to: "/dashboard/inventory/bom", label: "BOM", icon: ClipboardCheck },
         { to: "/dashboard/inventory/lots", label: "Lot Tracking", icon: QrCode },
         { to: "/dashboard/inventory/serials", label: "Serial Tracking", icon: ScanLine },
-        { to: "/dashboard/inventory/warehouse", label: "Warehouses", icon: Warehouse },
       ],
     };
 

@@ -195,7 +195,7 @@ export default function RFQList() {
           </Button>
 
           <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
-            <Link to="/sales/rfq/create">
+            <Link to="/dashboard/sales/rfq/create">
               <Plus className="h-4 w-4" />
               New RFQ
             </Link>
@@ -305,7 +305,7 @@ export default function RFQList() {
               <p className="mt-1 text-sm text-gray-500">Try changing filters or create a new RFQ.</p>
               <div className="mt-4 flex justify-center">
                 <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
-                  <Link to="/sales/rfq/create">
+                  <Link to="/dashboard/sales/rfq/create">
                     <Plus className="h-4 w-4" />
                     New RFQ
                   </Link>

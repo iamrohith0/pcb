@@ -836,7 +836,7 @@ export default function SalesOrderEdit() {
               </CardHeader>
               <CardContent className="space-y-2">
                 <Button asChild variant="outline" className="w-full gap-2">
-                  <Link to="/sales/customers">
+                  <Link to="/dashboard/sales/customers">
                     <User className="h-4 w-4" />
                     Customers
                   </Link>

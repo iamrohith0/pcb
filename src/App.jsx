@@ -43,6 +43,7 @@ import DFMChecklist from './pages/engineering/dfm/DFMChecklist.jsx'
 import CAMJobs from './pages/engineering/cam/CAMJobs.jsx'
 import CAMJobDetails from './pages/engineering/cam/CAMJobDetails.jsx'
 import CAMOutputs from './pages/engineering/cam/CAMOutputs.jsx'
+import CAMCreate from './pages/engineering/cam/CAMCreate.jsx'
 import GerberUpload from './pages/engineering/cam/GerberUpload.jsx'
 import PanelList from './pages/engineering/panelization/PanelList.jsx'
 import PanelCreate from './pages/engineering/panelization/PanelCreate.jsx'
@@ -56,6 +57,32 @@ import StackupLibrary from './pages/engineering/stackup/StackupLibrary.jsx'
 import StackupCreate from './pages/engineering/stackup/StackupCreate.jsx'
 import StackupDetails from './pages/engineering/stackup/StackupDetails.jsx'
 import MaterialRules from './pages/engineering/stackup/MaterialRules.jsx'
+
+// Inventory Pages
+import ItemsList from './pages/inventory/items/ItemsList.jsx'
+import ItemCreate from './pages/inventory/items/ItemCreate.jsx'
+import ItemDetails from './pages/inventory/items/ItemDetails.jsx'
+import ItemEdit from './pages/inventory/items/ItemEdit.jsx'
+import BOMList from './pages/inventory/bom/BOMList.jsx'
+import BOMCreate from './pages/inventory/bom/BOMCreate.jsx'
+import BOMDetails from './pages/inventory/bom/BOMDetails.jsx'
+import BOMExplode from './pages/inventory/bom/BOMExplode.jsx'
+import StockDashboard from './pages/inventory/stock/StockDashboard.jsx'
+import StockLedger from './pages/inventory/stock/StockLedger.jsx'
+import StockTransfer from './pages/inventory/stock/StockTransfer.jsx'
+import StockValuation from './pages/inventory/stock/StockValuation.jsx'
+import StockAdjustmentsList from './pages/inventory/adjustments/StockAdjustmentsList.jsx'
+import StockAdjustmentCreate from './pages/inventory/adjustments/StockAdjustmentCreate.jsx'
+import StockAdjustmentDetails from './pages/inventory/adjustments/StockAdjustmentDetails.jsx'
+import CycleCount from './pages/inventory/adjustments/CycleCount.jsx'
+import LotsList from './pages/inventory/lots/LotsList.jsx'
+import LotCreate from './pages/inventory/lots/LotCreate.jsx'
+import LotDetails from './pages/inventory/lots/LotDetails.jsx'
+import LotTrace from './pages/inventory/lots/LotTrace.jsx'
+import SerialLookup from './pages/inventory/serials/SerialLookup.jsx'
+import SerialRegister from './pages/inventory/serials/SerialRegister.jsx'
+import SerialPrint from './pages/inventory/serials/SerialPrint.jsx'
+import SerialHistory from './pages/inventory/serials/SerialHistory.jsx'
 
 // Protected route wrapper
 function ProtectedRoute({ children }) {
@@ -133,8 +160,10 @@ function App() {
             <Route path="engineering/dfm/report" element={<DFMReport />} />
             <Route path="engineering/dfm/checklist" element={<DFMChecklist />} />
             <Route path="engineering/cam" element={<CAMJobs />} />
+            <Route path="engineering/cam/create" element={<CAMCreate />} />
             <Route path="engineering/cam/:id" element={<CAMJobDetails />} />
             <Route path="engineering/cam/outputs" element={<CAMOutputs />} />
+            <Route path="engineering/cam/outputs/create" element={<CAMCreate />} />
             <Route path="engineering/cam/upload" element={<GerberUpload />} />
             <Route path="engineering/panelization" element={<PanelList />} />
             <Route path="engineering/panelization/create" element={<PanelCreate />} />
@@ -157,8 +186,31 @@ function App() {
             <Route path="quality/inspections" element={<div>Inspections Page - Coming Soon</div>} />
             
             {/* Inventory Routes */}
-            <Route path="inventory/items" element={<div>Items/Materials Page - Coming Soon</div>} />
-            <Route path="inventory/stock" element={<div>Stock/Ledger Page - Coming Soon</div>} />
+            <Route path="inventory/items" element={<ItemsList />} />
+            <Route path="inventory/items/create" element={<ItemCreate />} />
+            <Route path="inventory/items/:id" element={<ItemDetails />} />
+            <Route path="inventory/items/:id/edit" element={<ItemEdit />} />
+            <Route path="inventory/bom" element={<BOMList />} />
+            <Route path="inventory/bom/create" element={<BOMCreate />} />
+            <Route path="inventory/bom/:id" element={<BOMDetails />} />
+            <Route path="inventory/bom/:id/explode" element={<BOMExplode />} />
+            <Route path="inventory/stock" element={<StockDashboard />} />
+            <Route path="inventory/stock/ledger" element={<StockLedger />} />
+            <Route path="inventory/stock/transfer" element={<StockTransfer />} />
+            <Route path="inventory/stock/valuation" element={<StockValuation />} />
+            <Route path="inventory/adjustments" element={<StockAdjustmentsList />} />
+            <Route path="inventory/adjustments/create" element={<StockAdjustmentCreate />} />
+            <Route path="inventory/adjustments/:id" element={<StockAdjustmentDetails />} />
+            <Route path="inventory/adjustments/cycle-count" element={<CycleCount />} />
+            <Route path="inventory/lots" element={<LotsList />} />
+            <Route path="inventory/lots/create" element={<LotCreate />} />
+            <Route path="inventory/lots/:id" element={<LotDetails />} />
+            <Route path="inventory/lots/:id/trace" element={<LotTrace />} />
+            <Route path="inventory/serials" element={<SerialLookup />} />
+            <Route path="inventory/serials/lookup" element={<SerialLookup />} />
+            <Route path="inventory/serials/register" element={<SerialRegister />} />
+            <Route path="inventory/serials/print" element={<SerialPrint />} />
+            <Route path="inventory/serials/history" element={<SerialHistory />} />
             
             {/* Procurement Routes */}
             <Route path="procurement/suppliers" element={<div>Suppliers Page - Coming Soon</div>} />

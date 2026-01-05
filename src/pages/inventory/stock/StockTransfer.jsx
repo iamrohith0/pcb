@@ -27,9 +27,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
-import ConfirmationDialog from "@/components/ConfirmationDialog.jsx";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog.jsx";
 
-import stockService from "@/services/stock.service";
+import stockService from "@/services/inventory/stock.service";
 
 function cx(...p) {
   return p.filter(Boolean).join(" ");

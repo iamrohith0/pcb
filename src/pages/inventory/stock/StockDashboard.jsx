@@ -21,7 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
-import stockService from "@/services/stock.service";
+import stockService from "@/services/inventory/stock.service";
 
 function cx(...p) {
   return p.filter(Boolean).join(" ");

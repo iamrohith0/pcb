@@ -383,7 +383,7 @@ export default function CustomerEdit() {
         <div className="min-w-0">
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <Button asChild variant="ghost" className="h-8 px-2">
-              <Link to="/sales/customers" className="inline-flex items-center gap-2">
+              <Link to="/dashboard/sales/customers" className="inline-flex items-center gap-2">
                 <ArrowLeft className="h-4 w-4" />
                 Back
               </Link>
@@ -868,7 +868,7 @@ export default function CustomerEdit() {
               </CardHeader>
               <CardContent className="flex flex-col gap-2">
                 <Button asChild variant="outline" className="justify-start gap-2">
-                  <Link to={`/sales/customers/${id}`}>
+                  <Link to={`/dashboard/sales/customers/${id}`}>
                     <User2 className="h-4 w-4" />
                     View customer
                   </Link>

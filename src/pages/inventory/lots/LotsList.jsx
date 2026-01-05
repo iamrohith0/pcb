@@ -26,7 +26,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import lotsService from "@/services/inventory/lots.service";
-import ConfirmationDialog from "@/components/ConfirmationDialog.jsx";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");

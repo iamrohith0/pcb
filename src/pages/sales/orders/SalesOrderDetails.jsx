@@ -521,7 +521,7 @@ export default function SalesOrderDetails() {
                 </div>
 
                 <Button asChild variant="outline" className="w-full gap-2">
-                  <Link to="/sales/customers">
+                  <Link to="/dashboard/sales/customers">
                     <FileText className="h-4 w-4" />
                     View Customers
                   </Link>
