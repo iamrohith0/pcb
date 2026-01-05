@@ -7,12 +7,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import ConfirmationDialog from "@/components/ConfirmationDialog";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 import {
   Building2,
-  CircleCheck,
-  CircleX,
+  CheckCircle2,
+  XCircle,
   Filter,
   Loader2,
   Plus,
@@ -43,33 +43,6 @@ function normalizeDate(v) {
   if (!v) return "—";
   const s = String(v);
   return s.includes("T") ? s.split("T")[0] : s;
-}
-
-function statusPill(status) {
-  const s = String(status || "active").toLowerCase();
-  const base = "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium";
-  if (s === "inactive") {
-    return (
-      <span className={cx(base, "border-gray-200 bg-gray-50 text-gray-700")}>
-        <CircleX className="h-3.5 w-3.5" />
-        Inactive
-      </span>
-    );
-  }
-  if (s === "blocked") {
-    return (
-      <span className={cx(base, "border-red-200 bg-red-50 text-red-700")}>
-        <ShieldAlert className="h-3.5 w-3.5" />
-        Blocked
-      </span>
-    );
-  }
-  return (
-    <span className={cx(base, "border-emerald-200 bg-emerald-50 text-emerald-700")}>
-      <CircleCheck className="h-3.5 w-3.5" />
-      Active
-    </span>
-  );
 }
 
 function getSupplierId(s) {
@@ -491,29 +464,3 @@ function SupplierCard({ row, onOpen, onDelete }) {
   );
 }
 
-function statusPill(status) {
-  const s = String(status || "active").toLowerCase();
-  const base = "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium";
-  if (s === "inactive") {
-    return (
-      <span className={cx(base, "border-gray-200 bg-gray-50 text-gray-700")}>
-        <CircleX className="h-3.5 w-3.5" />
-        Inactive
-      </span>
-    );
-  }
-  if (s === "blocked") {
-    return (
-      <span className={cx(base, "border-red-200 bg-red-50 text-red-700")}>
-        <ShieldAlert className="h-3.5 w-3.5" />
-        Blocked
-      </span>
-    );
-  }
-  return (
-    <span className={cx(base, "border-emerald-200 bg-emerald-50 text-emerald-700")}>
-      <CircleCheck className="h-3.5 w-3.5" />
-      Active
-    </span>
-  );
-}

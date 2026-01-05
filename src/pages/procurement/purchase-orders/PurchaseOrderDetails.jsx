@@ -29,7 +29,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import ConfirmationDialog from "@/components/ConfirmationDialog";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 // If you have a PO service, wire it here.
 // import purchaseOrdersService from "@/services/purchaseOrders.service";

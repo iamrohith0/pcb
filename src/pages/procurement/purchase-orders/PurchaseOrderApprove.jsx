@@ -11,7 +11,7 @@ import {
   FileText,
   Hash,
   Mail,
-  MessageSquareText,
+  MessageSquare,
   Package,
   Printer,
   RefreshCcw,
@@ -29,7 +29,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import ConfirmationDialog from "@/components/ConfirmationDialog";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 // If you have a PO service, plug it in here.
 // import purchaseOrdersService from "@/services/purchaseOrders.service";

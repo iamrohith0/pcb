@@ -216,9 +216,16 @@ export default function DashboardLayout() {
       title: "Procurement",
       items: [
         { to: "/dashboard/procurement/suppliers", label: "Suppliers", icon: UsersIcon },
+        { to: "/dashboard/procurement/suppliers/create", label: "Create Supplier", icon: Plus },
         { to: "/dashboard/procurement/purchase-orders", label: "Purchase Orders", icon: ClipboardList },
+        { to: "/dashboard/procurement/purchase-orders/create", label: "Create PO", icon: Plus },
         { to: "/dashboard/procurement/grn", label: "GRN / Receiving", icon: Truck },
+        { to: "/dashboard/procurement/grn/create", label: "Create GRN", icon: Plus },
+        { to: "/dashboard/procurement/grn/incoming-qc", label: "Incoming QC", icon: Eye },
         { to: "/dashboard/procurement/pricing", label: "Supplier Pricing", icon: Percent },
+        { to: "/dashboard/procurement/pricing/rule-engine", label: "Price Rules", icon: Settings },
+        { to: "/dashboard/procurement/pricing/lead-time", label: "Lead Time Matrix", icon: Clock },
+        { to: "/dashboard/procurement/pricing/cost-history", label: "Cost History", icon: TrendingUp },
       ],
     };
 

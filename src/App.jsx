@@ -34,6 +34,24 @@ import AuditLogList from './pages/admin/audit-logs/AuditLogList.jsx'
 import AuditLogDetails from './pages/admin/audit-logs/AuditLogDetails.jsx'
 import ExportAuditLogs from './pages/admin/audit-logs/ExportAuditLogs.jsx'
 
+// Procurement Pages
+import SuppliersList from './pages/procurement/suppliers/SuppliersList.jsx'
+import SupplierCreate from './pages/procurement/suppliers/SupplierCreate.jsx'
+import SupplierDetails from './pages/procurement/suppliers/SupplierDetails.jsx'
+import SupplierEdit from './pages/procurement/suppliers/SupplierEdit.jsx'
+import PurchaseOrdersList from './pages/procurement/purchase-orders/PurchaseOrdersList.jsx'
+import PurchaseOrderCreate from './pages/procurement/purchase-orders/PurchaseOrderCreate.jsx'
+import PurchaseOrderDetails from './pages/procurement/purchase-orders/PurchaseOrderDetails.jsx'
+import PurchaseOrderApprove from './pages/procurement/purchase-orders/PurchaseOrderApprove.jsx'
+import GRNList from './pages/procurement/grn/GRNList.jsx'
+import GRNCreate from './pages/procurement/grn/GRNCreate.jsx'
+import GRNDetails from './pages/procurement/grn/GRNDetails.jsx'
+import IncomingQC from './pages/procurement/grn/IncomingQC.jsx'
+import SupplierPriceList from './pages/procurement/pricing/SupplierPriceList.jsx'
+import PriceRuleEngine from './pages/procurement/pricing/PriceRuleEngine.jsx'
+import LeadTimeMatrix from './pages/procurement/pricing/LeadTimeMatrix.jsx'
+import CostHistory from './pages/procurement/pricing/CostHistory.jsx'
+
 // Settings Pages
 import CompanyProfile from './pages/settings/company/CompanyProfile.jsx'
 import Branding from './pages/settings/company/Branding.jsx'
@@ -371,8 +389,23 @@ function App() {
             <Route path="inventory/serials/history" element={<SerialHistory />} />
             
             {/* Procurement Routes */}
-            <Route path="procurement/suppliers" element={<div>Suppliers Page - Coming Soon</div>} />
-            <Route path="procurement/purchase-orders" element={<div>Purchase Orders Page - Coming Soon</div>} />
+            <Route path="procurement/suppliers" element={<SuppliersList />} />
+            <Route path="procurement/suppliers/create" element={<SupplierCreate />} />
+            <Route path="procurement/suppliers/:id" element={<SupplierDetails />} />
+            <Route path="procurement/suppliers/:id/edit" element={<SupplierEdit />} />
+            <Route path="procurement/purchase-orders" element={<PurchaseOrdersList />} />
+            <Route path="procurement/purchase-orders/create" element={<PurchaseOrderCreate />} />
+            <Route path="procurement/purchase-orders/:id" element={<PurchaseOrderDetails />} />
+            <Route path="procurement/purchase-orders/:id/approve" element={<PurchaseOrderApprove />} />
+            <Route path="procurement/grn" element={<GRNList />} />
+            <Route path="procurement/grn/create" element={<GRNCreate />} />
+            <Route path="procurement/grn/:id" element={<GRNDetails />} />
+            <Route path="procurement/grn/incoming-qc" element={<IncomingQC />} />
+            <Route path="procurement/pricing" element={<SupplierPriceList />} />
+            <Route path="procurement/pricing/create" element={<SupplierPriceList />} />
+            <Route path="procurement/pricing/rule-engine" element={<PriceRuleEngine />} />
+            <Route path="procurement/pricing/lead-time" element={<LeadTimeMatrix />} />
+            <Route path="procurement/pricing/cost-history" element={<CostHistory />} />
             
             {/* Admin Routes */}
             <Route path="admin/users" element={<UsersList />} />

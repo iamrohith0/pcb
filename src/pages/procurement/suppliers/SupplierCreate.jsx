@@ -6,6 +6,7 @@ import {
   ChevronLeft,
   Factory,
   FileCheck2,
+  FileText,
   Globe,
   Hash,
   Mail,
@@ -25,7 +26,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import ConfirmationDialog from "@/components/ConfirmationDialog";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 // If you already have a supplier service, wire it here.
 // import suppliersService from "@/services/suppliers.service";
