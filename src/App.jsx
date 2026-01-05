@@ -34,6 +34,32 @@ import AuditLogList from './pages/admin/audit-logs/AuditLogList.jsx'
 import AuditLogDetails from './pages/admin/audit-logs/AuditLogDetails.jsx'
 import ExportAuditLogs from './pages/admin/audit-logs/ExportAuditLogs.jsx'
 
+// Quality Pages
+import InspectionList from './pages/quality/inspections/InspectionList.jsx'
+import InspectionCreate from './pages/quality/inspections/InspectionCreate.jsx'
+import InspectionDetails from './pages/quality/inspections/InspectionDetails.jsx'
+import InspectionTemplates from './pages/quality/inspections/InspectionTemplates.jsx'
+import NCRList from './pages/quality/ncr/NCRList.jsx'
+import NCRCreate from './pages/quality/ncr/NCRCreate.jsx'
+import NCRDetails from './pages/quality/ncr/NCRDetails.jsx'
+import NCRDisposition from './pages/quality/ncr/NCRDisposition.jsx'
+import CAPAList from './pages/quality/capa/CAPAList.jsx'
+import CAPACreate from './pages/quality/capa/CAPACreate.jsx'
+import CAPADetails from './pages/quality/capa/CAPADetails.jsx'
+import CAPAEffectiveness from './pages/quality/capa/CAPAEffectiveness.jsx'
+import CoCList from './pages/quality/certificates/CoCList.jsx'
+import CoCGenerate from './pages/quality/certificates/CoCGenerate.jsx'
+import ComplianceDocs from './pages/quality/certificates/ComplianceDocs.jsx'
+import RoHSREACH from './pages/quality/certificates/RoHSREACH.jsx'
+import AOIResults from './pages/quality/aoi/AOIResults.jsx'
+import AOIQueue from './pages/quality/aoi/AOIQueue.jsx'
+import AOIDefects from './pages/quality/aoi/AOIDefects.jsx'
+import AOIRework from './pages/quality/aoi/AOIRework.jsx'
+import ETestResults from './pages/quality/etest/ETestResults.jsx'
+import ETestQueue from './pages/quality/etest/ETestQueue.jsx'
+import ETestCertificates from './pages/quality/etest/ETestCertificates.jsx'
+import NetlistComparison from './pages/quality/etest/NetlistComparison.jsx'
+
 // Sales Pages
 import CustomersList from './pages/sales/customers/CustomersList.jsx'
 import CustomerCreate from './pages/sales/customers/CustomerCreate.jsx'
@@ -248,7 +274,30 @@ function App() {
             <Route path="production/scheduling/shifts" element={<ShiftPlanning />} />
             
             {/* Quality Routes */}
-            <Route path="quality/inspections" element={<div>Inspections Page - Coming Soon</div>} />
+            <Route path="quality/inspections" element={<InspectionList />} />
+            <Route path="quality/inspections/create" element={<InspectionCreate />} />
+            <Route path="quality/inspections/:id" element={<InspectionDetails />} />
+            <Route path="quality/inspections/templates" element={<InspectionTemplates />} />
+            <Route path="quality/ncr" element={<NCRList />} />
+            <Route path="quality/ncr/create" element={<NCRCreate />} />
+            <Route path="quality/ncr/:id" element={<NCRDetails />} />
+            <Route path="quality/ncr/disposition" element={<NCRDisposition />} />
+            <Route path="quality/capa" element={<CAPAList />} />
+            <Route path="quality/capa/create" element={<CAPACreate />} />
+            <Route path="quality/capa/:id" element={<CAPADetails />} />
+            <Route path="quality/capa/effectiveness" element={<CAPAEffectiveness />} />
+            <Route path="quality/certificates" element={<CoCList />} />
+            <Route path="quality/certificates/generate" element={<CoCGenerate />} />
+            <Route path="quality/certificates/compliance" element={<ComplianceDocs />} />
+            <Route path="quality/certificates/rohs-reach" element={<RoHSREACH />} />
+            <Route path="quality/aoi" element={<AOIResults />} />
+            <Route path="quality/aoi/queue" element={<AOIQueue />} />
+            <Route path="quality/aoi/defects" element={<AOIDefects />} />
+            <Route path="quality/aoi/rework" element={<AOIRework />} />
+            <Route path="quality/etest" element={<ETestResults />} />
+            <Route path="quality/etest/queue" element={<ETestQueue />} />
+            <Route path="quality/etest/certificates" element={<ETestCertificates />} />
+            <Route path="quality/etest/netlist" element={<NetlistComparison />} />
             
             {/* Inventory Routes */}
             <Route path="inventory/items" element={<ItemsList />} />

@@ -22,6 +22,7 @@ import {
 
 import {
   CheckCircle2,
+  ClipboardList,
   Download,
   Eye,
   Filter,
@@ -29,7 +30,7 @@ import {
   Search,
   ShieldAlert,
   SlidersHorizontal,
-  TriangleAlert,
+  AlertTriangle,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -258,7 +259,7 @@ export default function AOIResults() {
     if (v === "rework")
       return (
         <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
-          <TriangleAlert className="h-3.5 w-3.5" />
+          <AlertTriangle className="h-3.5 w-3.5" />
           Rework
         </span>
       );
@@ -271,7 +272,7 @@ export default function AOIResults() {
       );
     return (
       <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-200">
-        <TriangleAlert className="h-3.5 w-3.5" />
+        <AlertTriangle className="h-3.5 w-3.5" />
         Fail
       </span>
     );

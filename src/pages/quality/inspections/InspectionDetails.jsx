@@ -27,7 +27,7 @@ import {
   Trash2,
 } from "lucide-react";
 
-import ConfirmationDialog from "@/components/ConfirmationDialog";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 /**
  * InspectionDetails.jsx (PCB Manufacturing ERP)

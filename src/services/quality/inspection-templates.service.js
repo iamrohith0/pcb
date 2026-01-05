@@ -1,7 +1,7 @@
-// src/services/quality/ncr.service.js
+// src/services/quality/inspection-templates.service.js
 import axios from "@/lib/axios";
 
-const API_BASE = "/api/quality/ncr";
+const API_BASE = "/api/quality/inspection-templates";
 
 export default {
   async list(params = {}) {
@@ -29,8 +29,8 @@ export default {
     return res;
   },
 
-  async exportPdf(id) {
-    const res = await axios.get(`${API_BASE}/${id}/export/pdf`, {
+  async exportJson() {
+    const res = await axios.get(`${API_BASE}/export/json`, {
       responseType: "blob",
     });
     return res;

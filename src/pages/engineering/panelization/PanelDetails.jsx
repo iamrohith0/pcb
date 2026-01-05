@@ -333,7 +333,7 @@ export default function PanelDetails() {
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1.5">
-                        <TriangleAlert className="h-4 w-4" />
+                        <AlertTriangle className="h-4 w-4" />
                         Needs review
                       </span>
                     )}

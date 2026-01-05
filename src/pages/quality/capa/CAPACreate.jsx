@@ -12,10 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
-  SelectContent,
   SelectItem,
-  SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 
 import { ArrowLeft, Save, ShieldCheck } from "lucide-react";
@@ -239,17 +236,12 @@ export default function CAPACreate() {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
               <div className="space-y-2">
                 <Label>Source</Label>
-                <Select value={sourceType} onValueChange={setSourceType}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select source" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {SOURCE_OPTIONS.map((o) => (
-                      <SelectItem key={o.value} value={o.value}>
-                        {o.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
+                <Select value={sourceType} onValueChange={setSourceType} placeholder="Select source">
+                  {SOURCE_OPTIONS.map((o) => (
+                    <SelectItem key={o.value} value={o.value}>
+                      {o.label}
+                    </SelectItem>
+                  ))}
                 </Select>
               </div>
 
@@ -265,33 +257,23 @@ export default function CAPACreate() {
 
             <div className="space-y-2">
               <Label>Severity</Label>
-              <Select value={severity} onValueChange={setSeverity}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select severity" />
-                </SelectTrigger>
-                <SelectContent>
-                  {SEVERITY_OPTIONS.map((o) => (
-                    <SelectItem key={o.value} value={o.value}>
-                      {o.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
+              <Select value={severity} onValueChange={setSeverity} placeholder="Select severity">
+                {SEVERITY_OPTIONS.map((o) => (
+                  <SelectItem key={o.value} value={o.value}>
+                    {o.label}
+                  </SelectItem>
+                ))}
               </Select>
             </div>
 
             <div className="space-y-2">
               <Label>Status</Label>
-              <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  {STATUS_OPTIONS.map((o) => (
-                    <SelectItem key={o.value} value={o.value}>
-                      {o.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
+              <Select value={status} onValueChange={setStatus} placeholder="Select status">
+                {STATUS_OPTIONS.map((o) => (
+                  <SelectItem key={o.value} value={o.value}>
+                    {o.label}
+                  </SelectItem>
+                ))}
               </Select>
             </div>
 
@@ -395,17 +377,12 @@ export default function CAPACreate() {
 
             <div className="space-y-2">
               <Label>Root Cause Method</Label>
-              <Select value={rootCauseMethod} onValueChange={setRootCauseMethod}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select method" />
-                </SelectTrigger>
-                <SelectContent>
-                  {ROOT_CAUSE_METHODS.map((o) => (
-                    <SelectItem key={o.value} value={o.value}>
-                      {o.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
+              <Select value={rootCauseMethod} onValueChange={setRootCauseMethod} placeholder="Select method">
+                {ROOT_CAUSE_METHODS.map((o) => (
+                  <SelectItem key={o.value} value={o.value}>
+                    {o.label}
+                  </SelectItem>
+                ))}
               </Select>
 
               <div className="mt-3 space-y-2">

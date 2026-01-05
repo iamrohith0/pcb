@@ -26,7 +26,7 @@ import { Select } from "@/components/ui/select"; // if your shadcn select wrappe
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
-import inspectionsService from "@/services/inspections.service"; // create this service (API calls) or adapt to your existing api layer
+import inspectionsService from "@/services/quality/inspections.service"; // create this service (API calls) or adapt to your existing api layer
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");

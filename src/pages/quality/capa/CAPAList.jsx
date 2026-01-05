@@ -10,13 +10,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select } from "@/components/ui/select";
 
 import {
   AlertDialog,
@@ -352,22 +346,17 @@ export default function CAPAList() {
               <Label>Status</Label>
               <Select
                 value={status}
-                onValueChange={(v) => {
-                  setStatus(v);
+                onChange={(e) => {
+                  setStatus(e.target.value);
                   setPage(1);
                 }}
               >
-                <SelectTrigger>
-                  <SelectValue placeholder="All statuses" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  {Object.keys(STATUS_META).map((k) => (
-                    <SelectItem key={k} value={k}>
-                      {STATUS_META[k].label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
+                <option value="all">All</option>
+                {Object.keys(STATUS_META).map((k) => (
+                  <option key={k} value={k}>
+                    {STATUS_META[k].label}
+                  </option>
+                ))}
               </Select>
             </div>
 
@@ -375,22 +364,17 @@ export default function CAPAList() {
               <Label>Severity</Label>
               <Select
                 value={severity}
-                onValueChange={(v) => {
-                  setSeverity(v);
+                onChange={(e) => {
+                  setSeverity(e.target.value);
                   setPage(1);
                 }}
               >
-                <SelectTrigger>
-                  <SelectValue placeholder="All severities" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  {Object.keys(SEVERITY_META).map((k) => (
-                    <SelectItem key={k} value={k}>
-                      {SEVERITY_META[k].label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
+                <option value="all">All</option>
+                {Object.keys(SEVERITY_META).map((k) => (
+                  <option key={k} value={k}>
+                    {SEVERITY_META[k].label}
+                  </option>
+                ))}
               </Select>
             </div>
 
@@ -398,22 +382,17 @@ export default function CAPAList() {
               <Label>Source</Label>
               <Select
                 value={sourceType}
-                onValueChange={(v) => {
-                  setSourceType(v);
+                onChange={(e) => {
+                  setSourceType(e.target.value);
                   setPage(1);
                 }}
               >
-                <SelectTrigger>
-                  <SelectValue placeholder="All sources" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  {Object.entries(SOURCE_LABEL).map(([k, v]) => (
-                    <SelectItem key={k} value={k}>
-                      {v}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
+                <option value="all">All</option>
+                {Object.entries(SOURCE_LABEL).map(([k, v]) => (
+                  <option key={k} value={k}>
+                    {v}
+                  </option>
+                ))}
               </Select>
             </div>
 

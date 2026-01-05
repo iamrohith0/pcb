@@ -487,7 +487,7 @@ export default function PanelCreate() {
                     </>
                   ) : (
                     <>
-                      <TriangleAlert className="mt-0.5 h-4 w-4 text-amber-600" />
+                      <AlertTriangle className="mt-0.5 h-4 w-4 text-amber-600" />
                       <p>
                         Array does not fit. Reduce rows/cols or increase panel size / rails.
                       </p>
@@ -820,7 +820,7 @@ export default function PanelCreate() {
                   warnings.map((msg, idx) => (
                     <div key={idx} className="rounded-xl border bg-amber-50 p-3 text-xs text-amber-900">
                       <div className="flex items-start gap-2">
-                        <TriangleAlert className="mt-0.5 h-4 w-4" />
+                        <AlertTriangle className="mt-0.5 h-4 w-4" />
                         <p>{msg}</p>
                       </div>
                     </div>
