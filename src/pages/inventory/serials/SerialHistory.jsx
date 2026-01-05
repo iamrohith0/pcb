@@ -29,7 +29,7 @@ import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 
 // If you already have a serials service, replace this import with it.
-import serialsService from "@/services/serials.service";
+import serialsService from "@/services/inventory/serials.service";
 
 /**
  * SerialHistory.jsx

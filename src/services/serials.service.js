@@ -1,82 +1,53 @@
-// src/services/serials.service.js
-import api from "@/lib/axios";
+import axios from "@/lib/axios";
 
-/**
- * Serials Service
- * Provides API endpoints for serial number management including creation, lookup, and history
- */
-const serialsService = {
-  /**
-   * Get serial details by serial number
-   * @param {string} serial - The serial number to lookup
-   * @returns {Promise} API response with serial details
-   */
-  getSerial(serial) {
-    return api.get(`/inventory/serials/${encodeURIComponent(serial)}`);
+const API_BASE = "/api/serials";
+
+export default {
+  async getAll(params = {}) {
+    const response = await axios.get(API_BASE, { params });
+    return response.data;
   },
 
-  /**
-   * Get serial history/events
-   * @param {string} serial - The serial number
-   * @param {Object} params - Query parameters (type, q, from, to, page, limit)
-   * @returns {Promise} API response with serial history
-   */
-  getSerialHistory(serial, params = {}) {
-    return api.get(`/inventory/serials/${encodeURIComponent(serial)}/history`, { params });
+  async getById(serialId) {
+    const response = await axios.get(`${API_BASE}/${serialId}`);
+    return response.data;
   },
 
-  /**
-   * Register/generate new serials for a work order and lot
-   * @param {Object} payload - Serial registration data
-   * @param {string} payload.plant - Plant identifier
-   * @param {string} payload.workOrderNo - Work order number
-   * @param {string} payload.lotNo - Lot number
-   * @param {string} payload.itemCode - Item code
-   * @param {string} payload.revision - Revision
-   * @param {number} payload.quantity - Number of serials to generate
-   * @param {string} payload.mfgDate - Manufacturing date
-   * @returns {Promise} API response with generated serials
-   */
-  registerSerials(payload) {
-    return api.post("/inventory/serials/register", payload);
+  async create(serialData) {
+    const response = await axios.post(API_BASE, serialData);
+    return response.data;
   },
 
-  /**
-   * Get serials list with filtering
-   * @param {Object} params - Query parameters
-   * @returns {Promise} API response with serials list
-   */
-  getSerials(params = {}) {
-    return api.get("/inventory/serials", { params });
+  async update(serialId, serialData) {
+    const response = await axios.put(`${API_BASE}/${serialId}`, serialData);
+    return response.data;
   },
 
-  /**
-   * Update serial status or details
-   * @param {string} serial - The serial number
-   * @param {Object} updates - Fields to update
-   * @returns {Promise} API response
-   */
-  updateSerial(serial, updates) {
-    return api.put(`/inventory/serials/${encodeURIComponent(serial)}`, updates);
+  async delete(serialId) {
+    const response = await axios.delete(`${API_BASE}/${serialId}`);
+    return response.data;
   },
 
-  /**
-   * Delete a serial (if supported by backend)
-   * @param {string} serial - The serial number
-   * @returns {Promise} API response
-   */
-  deleteSerial(serial) {
-    return api.delete(`/inventory/serials/${encodeURIComponent(serial)}`);
+  async registerBatch(serials) {
+    const response = await axios.post(`${API_BASE}/register-batch`, { serials });
+    return response.data;
   },
 
-  /**
-   * Bulk operations on serials
-   * @param {Object} payload - Bulk operation data
-   * @returns {Promise} API response
-   */
-  bulkOperation(payload) {
-    return api.post("/inventory/serials/bulk", payload);
+  async printLabels(serialIds, templateId) {
+    const response = await axios.post(`${API_BASE}/print-labels`, {
+      serialIds,
+      templateId
+    });
+    return response.data;
+  },
+
+  async lookup(serialNumber) {
+    const response = await axios.get(`${API_BASE}/lookup/${serialNumber}`);
+    return response.data;
+  },
+
+  async getHistory(serialId) {
+    const response = await axios.get(`${API_BASE}/${serialId}/history`);
+    return response.data;
   }
 };
-
-export default serialsService;

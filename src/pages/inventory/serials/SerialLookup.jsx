@@ -26,7 +26,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
-import serialsService from "@/services/serials.service";
+import serialsService from "@/services/inventory/serials.service";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");

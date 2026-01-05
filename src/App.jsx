@@ -34,6 +34,21 @@ import AuditLogList from './pages/admin/audit-logs/AuditLogList.jsx'
 import AuditLogDetails from './pages/admin/audit-logs/AuditLogDetails.jsx'
 import ExportAuditLogs from './pages/admin/audit-logs/ExportAuditLogs.jsx'
 
+// Settings Pages
+import CompanyProfile from './pages/settings/company/CompanyProfile.jsx'
+import Branding from './pages/settings/company/Branding.jsx'
+import WorkingHours from './pages/settings/company/WorkingHours.jsx'
+import EmailSMTP from './pages/settings/integrations/EmailSMTP.jsx'
+import ERPWebhooks from './pages/settings/integrations/ERPWebhooks.jsx'
+import AccountingSync from './pages/settings/integrations/AccountingSync.jsx'
+import Barcode from './pages/settings/integrations/Barcode.jsx'
+import DocumentSeries from './pages/settings/numbering/DocumentSeries.jsx'
+import LotNumbering from './pages/settings/numbering/LotNumbering.jsx'
+import WorkOrderNumbering from './pages/settings/numbering/WorkOrderNumbering.jsx'
+import PlantsList from './pages/settings/plants/PlantsList.jsx'
+import PlantCreate from './pages/settings/plants/PlantCreate.jsx'
+import Shifts from './pages/settings/plants/Shifts.jsx'
+
 // Quality Pages
 import InspectionList from './pages/quality/inspections/InspectionList.jsx'
 import InspectionCreate from './pages/quality/inspections/InspectionCreate.jsx'
@@ -192,6 +207,35 @@ function App() {
               </PublicRoute>
             }
           />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout />
+              </ProtectedRoute>
+            }
+          >
+            {/* Company Settings */}
+            <Route path="company/profile" element={<CompanyProfile />} />
+            <Route path="company/branding" element={<Branding />} />
+            <Route path="company/working-hours" element={<WorkingHours />} />
+            
+            {/* Integrations Settings */}
+            <Route path="integrations/email" element={<EmailSMTP />} />
+            <Route path="integrations/webhooks" element={<ERPWebhooks />} />
+            <Route path="integrations/accounting" element={<AccountingSync />} />
+            <Route path="integrations/barcode" element={<Barcode />} />
+            
+            {/* Numbering Settings */}
+            <Route path="numbering/documents" element={<DocumentSeries />} />
+            <Route path="numbering/lots" element={<LotNumbering />} />
+            <Route path="numbering/work-orders" element={<WorkOrderNumbering />} />
+            
+            {/* Plants Settings */}
+            <Route path="plants/list" element={<PlantsList />} />
+            <Route path="plants/create" element={<PlantCreate />} />
+            <Route path="plants/shifts" element={<Shifts />} />
+          </Route>
           <Route
             path="/dashboard"
             element={

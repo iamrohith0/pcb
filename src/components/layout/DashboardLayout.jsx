@@ -9,22 +9,29 @@ import {
   BarChart3,
   BookOpen,
   Boxes,
+  Calendar,
   ClipboardCheck,
   ClipboardList,
+  Clock,
   DollarSign,
   Eye,
   Factory,
+  Building2,
   FileSearch2,
   FileText,
   FolderKanban,
   GitCompare,
+  Hash,
   LayoutDashboard,
   LayoutGrid,
   Layers,
   LogOut,
+  Mail,
   Menu,
   Package,
+  Palette,
   Percent,
+  Plus,
   QrCode,
   Route,
   ScanLine,
@@ -32,12 +39,17 @@ import {
   ShieldCheck,
   ShoppingCart,
   SlidersHorizontal,
+  Tag,
   TrendingUp,
   Truck,
+  MapPin,
+  PackageCheck,
+  Ship,
   Users as UsersIcon,
   Warehouse,
-  X,
+  Webhook,
   Wrench,
+  X,
   Zap,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -232,6 +244,22 @@ export default function DashboardLayout() {
       ],
     };
 
+    const logistics = {
+      title: "Logistics",
+      items: [
+        { to: "/dashboard/logistics/dispatch", label: "Dispatch", icon: Truck },
+        { to: "/dashboard/logistics/dispatch/create", label: "Create Dispatch", icon: PackageCheck },
+        { to: "/dashboard/logistics/dispatch/queue", label: "Dispatch Queue", icon: LayoutGrid },
+        { to: "/dashboard/logistics/shipments", label: "Shipments", icon: Ship },
+        { to: "/dashboard/logistics/shipments/create", label: "Create Shipment", icon: Truck },
+        { to: "/dashboard/logistics/shipments/documents", label: "Shipment Documents", icon: FileText },
+        { to: "/dashboard/logistics/tracking", label: "Tracking Dashboard", icon: MapPin },
+        { to: "/dashboard/logistics/tracking/status", label: "Delivery Status", icon: Clock },
+        { to: "/dashboard/logistics/tracking/pod", label: "POD Upload", icon: FileText },
+        { to: "/dashboard/logistics/tracking/carriers", label: "Carrier Integration", icon: Ship },
+      ],
+    };
+
     const reports = {
       title: "Reports",
       items: [
@@ -255,6 +283,32 @@ export default function DashboardLayout() {
       ],
     };
 
+    const superSettings = {
+      title: "Super Settings",
+      items: [
+        // Company
+        { to: "/settings/company/profile", label: "Company Profile", icon: Building2 },
+        { to: "/settings/company/branding", label: "Branding", icon: Palette },
+        { to: "/settings/company/working-hours", label: "Working Hours", icon: Clock },
+        
+        // Integrations
+        { to: "/settings/integrations/email", label: "Email SMTP", icon: Mail },
+        { to: "/settings/integrations/webhooks", label: "ERP Webhooks", icon: Webhook },
+        { to: "/settings/integrations/accounting", label: "Accounting Sync", icon: DollarSign },
+        { to: "/settings/integrations/barcode", label: "Barcode", icon: QrCode },
+        
+        // Numbering
+        { to: "/settings/numbering/documents", label: "Document Series", icon: Hash },
+        { to: "/settings/numbering/lots", label: "Lot Numbering", icon: Tag },
+        { to: "/settings/numbering/work-orders", label: "Work Order Numbering", icon: FileText },
+        
+        // Plants
+        { to: "/settings/plants/list", label: "Plants", icon: Factory },
+        { to: "/settings/plants/create", label: "Create Plant", icon: Plus },
+        { to: "/settings/plants/shifts", label: "Shifts", icon: Calendar },
+      ],
+    };
+
     /**
      * Role-based visibility rules (simple & practical)
      * Adjust to match your org needs.
@@ -268,6 +322,7 @@ export default function DashboardLayout() {
       quality: ["super_admin", "admin", "quality_manager"].includes(role),
       procurement: ["super_admin", "admin", "procurement"].includes(role),
       inventory: ["super_admin", "admin", "procurement", "store", "production_manager"].includes(role),
+      logistics: ["super_admin", "admin", "procurement", "store", "production_manager"].includes(role),
       traceability: ["super_admin", "admin", "quality_manager", "production_manager", "store"].includes(role),
       maintenance: ["super_admin", "admin", "production_manager"].includes(role),
       reports: ["super_admin", "admin", "production_manager", "quality_manager", "sales", "procurement"].includes(role),
@@ -280,10 +335,12 @@ export default function DashboardLayout() {
     if (can.quality) sections.push(quality);
     if (can.inventory) sections.push(inventory);
     if (can.procurement) sections.push(procurement);
+    if (can.logistics) sections.push(logistics);
     if (can.traceability) sections.push(traceability);
     if (can.maintenance) sections.push(maintenance);
     if (can.reports) sections.push(reports);
     if (can.admin) sections.push(admin);
+    if (can.admin) sections.push(superSettings);
 
     return sections;
   }, [role]);
