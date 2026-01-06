@@ -1750,7 +1750,7 @@ api.interceptors.response.use(
 export default api;
 ```
 
-## Component Organization
+## Component Organization (all componenets are not implemented yet)
 
 ### Component Hierarchy
 
