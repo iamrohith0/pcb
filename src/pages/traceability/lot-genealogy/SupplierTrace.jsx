@@ -1,34 +1,34 @@
 // src/pages/traceability/lot-genealogy/SupplierTrace.jsx
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  Building2,
-  FileSearch2,
-  Link2,
-  Loader2,
-  Package,
-  Route,
-  ScanSearch,
-  Truck,
-  RefreshCw,
-  Hash,
-  ShoppingBag,
-  MapPin,
-  Calendar,
-  ClipboardList,
-  Layers,
-  AlertTriangle,
-  ExternalLink,
+    AlertTriangle,
+    ArrowLeft,
+    Building2,
+    Calendar,
+    ClipboardList,
+    ExternalLink,
+    FileSearch2,
+    Hash,
+    Layers,
+    Link2,
+    Loader2,
+    MapPin,
+    Package,
+    RefreshCw,
+    Route,
+    ScanSearch,
+    ShoppingBag,
+    Truck,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import api from "@/lib/axios";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -224,7 +224,7 @@ export default function SupplierTrace() {
               <div className="md:col-span-1 flex items-end">
                 <Button
                   type="button"
-                  className="w-full gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                  className="w-full gap-2 bg-cyan-600 hover:bg-cyan-500"
                   onClick={() => runTrace(query)}
                   disabled={loading}
                 >

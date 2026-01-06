@@ -363,7 +363,7 @@ export default function StockValuation() {
 
             <div className="sm:col-span-2 lg:col-span-4 flex flex-wrap items-center justify-end gap-2 pt-1">
               <Button
-                className="bg-[#DC2551] hover:bg-[#B02045]"
+                className="bg-cyan-600 hover:bg-cyan-500"
                 onClick={loadValuation}
                 disabled={loading}
               >

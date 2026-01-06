@@ -2,34 +2,34 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  Building2,
-  CheckCircle2,
-  ClipboardList,
-  MapPin,
-  Plus,
-  Save,
-  ShieldCheck,
-  Warehouse as WarehouseIcon,
-  XCircle,
+    Building2,
+    CheckCircle2,
+    ClipboardList,
+    MapPin,
+    Plus,
+    Save,
+    ShieldCheck,
+    Warehouse as WarehouseIcon,
+    XCircle,
 } from "lucide-react";
 
 import api from "@/lib/axios";
@@ -268,7 +268,7 @@ export default function WarehouseCreate() {
             <XCircle className="h-4 w-4" />
             Cancel
           </Button>
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={submit} disabled={!canSave}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={submit} disabled={!canSave}>
             <Save className="h-4 w-4" />
             {saving ? "Saving..." : "Save Warehouse"}
           </Button>

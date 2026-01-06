@@ -1,32 +1,32 @@
 // src/pages/inventory/lots/LotsList.jsx
+import {
+    ArrowUpDown,
+    Barcode,
+    CalendarDays,
+    CheckCircle2,
+    ClipboardList,
+    Filter,
+    Loader2,
+    PackageSearch,
+    Plus,
+    RefreshCw,
+    Search,
+    ShieldCheck,
+    SlidersHorizontal,
+    Trash2,
+    XCircle,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  ArrowUpDown,
-  Barcode,
-  CalendarDays,
-  CheckCircle2,
-  ClipboardList,
-  Filter,
-  Loader2,
-  PackageSearch,
-  Plus,
-  RefreshCw,
-  Search,
-  ShieldCheck,
-  SlidersHorizontal,
-  Trash2,
-  XCircle,
-} from "lucide-react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
-import lotsService from "@/services/inventory/lots.service";
 import { ConfirmationDialog } from "@/components/ConfirmationDialog";
+import lotsService from "@/services/inventory/lots.service";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -229,7 +229,7 @@ export default function LotsList() {
             Refresh
           </Button>
 
-          <Button asChild className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+          <Button asChild className="gap-2 bg-cyan-600 hover:bg-cyan-500">
             <Link to="/inventory/lots/create">
               <Plus className="h-4 w-4" />
               New Lot

@@ -1,55 +1,53 @@
 // src/pages/production/work-orders/WorkOrderDetails.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  BadgeCheck,
-  Barcode,
-  Calendar,
-  CheckCircle2,
-  ChevronRight,
-  ClipboardList,
-  Clock,
-  Download,
-  ExternalLink,
-  Factory,
-  FileText,
-  Flag,
-  Hash,
-  Layers,
-  Package,
-  PauseCircle,
-  PlayCircle,
-  Printer,
-  RefreshCw,
-  ShieldCheck,
-  Tag,
-  Timer,
-  Trash2,
-  UserCircle2,
-  Wrench,
-  AlertTriangle,
-  ScanLine,
-  Route,
+    ArrowLeft,
+    BadgeCheck,
+    Barcode,
+    Calendar,
+    CheckCircle2,
+    ChevronRight,
+    ClipboardList,
+    Clock,
+    Download,
+    ExternalLink,
+    FileText,
+    Flag,
+    Hash,
+    Layers,
+    Package,
+    PauseCircle,
+    PlayCircle,
+    Printer,
+    RefreshCw,
+    Route,
+    ScanLine,
+    ShieldCheck,
+    Tag,
+    Timer,
+    Trash2,
+    UserCircle2,
+    Wrench
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 function cx(...parts) {
@@ -389,7 +387,7 @@ export default function WorkOrderDetails() {
           </Button>
 
           {wo.status === "Planned" && (
-            <Button className="bg-[#dc2551] hover:bg-[#b02045] gap-2" onClick={() => openConfirm("start")} disabled={loading}>
+            <Button className="bg-cyan-600 hover:bg-cyan-500 gap-2" onClick={() => openConfirm("start")} disabled={loading}>
               <PlayCircle className="h-4 w-4" />
               Start
             </Button>

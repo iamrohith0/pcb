@@ -1,39 +1,38 @@
 // src/pages/admin/settings/AdminSettings.jsx
-import { useEffect, useMemo, useState } from "react";
 import api from "@/lib/axios";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  Factory,
-  Building2,
-  Mail,
-  Phone,
-  MapPin,
-  Hash,
-  Globe,
-  Save,
-  RefreshCw,
-  ShieldCheck,
-  Network,
-  KeyRound,
-  Settings as SettingsIcon,
+    Building2,
+    Globe,
+    Hash,
+    KeyRound,
+    Mail,
+    MapPin,
+    Network,
+    Phone,
+    RefreshCw,
+    Save,
+    Settings as SettingsIcon,
+    ShieldCheck
 } from "lucide-react";
 
 function cx(...parts) {
@@ -382,7 +381,7 @@ export default function AdminSettings() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={handleSave}
             disabled={saving || loading || !isDirty}
           >

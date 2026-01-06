@@ -1,26 +1,26 @@
 // src/pages/maintenance/spares/SpareIssue.jsx
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  Barcode,
-  ClipboardCheck,
-  Hash,
-  MapPin,
-  Minus,
-  Package,
-  Plus,
-  Save,
-  Search,
-  Settings2,
-  User,
-  Wrench,
+    ArrowLeft,
+    Barcode,
+    ClipboardCheck,
+    Hash,
+    MapPin,
+    Minus,
+    Package,
+    Plus,
+    Save,
+    Search,
+    Settings2,
+    User,
+    Wrench,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -362,7 +362,7 @@ export default function SpareIssue() {
           <Button
             onClick={handleSave}
             disabled={!canSubmit || saving}
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
           >
             <Save className="h-4 w-4" />
             {saving ? "Saving..." : "Save Issue"}
@@ -858,7 +858,7 @@ export default function SpareIssue() {
             <Button
               type="submit"
               disabled={!canSubmit || saving}
-              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             >
               <Save className="h-4 w-4" />
               {saving ? "Saving..." : "Create Issue"}

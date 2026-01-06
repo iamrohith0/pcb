@@ -204,7 +204,7 @@ export default function StockDashboard() {
           </Link>
 
           <Link to="/inventory/lots">
-            <Button className="bg-[#DC2551] hover:bg-[#B02045]">
+            <Button className="bg-cyan-600 hover:bg-cyan-500">
               <Layers className="mr-2 h-4 w-4" />
               Lots
             </Button>
@@ -303,7 +303,7 @@ export default function StockDashboard() {
               </Link>
 
               <Link to="/procurement/grn/create">
-                <Button className="bg-[#DC2551] hover:bg-[#B02045]">
+                <Button className="bg-cyan-600 hover:bg-cyan-500">
                   <RefreshCw className="mr-2 h-4 w-4" />
                   GRN (Receive)
                 </Button>

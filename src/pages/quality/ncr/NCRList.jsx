@@ -2,31 +2,31 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 
 import {
-  AlertTriangle,
-  ArrowUpDown,
-  CalendarDays,
-  CheckCircle2,
-  ChevronLeft,
-  ChevronRight,
-  ClipboardCheck,
-  Eye,
-  Filter,
-  Loader2,
-  Plus,
-  RefreshCw,
-  Search,
-  ShieldCheck,
-  XCircle,
+    AlertTriangle,
+    ArrowUpDown,
+    CalendarDays,
+    CheckCircle2,
+    ChevronLeft,
+    ChevronRight,
+    ClipboardCheck,
+    Eye,
+    Filter,
+    Loader2,
+    Plus,
+    RefreshCw,
+    Search,
+    ShieldCheck,
+    XCircle,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -355,7 +355,7 @@ export default function NCRList() {
             Refresh
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" asChild>
             <Link to="/quality/ncr/create">
               <Plus className="h-4 w-4" />
               New NCR
@@ -479,7 +479,7 @@ export default function NCRList() {
               <XCircle className="h-4 w-4" />
               Clear
             </Button>
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" type="button" onClick={applyFilters}>
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" type="button" onClick={applyFilters}>
               <Filter className="h-4 w-4" />
               Apply
             </Button>

@@ -1,37 +1,37 @@
 // src/pages/procurement/purchase-orders/PurchaseOrdersList.jsx
+import api from "@/lib/axios";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import api from "@/lib/axios";
 
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  ChevronLeft,
-  ChevronRight,
-  FileDown,
-  Filter,
-  Loader2,
-  Plus,
-  RefreshCw,
-  Search,
-  Trash2,
-  Eye,
-  FileText,
+    ChevronLeft,
+    ChevronRight,
+    Eye,
+    FileDown,
+    FileText,
+    Filter,
+    Loader2,
+    Plus,
+    RefreshCw,
+    Search,
+    Trash2,
 } from "lucide-react";
 
 /**
@@ -462,7 +462,7 @@ export default function PurchaseOrdersList() {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-[#dc2551] hover:bg-[#b02045]"
+              className="bg-cyan-600 hover:bg-cyan-500"
               onClick={confirmDelete}
             >
               Delete

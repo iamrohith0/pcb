@@ -1,38 +1,38 @@
 // src/pages/settings/numbering/DocumentSeries.jsx
-import { useEffect, useMemo, useState } from "react";
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
+import { useEffect, useMemo, useState } from "react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  BookMarked,
-  Calculator,
-  Copy,
-  FileText,
-  Hash,
-  Loader2,
-  RefreshCw,
-  Save,
-  Settings2,
-  Trash2,
+    BookMarked,
+    Calculator,
+    Copy,
+    FileText,
+    Hash,
+    Loader2,
+    RefreshCw,
+    Save,
+    Settings2,
+    Trash2,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -289,7 +289,7 @@ export default function DocumentSeries() {
             Refresh
           </Button>
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={handleSave}
             disabled={saving}
           >

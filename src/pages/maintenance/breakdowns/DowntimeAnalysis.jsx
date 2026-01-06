@@ -1,27 +1,27 @@
 // src/pages/maintenance/breakdowns/DowntimeAnalysis.jsx
-import { useEffect, useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import {
-  Activity,
-  AlertTriangle,
-  Clock,
-  Download,
-  Filter,
-  RefreshCw,
-  Wrench,
+    Activity,
+    AlertTriangle,
+    Clock,
+    Download,
+    Filter,
+    RefreshCw,
+    Wrench,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
 /**
  * DowntimeAnalysis.jsx (PCBxpress - PCB Manufacturing ERP)
@@ -403,7 +403,7 @@ export default function DowntimeAnalysis() {
 
           <Button
             onClick={load}
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             disabled={loading}
           >
             {loading ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Filter className="h-4 w-4" />}

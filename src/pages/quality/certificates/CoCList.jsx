@@ -1,50 +1,49 @@
 // src/pages/quality/certificates/CoCList.jsx
 import { useEffect, useMemo, useState } from "react";
-import { Link, NavLink, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  ArrowUpDown,
-  ClipboardCheck,
-  Copy,
-  Download,
-  Eye,
-  FileText,
-  Loader2,
-  Pencil,
-  Plus,
-  RefreshCcw,
-  Search,
-  Send,
-  Trash2,
-  XCircle,
+    ArrowUpDown,
+    Copy,
+    Download,
+    Eye,
+    FileText,
+    Loader2,
+    Pencil,
+    Plus,
+    RefreshCcw,
+    Search,
+    Send,
+    Trash2,
+    XCircle
 } from "lucide-react";
 
 function cx(...parts) {
@@ -625,7 +624,7 @@ export default function CoCList() {
 
                         <Button
                           size="sm"
-                          className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                          className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                           disabled={!canSend || sendingId === id}
                           onClick={() => handleSend(r)}
                           title="Send to customer"

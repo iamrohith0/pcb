@@ -1,22 +1,22 @@
 // src/pages/warehouse/picking/PickExceptions.jsx
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 import {
-  AlertTriangle,
-  ArrowRight,
-  CheckCircle2,
-  ClipboardList,
-  Filter,
-  PackageSearch,
-  RefreshCw,
-  Search,
-  ShieldAlert,
-  XCircle,
+    AlertTriangle,
+    ArrowRight,
+    CheckCircle2,
+    ClipboardList,
+    Filter,
+    PackageSearch,
+    RefreshCw,
+    Search,
+    ShieldAlert,
+    XCircle,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -263,7 +263,7 @@ export default function PickExceptions() {
           </Button>
 
           <Link to="/warehouse/picking">
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500">
               <ClipboardList className="h-4 w-4" />
               Go to Picking
             </Button>
@@ -475,7 +475,7 @@ export default function PickExceptions() {
                       <Button
                         onClick={() => resolve(r)}
                         disabled={r.status === "resolved"}
-                        className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                        className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                       >
                         {r.status === "resolved" ? (
                           <>

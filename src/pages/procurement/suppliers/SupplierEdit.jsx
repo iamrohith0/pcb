@@ -1,31 +1,31 @@
 // src/pages/procurement/suppliers/SupplierEdit.jsx
-import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Building2,
-  ChevronLeft,
-  Factory,
-  FileCheck2,
-  Globe,
-  Hash,
-  Mail,
-  MapPin,
-  Phone,
-  Save,
-  ShieldCheck,
-  Trash2,
-  Upload,
-  XCircle,
+    Building2,
+    ChevronLeft,
+    Factory,
+    FileCheck2,
+    Globe,
+    Hash,
+    Mail,
+    MapPin,
+    Phone,
+    Save,
+    ShieldCheck,
+    Trash2,
+    Upload,
+    XCircle,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 // If you already have a supplier service, wire it here.
 // import suppliersService from "@/services/suppliers.service";
@@ -373,7 +373,7 @@ export default function SupplierEdit() {
             <Button
               onClick={() => setConfirmSaveOpen(true)}
               disabled={busy || !isValid || loading}
-              className="bg-[#dc2551] hover:bg-[#b02045]"
+              className="bg-cyan-600 hover:bg-cyan-500"
             >
               <Save className="mr-2 h-4 w-4" />
               Save Changes

@@ -1,33 +1,33 @@
 // src/pages/logistics/shipments/ShipmentDocuments.jsx
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
-import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  ClipboardCopy,
-  Download,
-  Eye,
-  FileDown,
-  FileText,
-  Image as ImageIcon,
-  Link2,
-  Plus,
-  Printer,
-  RefreshCcw,
-  ShieldCheck,
-  Trash2,
-  UploadCloud,
+    ArrowLeft,
+    ClipboardCopy,
+    Download,
+    Eye,
+    FileDown,
+    FileText,
+    Image as ImageIcon,
+    Link2,
+    Plus,
+    Printer,
+    RefreshCcw,
+    ShieldCheck,
+    Trash2,
+    UploadCloud,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -401,7 +401,7 @@ export default function ShipmentDocuments() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => {
               const el = document.getElementById("add-doc");
               el?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -614,7 +614,7 @@ export default function ShipmentDocuments() {
             <div className="flex flex-wrap items-center gap-2">
               <Button
                 variant={mode === "upload" ? "default" : "secondary"}
-                className={cx(mode === "upload" ? "bg-[#dc2551] hover:bg-[#b02045]" : "")}
+                className={cx(mode === "upload" ? "bg-cyan-600 hover:bg-cyan-500" : "")}
                 onClick={() => {
                   setMode("upload");
                   resetForm();
@@ -626,7 +626,7 @@ export default function ShipmentDocuments() {
 
               <Button
                 variant={mode === "link" ? "default" : "secondary"}
-                className={cx(mode === "link" ? "bg-[#dc2551] hover:bg-[#b02045]" : "")}
+                className={cx(mode === "link" ? "bg-cyan-600 hover:bg-cyan-500" : "")}
                 onClick={() => {
                   setMode("link");
                   resetForm();
@@ -731,7 +731,7 @@ export default function ShipmentDocuments() {
               <Button variant="secondary" onClick={resetForm}>
                 Reset
               </Button>
-              <Button className="bg-[#dc2551] hover:bg-[#b02045]" onClick={validateAndSubmit}>
+              <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={validateAndSubmit}>
                 <Plus className="mr-2 h-4 w-4" />
                 Add
               </Button>

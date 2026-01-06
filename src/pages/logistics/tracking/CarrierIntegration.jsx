@@ -1,22 +1,22 @@
 // src/pages/settings/integrations/CarrierIntegration.jsx
 import { useEffect, useMemo, useState } from "react";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  CheckCircle2,
-  Copy,
-  KeyRound,
-  Link2,
-  RefreshCw,
-  ShieldCheck,
-  Truck,
-  XCircle,
+    CheckCircle2,
+    Copy,
+    KeyRound,
+    Link2,
+    RefreshCw,
+    ShieldCheck,
+    Truck,
+    XCircle,
 } from "lucide-react";
 
 /**
@@ -284,7 +284,7 @@ export default function CarrierIntegration() {
             <RefreshCw className={cx("h-4 w-4", loading ? "animate-spin" : "")} />
             Refresh
           </Button>
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={handleSave} disabled={loading || saving}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={handleSave} disabled={loading || saving}>
             {saving ? "Saving..." : "Save Changes"}
           </Button>
         </div>
@@ -505,7 +505,7 @@ export default function CarrierIntegration() {
                     </Button>
 
                     <Button
-                      className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                      className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                       onClick={handleTest}
                       disabled={testing || !selectedCarrier.enabled}
                     >

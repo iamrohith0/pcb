@@ -2,26 +2,26 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  ArrowLeft,
-  Loader2,
-  Warehouse,
-  CalendarDays,
-  Hash,
-  FileText,
-  Layers,
-  ClipboardCheck,
-  ShieldCheck,
-  UserCircle2,
-  Printer,
-  Download,
-  Pencil,
-  AlertTriangle,
+    AlertTriangle,
+    ArrowLeft,
+    CalendarDays,
+    ClipboardCheck,
+    Download,
+    FileText,
+    Hash,
+    Layers,
+    Loader2,
+    Pencil,
+    Printer,
+    ShieldCheck,
+    UserCircle2,
+    Warehouse,
 } from "lucide-react";
 
 import api from "@/lib/axios";
@@ -227,7 +227,7 @@ export default function StockAdjustmentDetails() {
             <ArrowLeft className="h-4 w-4" />
             Back
           </Button>
-          <Button asChild className="bg-[#dc2551] hover:bg-[#b02045]">
+          <Button asChild className="bg-cyan-600 hover:bg-cyan-500">
             <Link to="/inventory/adjustments">Go to list</Link>
           </Button>
         </CardContent>
@@ -277,7 +277,7 @@ export default function StockAdjustmentDetails() {
           </Button>
 
           {/* If you implement edit route */}
-          <Button asChild className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+          <Button asChild className="gap-2 bg-cyan-600 hover:bg-cyan-500">
             <Link to={`/inventory/adjustments/${doc.id ?? id}/edit`}>
               <Pencil className="h-4 w-4" />
               Edit
@@ -530,7 +530,7 @@ export default function StockAdjustmentDetails() {
               <ArrowLeft className="h-4 w-4" />
               Back
             </Button>
-            <Button asChild className="bg-[#dc2551] hover:bg-[#b02045]">
+            <Button asChild className="bg-cyan-600 hover:bg-cyan-500">
               <Link to="/inventory/adjustments">Go to adjustments list</Link>
             </Button>
           </div>

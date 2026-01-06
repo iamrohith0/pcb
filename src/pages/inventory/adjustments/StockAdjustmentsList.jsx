@@ -2,39 +2,38 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  ClipboardCheck,
-  Plus,
-  Search,
-  RefreshCw,
-  Filter,
-  CalendarDays,
-  Warehouse,
-  ArrowUpDown,
-  Eye,
-  Trash2,
-  XCircle,
-  Loader2,
+    ArrowUpDown,
+    CalendarDays,
+    ClipboardCheck,
+    Eye,
+    Filter,
+    Loader2,
+    Plus,
+    RefreshCw,
+    Search,
+    Trash2,
+    Warehouse,
+    XCircle,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -277,7 +276,7 @@ export default function StockAdjustmentsList() {
             Refresh
           </Button>
 
-          <Button asChild className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+          <Button asChild className="gap-2 bg-cyan-600 hover:bg-cyan-500">
             <Link to="/inventory/adjustments/create">
               <Plus className="h-4 w-4" />
               New Adjustment

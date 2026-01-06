@@ -1,40 +1,39 @@
 // src/pages/production/wip/WIPHoldRelease.jsx
-import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import {
-  AlertTriangle,
-  CheckCircle2,
-  Clock,
-  Download,
-  Filter,
-  PauseCircle,
-  PlayCircle,
-  RefreshCw,
-  Search,
-  ShieldCheck,
-  Tag,
-  UserCircle2,
-  Wrench,
-  Factory,
+    AlertTriangle,
+    CheckCircle2,
+    Clock,
+    Download,
+    Factory,
+    Filter,
+    PauseCircle,
+    PlayCircle,
+    RefreshCw,
+    Search,
+    ShieldCheck,
+    Tag,
+    UserCircle2,
+    Wrench,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 function cx(...parts) {
@@ -381,7 +380,7 @@ export default function WIPHoldRelease() {
             Export
           </Button>
 
-          <Button onClick={refresh} className="bg-[#dc2551] hover:bg-[#b02045] gap-2" disabled={loading}>
+          <Button onClick={refresh} className="bg-cyan-600 hover:bg-cyan-500 gap-2" disabled={loading}>
             <RefreshCw className={cx("h-4 w-4", loading ? "animate-spin" : "")} />
             Refresh
           </Button>

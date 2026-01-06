@@ -1,26 +1,26 @@
 // src/pages/sales/orders/SalesOrdersList.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowUpDown,
-  CalendarDays,
-  Eye,
-  FileText,
-  Loader2,
-  Plus,
-  RefreshCw,
-  Search,
-  Filter,
-  X,
-  Building2,
+    ArrowUpDown,
+    Building2,
+    CalendarDays,
+    Eye,
+    FileText,
+    Filter,
+    Loader2,
+    Plus,
+    RefreshCw,
+    Search,
+    X,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import salesOrdersApi from "@/services/sales/salesOrders.service";
@@ -210,7 +210,7 @@ export default function SalesOrdersList() {
             Refresh
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" asChild>
             <Link to="/dashboard/sales/orders/create">
               <Plus className="h-4 w-4" />
               New Sales Order
@@ -357,7 +357,7 @@ export default function SalesOrdersList() {
               <p className="text-sm font-semibold text-gray-900">No Sales Orders found</p>
               <p className="mt-1 text-sm text-gray-500">Try changing filters or create a new Sales Order.</p>
               <div className="mt-4 flex justify-center">
-                <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
+                <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" asChild>
                   <Link to="/dashboard/sales/orders/create">
                     <Plus className="h-4 w-4" />
                     Create Sales Order
@@ -443,7 +443,7 @@ export default function SalesOrdersList() {
 
                 <Button
                   size="sm"
-                  className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                  className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                   onClick={() => navigate("/dashboard/sales/orders/create")}
                 >
                   <Plus className="h-4 w-4" />

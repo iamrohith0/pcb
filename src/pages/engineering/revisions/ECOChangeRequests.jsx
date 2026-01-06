@@ -322,7 +322,7 @@ export default function ECOChangeRequests() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button asChild className="gap-2 bg-[#DC2551] hover:bg-[#B02045]">
+          <Button asChild className="gap-2 bg-cyan-600 hover:bg-cyan-500">
             <Link to="/engineering/revisions/eco/new">
               <Plus className="h-4 w-4" />
               Create ECO
@@ -447,7 +447,7 @@ export default function ECOChangeRequests() {
                 <XCircle className="h-4 w-4" />
                 Reset
               </Button>
-              <Button type="submit" className="gap-2 bg-[#DC2551] hover:bg-[#B02045]" disabled={loading}>
+              <Button type="submit" className="gap-2 bg-cyan-600 hover:bg-cyan-500" disabled={loading}>
                 <Search className="h-4 w-4" />
                 Apply
               </Button>

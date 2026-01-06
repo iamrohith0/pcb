@@ -1,26 +1,26 @@
 // src/pages/maintenance/equipment/EquipmentCreate.jsx
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  BadgeCheck,
-  Building2,
-  CalendarDays,
-  Factory,
-  Hash,
-  MapPin,
-  Plus,
-  Save,
-  Settings,
-  ShieldAlert,
-  Wrench,
+    ArrowLeft,
+    BadgeCheck,
+    Building2,
+    CalendarDays,
+    Factory,
+    Hash,
+    MapPin,
+    Plus,
+    Save,
+    Settings,
+    ShieldAlert,
+    Wrench,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -237,7 +237,7 @@ export default function EquipmentCreate() {
           <Button
             onClick={() => setConfirmOpen(true)}
             disabled={!canSubmit}
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
           >
             <Save className="h-4 w-4" />
             {saving ? "Saving..." : "Save Equipment"}
@@ -501,7 +501,7 @@ export default function EquipmentCreate() {
             <Button
               type="submit"
               disabled={!canSubmit}
-              className="w-full sm:w-auto gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+              className="w-full sm:w-auto gap-2 bg-cyan-600 hover:bg-cyan-500"
             >
               <Save className="h-4 w-4" />
               {saving ? "Saving..." : "Save Equipment"}

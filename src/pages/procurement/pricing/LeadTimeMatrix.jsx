@@ -1,38 +1,38 @@
 // src/pages/engineering/stackup/LeadTimeMatrix.jsx
-import { useEffect, useMemo, useState } from "react";
 import api from "@/lib/axios";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  CalendarClock,
-  Copy,
-  Download,
-  Layers,
-  Loader2,
-  Plus,
-  RefreshCcw,
-  Save,
-  Search,
-  Settings2,
-  Trash2,
-  Upload,
+    CalendarClock,
+    Copy,
+    Download,
+    Layers,
+    Loader2,
+    Plus,
+    RefreshCcw,
+    Save,
+    Search,
+    Settings2,
+    Trash2,
+    Upload,
 } from "lucide-react";
 
 /**
@@ -455,7 +455,7 @@ export default function LeadTimeMatrix() {
             </span>
           </label>
 
-          <Button onClick={addRow} className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" disabled={savingAll}>
+          <Button onClick={addRow} className="gap-2 bg-cyan-600 hover:bg-cyan-500" disabled={savingAll}>
             <Plus className="h-4 w-4" />
             Add Rule
           </Button>
@@ -531,7 +531,7 @@ export default function LeadTimeMatrix() {
               <p className="text-sm font-semibold text-gray-900">No rules found</p>
               <p className="mt-1 text-sm text-gray-600">Try clearing the search or add a new rule.</p>
               <div className="mt-4 flex justify-center">
-                <Button onClick={addRow} className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+                <Button onClick={addRow} className="gap-2 bg-cyan-600 hover:bg-cyan-500">
                   <Plus className="h-4 w-4" />
                   Add Rule
                 </Button>
@@ -900,7 +900,7 @@ export default function LeadTimeMatrix() {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDelete}
-              className="bg-[#dc2551] hover:bg-[#b02045]"
+              className="bg-cyan-600 hover:bg-cyan-500"
             >
               Delete
             </AlertDialogAction>

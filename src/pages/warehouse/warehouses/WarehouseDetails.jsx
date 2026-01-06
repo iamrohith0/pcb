@@ -1,35 +1,35 @@
 // src/pages/warehouse/warehouses/WarehouseDetails.jsx
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  ArrowRight,
-  BadgeCheck,
-  Box,
-  Building2,
-  CalendarDays,
-  ClipboardList,
-  Factory,
-  Hash,
-  MapPin,
-  Package,
-  Pencil,
-  RefreshCw,
-  Route,
-  Search,
-  ShieldCheck,
-  Warehouse as WarehouseIcon,
+    ArrowLeft,
+    ArrowRight,
+    BadgeCheck,
+    Box,
+    Building2,
+    CalendarDays,
+    ClipboardList,
+    Factory,
+    Hash,
+    MapPin,
+    Package,
+    Pencil,
+    RefreshCw,
+    Route,
+    Search,
+    ShieldCheck,
+    Warehouse as WarehouseIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -312,7 +312,7 @@ export default function WarehouseDetails() {
           {!editMode ? (
             <Button
               onClick={() => setEditMode(true)}
-              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
               disabled={loading}
             >
               <Pencil className="h-4 w-4" />
@@ -323,7 +323,7 @@ export default function WarehouseDetails() {
               <Button variant="outline" onClick={cancel} disabled={loading}>
                 Cancel
               </Button>
-              <Button onClick={save} disabled={loading} className="bg-[#dc2551] hover:bg-[#b02045]">
+              <Button onClick={save} disabled={loading} className="bg-cyan-600 hover:bg-cyan-500">
                 Save
               </Button>
             </>
@@ -555,7 +555,7 @@ export default function WarehouseDetails() {
                 </Link>
               </Button>
 
-              <Button asChild className="justify-between bg-[#dc2551] hover:bg-[#b02045]">
+              <Button asChild className="justify-between bg-cyan-600 hover:bg-cyan-500">
                 <Link to="/inventory/stock/cycle-count">
                   Cycle Count
                   <ArrowRight className="h-4 w-4" />
@@ -615,7 +615,7 @@ export default function WarehouseDetails() {
                 </Link>
               </Button>
 
-              <Button asChild className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+              <Button asChild className="gap-2 bg-cyan-600 hover:bg-cyan-500">
                 <Link to="/warehouse/locations/map">
                   <Route className="h-4 w-4" />
                   Location Map

@@ -6,6 +6,9 @@ import './css/app.css'
 
 // Direct imports to avoid lazy loading issues
 import LoginPage from './Auth/LoginPage.jsx'
+import ForgotPassword from './Auth/ForgotPassword.jsx'
+import ResetPassword from './Auth/ResetPassword.jsx'
+import AccessDenied from './Auth/AccessDenied.jsx'
 import Dashboard from './pages/dashboard/Dashboard.jsx'
 import DashboardLayout from './components/layout/DashboardLayout.jsx'
 import NotFound from './pages/not-found/NotFound.jsx'
@@ -289,6 +292,26 @@ function App() {
                 <LoginPage />
               </PublicRoute>
             }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <PublicRoute>
+                <ForgotPassword />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/reset-password"
+            element={
+              <PublicRoute>
+                <ResetPassword />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/access-denied"
+            element={<AccessDenied />}
           />
           <Route
             path="/settings"

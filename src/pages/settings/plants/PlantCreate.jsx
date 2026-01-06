@@ -1,6 +1,6 @@
 // src/pages/settings/plants/PlantCreate.jsx
-import { useEffect, useMemo, useState } from "react";
 import api from "@/lib/axios";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -12,26 +12,26 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  ArrowLeft,
-  Building2,
-  Factory,
-  Loader2,
-  MapPin,
-  Save,
-  Settings2,
-  ShieldCheck,
-  Trash2,
+    ArrowLeft,
+    Building2,
+    Factory,
+    Loader2,
+    MapPin,
+    Save,
+    Settings2,
+    ShieldCheck,
+    Trash2,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -215,7 +215,7 @@ export default function PlantCreate() {
             Cancel
           </Button>
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={handleSubmit}
             disabled={!canSave}
             type="submit"

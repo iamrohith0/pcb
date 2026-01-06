@@ -2,42 +2,42 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  Cable,
-  CheckCircle2,
-  ChevronLeft,
-  ClipboardList,
-  Eye,
-  Filter,
-  Loader2,
-  PauseCircle,
-  PlayCircle,
-  RefreshCcw,
-  Search,
-  ShieldAlert,
-  Timer,
-  Trash2,
-  XCircle,
+    Cable,
+    CheckCircle2,
+    ChevronLeft,
+    ClipboardList,
+    Eye,
+    Filter,
+    Loader2,
+    PauseCircle,
+    PlayCircle,
+    RefreshCcw,
+    Search,
+    ShieldAlert,
+    Timer,
+    Trash2,
+    XCircle,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -280,7 +280,7 @@ export default function ETestQueue() {
             Refresh
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500">
             <ClipboardList className="h-4 w-4" />
             Add to Queue
           </Button>
@@ -454,7 +454,7 @@ export default function ETestQueue() {
                           {row.status !== "running" ? (
                             <Button
                               size="sm"
-                              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                               onClick={() => startTest(row)}
                               disabled={busy}
                             >

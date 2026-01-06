@@ -1,36 +1,35 @@
 // src/pages/production/capacity/BottleneckAnalysis.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import {
-  Activity,
-  ArrowDown,
-  ArrowUp,
-  CalendarDays,
-  Download,
-  Filter,
-  Loader2,
-  RefreshCw,
-  Search,
-  Settings2,
-  TrendingDown,
-  TrendingUp,
+    Activity,
+    ArrowDown,
+    ArrowUp,
+    CalendarDays,
+    Download,
+    Filter,
+    Loader2,
+    RefreshCw,
+    Search,
+    Settings2,
+    TrendingDown,
+    TrendingUp,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
 // If you already have a service, replace mock calls with your API.
 // Example: import capacityService from "@/services/capacity.service";
@@ -415,7 +414,7 @@ export default function BottleneckAnalysis() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => exportCsv(filtered, { from, to })}
             disabled={!canExport || loading || filtered.length === 0}
             title={!canExport ? "You don't have permission to export" : ""}
@@ -748,7 +747,7 @@ export default function BottleneckAnalysis() {
 
           <AlertDialogFooter>
             <AlertDialogCancel onClick={onResetFilters}>Reset</AlertDialogCancel>
-            <AlertDialogAction onClick={onApplyFilters} disabled={loading} className="bg-[#dc2551] hover:bg-[#b02045]">
+            <AlertDialogAction onClick={onApplyFilters} disabled={loading} className="bg-cyan-600 hover:bg-cyan-500">
               {loading ? "Applying..." : "Apply"}
             </AlertDialogAction>
           </AlertDialogFooter>

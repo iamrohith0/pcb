@@ -1,23 +1,23 @@
 // src/pages/maintenance/preventive/PMCalendar.jsx
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 import {
-  CalendarDays,
-  ChevronLeft,
-  ChevronRight,
-  Filter,
-  Plus,
-  Search,
-  Settings2,
-  Wrench,
-  AlertTriangle,
-  CheckCircle2,
-  Clock,
-  User,
+    AlertTriangle,
+    CalendarDays,
+    CheckCircle2,
+    ChevronLeft,
+    ChevronRight,
+    Clock,
+    Filter,
+    Plus,
+    Search,
+    Settings2,
+    User,
+    Wrench,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -353,7 +353,7 @@ export default function PMCalendar() {
             Today
           </Button>
           <Link to="/maintenance/preventive/create">
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500">
               <Plus className="h-4 w-4" />
               Schedule PM
             </Button>
@@ -507,7 +507,7 @@ export default function PMCalendar() {
             <p className="mt-1 text-sm text-gray-500">Schedule a PM task for this day.</p>
             <div className="mt-4 flex justify-center">
               <Link to="/maintenance/preventive/create">
-                <Button className="bg-[#dc2551] hover:bg-[#b02045]">Schedule PM</Button>
+                <Button className="bg-cyan-600 hover:bg-cyan-500">Schedule PM</Button>
               </Link>
             </div>
           </div>
@@ -567,7 +567,7 @@ export default function PMCalendar() {
                     {pm.status !== "completed" && (
                       <Button
                         size="sm"
-                        className="bg-[#dc2551] hover:bg-[#b02045]"
+                        className="bg-cyan-600 hover:bg-cyan-500"
                         onClick={() => markCompleted(pm.id)}
                       >
                         Mark Completed

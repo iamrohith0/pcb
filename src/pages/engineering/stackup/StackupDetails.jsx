@@ -414,7 +414,7 @@ export default function StackupDetails() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#DC2551] hover:bg-[#B02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={handleSave}
             disabled={!canSave || saving}
           >

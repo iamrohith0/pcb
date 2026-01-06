@@ -1,31 +1,31 @@
 // src/pages/engineering/revisions/ComponentLinking.jsx
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  Link2,
-  Loader2,
-  Search,
-  RefreshCw,
-  FileText,
-  Hash,
-  Layers,
-  Package,
-  ScanBarcode,
-  CheckCircle2,
-  XCircle,
-  AlertTriangle,
-  ExternalLink,
-  Component as ComponentIcon,
+    AlertTriangle,
+    ArrowLeft,
+    CheckCircle2,
+    Component as ComponentIcon,
+    ExternalLink,
+    FileText,
+    Hash,
+    Layers,
+    Link2,
+    Loader2,
+    Package,
+    RefreshCw,
+    ScanBarcode,
+    Search,
+    XCircle,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import api from "@/lib/axios";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -314,7 +314,7 @@ export default function ComponentLinking() {
                 <div className="flex items-center gap-2">
                   <Button
                     type="button"
-                    className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                    className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                     onClick={() => revId && loadRevision(revId)}
                     disabled={!revId || loading}
                   >
@@ -573,7 +573,7 @@ export default function ComponentLinking() {
                     <div className="flex flex-wrap items-center gap-2 pt-1">
                       <Button
                         type="button"
-                        className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                        className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                         onClick={handleAddLink}
                         disabled={loading || !revision}
                       >

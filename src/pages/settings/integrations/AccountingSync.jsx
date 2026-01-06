@@ -1,39 +1,39 @@
 // src/pages/settings/integrations/AccountingSync.jsx
-import { useEffect, useMemo, useState } from "react";
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
+import { useEffect, useMemo, useState } from "react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  Calculator,
-  CheckCircle2,
-  AlertCircle,
-  Cloud,
-  Loader2,
-  Plug,
-  RefreshCw,
-  Save,
-  Send,
-  Trash2,
-  Unplug,
+    AlertCircle,
+    Calculator,
+    CheckCircle2,
+    Cloud,
+    Loader2,
+    Plug,
+    RefreshCw,
+    Save,
+    Send,
+    Trash2,
+    Unplug,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -248,7 +248,7 @@ export default function AccountingSync() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={handleSave}
             disabled={saving}
           >

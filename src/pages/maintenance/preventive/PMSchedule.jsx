@@ -2,38 +2,38 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertTriangle,
-  CalendarDays,
-  CheckCircle2,
-  ClipboardCheck,
-  Download,
-  Filter,
-  Plus,
-  RefreshCw,
-  Search,
-  ShieldAlert,
-  SlidersHorizontal,
-  Wrench,
-  XCircle,
+    AlertTriangle,
+    CalendarDays,
+    CheckCircle2,
+    ClipboardCheck,
+    Download,
+    Filter,
+    Plus,
+    RefreshCw,
+    Search,
+    ShieldAlert,
+    SlidersHorizontal,
+    Wrench,
+    XCircle,
 } from "lucide-react";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 /**
@@ -408,7 +408,7 @@ export default function PMSchedule() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() =>
               toast({
                 title: "Create schedule item (placeholder)",
@@ -664,7 +664,7 @@ export default function PMSchedule() {
                   {r.status === "due" || r.status === "overdue" ? (
                     <Button
                       size="sm"
-                      className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                      className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                       onClick={() => markDone(r)}
                     >
                       <CheckCircle2 className="h-4 w-4" />

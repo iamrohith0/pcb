@@ -1,30 +1,30 @@
 // src/pages/quality/ncr/NCRDetails.jsx
-import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  AlertTriangle,
-  ArrowLeft,
-  BadgeCheck,
-  ClipboardList,
-  FileDown,
-  Image as ImageIcon,
-  Link2,
-  Paperclip,
-  Pencil,
-  RefreshCcw,
-  ShieldCheck,
-  Trash2,
-  XCircle,
+    AlertTriangle,
+    ArrowLeft,
+    BadgeCheck,
+    ClipboardList,
+    FileDown,
+    Image as ImageIcon,
+    Link2,
+    Paperclip,
+    Pencil,
+    RefreshCcw,
+    ShieldCheck,
+    Trash2,
+    XCircle,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 import ncrService from "@/services/quality/ncr.service";
 
@@ -283,7 +283,7 @@ export default function NCRDetails() {
           </Button>
 
           {canEdit && (
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={() => setEditOpen(true)} disabled={!row}>
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={() => setEditOpen(true)} disabled={!row}>
               <Pencil className="h-4 w-4" />
               Edit
             </Button>
@@ -644,7 +644,7 @@ export default function NCRDetails() {
                   <Button variant="outline" onClick={() => setEditOpen(false)} disabled={saving}>
                     Cancel
                   </Button>
-                  <Button className="bg-[#dc2551] hover:bg-[#b02045]" onClick={handleSave} disabled={saving}>
+                  <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={handleSave} disabled={saving}>
                     {saving ? "Saving..." : "Save Changes"}
                   </Button>
                 </div>

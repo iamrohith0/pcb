@@ -305,7 +305,7 @@ export default function SerialPrint() {
             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
             Load
           </Button>
-          <Button className="bg-[#DC2551] hover:bg-[#B02045]" onClick={handlePrint} disabled={!data}>
+          <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={handlePrint} disabled={!data}>
             <Printer className="mr-2 h-4 w-4" />
             Print
           </Button>
@@ -370,7 +370,7 @@ export default function SerialPrint() {
                   key={s}
                   type="button"
                   variant={size === s ? "default" : "outline"}
-                  className={cx(size === s ? "bg-[#DC2551] hover:bg-[#B02045]" : "")}
+                  className={cx(size === s ? "bg-cyan-600 hover:bg-cyan-500" : "")}
                   onClick={() => {
                     setSize(s);
                     syncParams({ size: s });
@@ -390,7 +390,7 @@ export default function SerialPrint() {
                   key={l}
                   type="button"
                   variant={layout === l ? "default" : "outline"}
-                  className={cx(layout === l ? "bg-[#DC2551] hover:bg-[#B02045]" : "")}
+                  className={cx(layout === l ? "bg-cyan-600 hover:bg-cyan-500" : "")}
                   onClick={() => {
                     setLayout(l);
                     syncParams({ layout: l });
@@ -404,7 +404,7 @@ export default function SerialPrint() {
 
           <div className="md:col-span-12 flex flex-wrap gap-2">
             <Button
-              className="bg-[#DC2551] hover:bg-[#B02045]"
+              className="bg-cyan-600 hover:bg-cyan-500"
               onClick={() => load()}
               disabled={loading || !canLoad}
             >

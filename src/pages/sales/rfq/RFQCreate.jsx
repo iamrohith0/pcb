@@ -1,29 +1,29 @@
 // src/pages/sales/rfq/RFQCreate.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  Building2,
-  Check,
-  FilePlus2,
-  Loader2,
-  Plus,
-  Trash2,
-  Upload,
-  X,
+    ArrowLeft,
+    Building2,
+    Check,
+    FilePlus2,
+    Loader2,
+    Plus,
+    Trash2,
+    Upload,
+    X,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
-import rfqApi from "@/services/sales/rfq.service";
 import customersApi from "@/services/sales/customers.service";
+import rfqApi from "@/services/sales/rfq.service";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -262,7 +262,7 @@ export default function RFQCreate() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={submit}
             disabled={!canSubmit || loading}
           >
@@ -662,7 +662,7 @@ export default function RFQCreate() {
           </Button>
           <Button
             type="submit"
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             disabled={!canSubmit || loading}
           >
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}

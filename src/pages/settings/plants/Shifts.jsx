@@ -1,25 +1,25 @@
 // src/pages/settings/plants/Shifts.jsx
-import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
+import { useEffect, useMemo, useState } from "react";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-import { Plus, Pencil, Trash2, RefreshCw, Clock, Factory, CalendarClock } from "lucide-react";
 import api from "@/lib/axios";
+import { CalendarClock, Clock, Factory, Pencil, Plus, RefreshCw, Trash2 } from "lucide-react";
 
 /**
  * PCBxpress – Shifts
@@ -302,7 +302,7 @@ export default function Shifts() {
             Refresh
           </Button>
 
-          <Button onClick={openCreate} className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+          <Button onClick={openCreate} className="gap-2 bg-cyan-600 hover:bg-cyan-500">
             <Plus className="h-4 w-4" />
             New Shift
           </Button>
@@ -366,7 +366,7 @@ export default function Shifts() {
             <div className="rounded-xl border border-dashed p-6 text-center">
               <p className="text-sm font-medium text-gray-800">No shifts found</p>
               <p className="mt-1 text-sm text-gray-600">Create a shift to start scheduling PCB production.</p>
-              <Button onClick={openCreate} className="mt-4 gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+              <Button onClick={openCreate} className="mt-4 gap-2 bg-cyan-600 hover:bg-cyan-500">
                 <Plus className="h-4 w-4" />
                 Create Shift
               </Button>
@@ -610,7 +610,7 @@ export default function Shifts() {
                     </Button>
                     <Button
                       type="submit"
-                      className="bg-[#dc2551] hover:bg-[#b02045]"
+                      className="bg-cyan-600 hover:bg-cyan-500"
                       disabled={saving}
                     >
                       {saving ? "Saving..." : mode === "edit" ? "Save Changes" : "Create Shift"}

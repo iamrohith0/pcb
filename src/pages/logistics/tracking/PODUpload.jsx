@@ -1,25 +1,25 @@
 // src/pages/logistics/shipments/PODUpload.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  CheckCircle2,
-  FileImage,
-  FileText,
-  Link2,
-  Loader2,
-  Search,
-  ShieldCheck,
-  Trash2,
-  Upload,
-  UploadCloud,
-  XCircle,
+    CheckCircle2,
+    FileImage,
+    FileText,
+    Link2,
+    Loader2,
+    Search,
+    ShieldCheck,
+    Trash2,
+    Upload,
+    UploadCloud,
+    XCircle,
 } from "lucide-react";
 
 /**
@@ -336,7 +336,7 @@ export default function PODUpload() {
               />
             </div>
             <Button
-              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
               onClick={doSearch}
               disabled={searching || (query || "").trim().length < 3}
             >
@@ -580,7 +580,7 @@ export default function PODUpload() {
 
                   <div className="flex flex-wrap items-center gap-2">
                     <Button
-                      className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                      className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                       onClick={handleUpload}
                       disabled={!canUpload || uploading}
                     >
@@ -633,7 +633,7 @@ export default function PODUpload() {
                       </Button>
 
                       <Button
-                        className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                        className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                         onClick={handleMarkDelivered}
                         disabled={hasDelivered || marking}
                       >

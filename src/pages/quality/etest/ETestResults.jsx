@@ -2,40 +2,40 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  ArrowUpRight,
-  CheckCircle2,
-  ChevronLeft,
-  Download,
-  Eye,
-  FileText,
-  Filter,
-  Loader2,
-  RefreshCcw,
-  Search,
-  ShieldAlert,
-  Trash2,
-  XCircle,
+    ArrowUpRight,
+    CheckCircle2,
+    ChevronLeft,
+    Download,
+    Eye,
+    FileText,
+    Filter,
+    Loader2,
+    RefreshCcw,
+    Search,
+    ShieldAlert,
+    Trash2,
+    XCircle,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -302,7 +302,7 @@ export default function ETestResults() {
             Export
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" asChild>
             <Link to="/quality/etest/queue">
               <ArrowUpRight className="h-4 w-4" />
               Go to Queue

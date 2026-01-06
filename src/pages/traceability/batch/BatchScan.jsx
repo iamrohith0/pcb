@@ -1,22 +1,22 @@
 // src/pages/traceability/batch/BatchScan.jsx
+import {
+    ArrowLeft,
+    Barcode,
+    Camera,
+    CheckCircle2,
+    ClipboardList,
+    Info,
+    Loader2,
+    Search,
+    ShieldCheck,
+    XCircle,
+} from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  ArrowLeft,
-  Barcode,
-  Camera,
-  CheckCircle2,
-  ClipboardList,
-  Info,
-  Loader2,
-  Search,
-  ShieldCheck,
-  XCircle,
-} from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -285,7 +285,7 @@ export default function BatchScan() {
 
           {hasBarcodeDetector ? (
             <Button
-              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
               onClick={() => (cameraOpen ? stopCamera() : startCamera())}
               disabled={cameraBusy}
             >
@@ -293,7 +293,7 @@ export default function BatchScan() {
               {cameraOpen ? "Close Camera" : "Scan with Camera"}
             </Button>
           ) : (
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={startCamera} disabled={cameraBusy}>
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={startCamera} disabled={cameraBusy}>
               {cameraBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />}
               Open Camera
             </Button>
@@ -318,7 +318,7 @@ export default function BatchScan() {
 
             <Button
               type="submit"
-              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
               disabled={!canSearch}
             >
               {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
@@ -460,7 +460,7 @@ export default function BatchScan() {
                   </div>
 
                   <div className="flex flex-col gap-2 sm:items-end">
-                    <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={goToDetails}>
+                    <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={goToDetails}>
                       <Barcode className="h-4 w-4" />
                       Open Batch Details
                     </Button>

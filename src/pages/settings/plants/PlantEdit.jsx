@@ -1,26 +1,26 @@
 // src/pages/settings/plants/PlantEdit.jsx
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  Building2,
-  Factory,
-  MapPin,
-  Phone,
-  Mail,
-  Save,
-  ArrowLeft,
-  RefreshCcw,
-  ToggleLeft,
-  ToggleRight,
-  AlertTriangle,
-  CheckCircle2,
-  Globe2,
-  Hash,
+    AlertTriangle,
+    ArrowLeft,
+    Building2,
+    CheckCircle2,
+    Factory,
+    Globe2,
+    Hash,
+    Mail,
+    MapPin,
+    Phone,
+    RefreshCcw,
+    Save,
+    ToggleLeft,
+    ToggleRight,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
@@ -234,7 +234,7 @@ export default function PlantEdit() {
 
           <Button
             onClick={onSave}
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             disabled={loading || saving}
           >
             <Save className="h-4 w-4" />

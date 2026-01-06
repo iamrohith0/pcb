@@ -1,20 +1,20 @@
 // src/pages/warehouse/packing/PackList.jsx
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 import {
-  ArrowRight,
-  ClipboardList,
-  Filter,
-  Package,
-  RefreshCw,
-  Search,
-  ShieldAlert,
-  Truck,
+    ArrowRight,
+    ClipboardList,
+    Filter,
+    Package,
+    RefreshCw,
+    Search,
+    ShieldAlert,
+    Truck,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -247,7 +247,7 @@ export default function PackList() {
           </Button>
 
           <Link to="/warehouse/packing/create">
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500">
               <ClipboardList className="h-4 w-4" />
               New Pack Job
             </Button>
@@ -398,7 +398,7 @@ export default function PackList() {
                       <Button
                         onClick={() => quickConfirm(r)}
                         disabled={r.status === "confirmed"}
-                        className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                        className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                         title={
                           r.status === "confirmed"
                             ? "Already confirmed"

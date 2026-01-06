@@ -2,44 +2,44 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  ArrowLeft,
-  CheckCircle2,
-  ClipboardList,
-  Copy,
-  Plus,
-  Trash2,
-  Wrench,
-  Save,
-  Loader2,
-  Layers,
-  Droplet,
-  ShieldCheck,
-  ScanEye,
-  Zap,
-  Printer,
-  Settings2,
-  Timer,
-  AlertTriangle,
+    AlertTriangle,
+    ArrowLeft,
+    CheckCircle2,
+    ClipboardList,
+    Copy,
+    Droplet,
+    Layers,
+    Loader2,
+    Plus,
+    Printer,
+    Save,
+    ScanEye,
+    Settings2,
+    ShieldCheck,
+    Timer,
+    Trash2,
+    Wrench,
+    Zap,
 } from "lucide-react";
 
 /**
@@ -423,7 +423,7 @@ export default function RoutingCreate() {
             Export JSON
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={onSave} disabled={saving || !canSave}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={onSave} disabled={saving || !canSave}>
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             Save Routing
           </Button>
@@ -594,7 +594,7 @@ export default function RoutingCreate() {
                 Maintain correct order. These values drive capacity planning and bottleneck analysis.
               </CardDescription>
             </div>
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={onAddStep} type="button">
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={onAddStep} type="button">
               <Plus className="h-4 w-4" />
               Add Step
             </Button>
@@ -853,7 +853,7 @@ export default function RoutingCreate() {
           <Button variant="outline" onClick={onDiscard} disabled={saving} type="button">
             Discard
           </Button>
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={onSave} disabled={saving || !canSave} type="button">
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={onSave} disabled={saving || !canSave} type="button">
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             Save Routing
           </Button>

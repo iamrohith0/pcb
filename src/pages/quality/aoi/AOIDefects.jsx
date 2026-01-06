@@ -1,36 +1,36 @@
 // src/pages/quality/aoi/AOIDefects.jsx
-import { useEffect, useMemo, useState } from "react";
 import api from "@/lib/axios";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  CheckCircle2,
-  ClipboardList,
-  Cpu,
-  Pencil,
-  Plus,
-  RefreshCw,
-  Search,
-  ShieldAlert,
-  Trash2,
-  XCircle,
+    CheckCircle2,
+    ClipboardList,
+    Cpu,
+    Pencil,
+    Plus,
+    RefreshCw,
+    Search,
+    ShieldAlert,
+    Trash2,
+    XCircle,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -364,7 +364,7 @@ export default function AOIDefects() {
             <RefreshCw className={cx("h-4 w-4", loading ? "animate-spin" : "")} />
             Refresh
           </Button>
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={openCreate}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={openCreate}>
             <Plus className="h-4 w-4" />
             New Defect
           </Button>
@@ -629,7 +629,7 @@ export default function AOIDefects() {
 
           <AlertDialogFooter>
             <AlertDialogCancel disabled={saving}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleCreate} disabled={!canSave} className="bg-[#dc2551] hover:bg-[#b02045]">
+            <AlertDialogAction onClick={handleCreate} disabled={!canSave} className="bg-cyan-600 hover:bg-cyan-500">
               {saving ? "Saving..." : "Create"}
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -740,7 +740,7 @@ export default function AOIDefects() {
 
           <AlertDialogFooter>
             <AlertDialogCancel disabled={saving}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleUpdate} disabled={!canSave} className="bg-[#dc2551] hover:bg-[#b02045]">
+            <AlertDialogAction onClick={handleUpdate} disabled={!canSave} className="bg-cyan-600 hover:bg-cyan-500">
               {saving ? "Saving..." : "Save"}
             </AlertDialogAction>
           </AlertDialogFooter>

@@ -1,28 +1,28 @@
 // src/pages/settings/company/CompanyProfile.jsx
-import { useEffect, useMemo, useState } from "react";
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
+import { useEffect, useMemo, useState } from "react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 
 import {
-  Building2,
-  Factory,
-  Globe,
-  Loader2,
-  Mail,
-  MapPin,
-  Phone,
-  RefreshCw,
-  Save,
-  ShieldCheck,
-  FileText,
-  Hash,
+    Building2,
+    Factory,
+    FileText,
+    Globe,
+    Hash,
+    Loader2,
+    Mail,
+    MapPin,
+    Phone,
+    RefreshCw,
+    Save,
+    ShieldCheck,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -231,7 +231,7 @@ export default function CompanyProfile() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={handleSave}
             disabled={saving || !isDirty}
           >

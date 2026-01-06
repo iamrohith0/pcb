@@ -1,24 +1,24 @@
 // src/pages/production/scheduling/ProductionCalendar.jsx
-import { useEffect, useMemo, useState } from "react";
-import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth, isSameDay, parseISO } from "date-fns";
+import { addDays, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, parseISO, startOfMonth, startOfWeek } from "date-fns";
 import { CalendarDays, Filter, Plus, RefreshCw, Search, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 /**
@@ -717,7 +717,7 @@ export default function ProductionCalendar() {
 
           <AlertDialogFooter className="mt-2">
             <AlertDialogCancel onClick={closeAdd}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleCreate} className="bg-[#dc2551] hover:bg-[#b02045]">
+            <AlertDialogAction onClick={handleCreate} className="bg-cyan-600 hover:bg-cyan-500">
               Add Schedule
             </AlertDialogAction>
           </AlertDialogFooter>

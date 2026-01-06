@@ -1,26 +1,26 @@
 // src/pages/traceability/lot-genealogy/LotGenealogyTree.jsx
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
 import {
-  ArrowLeft,
-  BadgeCheck,
-  ChevronDown,
-  ChevronRight,
-  CircleDot,
-  ExternalLink,
-  GitBranch,
-  Loader2,
-  Package,
-  RefreshCcw,
-  Search,
-  ShieldCheck,
-  Workflow,
-  XCircle,
+    ArrowLeft,
+    BadgeCheck,
+    ChevronDown,
+    ChevronRight,
+    CircleDot,
+    ExternalLink,
+    GitBranch,
+    Loader2,
+    Package,
+    RefreshCcw,
+    Search,
+    ShieldCheck,
+    Workflow,
+    XCircle,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -614,7 +614,7 @@ export default function LotGenealogyTree() {
               </Link>
 
               <Link to="/traceability/lot-genealogy/search">
-                <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+                <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500">
                   <Search className="h-4 w-4" />
                   New Search
                 </Button>

@@ -1,36 +1,36 @@
 // src/pages/quality/certificates/CoCGenerate.jsx
-import { useEffect, useMemo, useState } from "react";
 import api from "@/lib/axios";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  CheckCircle2,
-  Download,
-  FileText,
-  Printer,
-  RefreshCw,
-  Search,
-  ShieldCheck,
-  Sparkles,
-  ClipboardCheck,
-  FileUp,
+    CheckCircle2,
+    ClipboardCheck,
+    Download,
+    FileText,
+    FileUp,
+    Printer,
+    RefreshCw,
+    Search,
+    ShieldCheck,
+    Sparkles,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -524,7 +524,7 @@ export default function CoCGenerate() {
                         <div className="flex justify-end">
                           <Button
                             size="sm"
-                            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                             onClick={() => openDetails(r)}
                           >
                             <Sparkles className="h-4 w-4" />
@@ -694,7 +694,7 @@ export default function CoCGenerate() {
           <AlertDialogFooter>
             <AlertDialogCancel disabled={generating}>Close</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-[#dc2551] hover:bg-[#b02045]"
+              className="bg-cyan-600 hover:bg-cyan-500"
               disabled={generating || String(selected?.status || "").toLowerCase() === "hold"}
               onClick={openGenerateConfirm}
             >
@@ -744,7 +744,7 @@ export default function CoCGenerate() {
             <AlertDialogAction
               onClick={generateCoC}
               disabled={generating}
-              className="bg-[#dc2551] hover:bg-[#b02045]"
+              className="bg-cyan-600 hover:bg-cyan-500"
             >
               {generating ? "Generating…" : "Generate"}
             </AlertDialogAction>

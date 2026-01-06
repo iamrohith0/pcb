@@ -1,26 +1,23 @@
 // src/pages/procurement/suppliers/SuppliersList.jsx
+import api from "@/lib/axios";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import api from "@/lib/axios";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 import {
-  Building2,
-  CheckCircle2,
-  XCircle,
-  Filter,
-  Loader2,
-  Plus,
-  RefreshCw,
-  Search,
-  ShieldAlert,
-  SlidersHorizontal,
-  Truck,
+    Building2,
+    Filter,
+    Loader2,
+    Plus,
+    RefreshCw,
+    Search,
+    SlidersHorizontal,
+    Truck
 } from "lucide-react";
 
 /**
@@ -246,7 +243,7 @@ export default function SuppliersList() {
             Refresh
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" asChild>
             <Link to="/procurement/suppliers/create">
               <Plus className="h-4 w-4" />
               Add Supplier
@@ -330,7 +327,7 @@ export default function SuppliersList() {
             <h3 className="mt-3 text-base font-semibold text-gray-900">No suppliers found</h3>
             <p className="mt-1 text-sm text-gray-600">Try adjusting filters or add your first supplier.</p>
             <div className="mt-4">
-              <Button className="bg-[#dc2551] hover:bg-[#b02045]" asChild>
+              <Button className="bg-cyan-600 hover:bg-cyan-500" asChild>
                 <Link to="/procurement/suppliers/create">Add Supplier</Link>
               </Button>
             </div>

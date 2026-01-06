@@ -1,35 +1,35 @@
 // src/pages/procurement/purchase-orders/PurchaseOrderCreate.jsx
+import api from "@/lib/axios";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "@/lib/axios";
 
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  Building2,
-  CalendarDays,
-  FileText,
-  Loader2,
-  PackageOpen,
-  Plus,
-  Save,
-  Trash2,
+    Building2,
+    CalendarDays,
+    FileText,
+    Loader2,
+    PackageOpen,
+    Plus,
+    Save,
+    Trash2,
 } from "lucide-react";
 
 /**
@@ -696,7 +696,7 @@ export default function PurchaseOrderCreate() {
           <AlertDialogFooter>
             <AlertDialogCancel>Stay</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-[#dc2551] hover:bg-[#b02045]"
+              className="bg-cyan-600 hover:bg-cyan-500"
               onClick={() => navigate(-1)}
             >
               Discard

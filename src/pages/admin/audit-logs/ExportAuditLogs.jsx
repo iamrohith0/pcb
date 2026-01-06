@@ -1,26 +1,26 @@
 // src/pages/admin/audit-logs/ExportAuditLogs.jsx
-import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Download,
-  Filter,
-  RefreshCw,
-  Calendar,
-  CalendarRange,
-  Shield,
-  FileText,
-  FileDown,
-  X,
-  Info,
-  AlertTriangle,
-  CheckCircle2,
+    AlertTriangle,
+    Calendar,
+    CalendarRange,
+    CheckCircle2,
+    Download,
+    FileDown,
+    FileText,
+    Filter,
+    Info,
+    RefreshCw,
+    Shield,
+    X,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import api from "@/lib/axios";
 
@@ -241,7 +241,7 @@ export default function ExportAuditLogs() {
           </Button>
 
           <Button
-            className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
+            className="bg-cyan-600 hover:bg-cyan-500 gap-2"
             onClick={doExport}
             disabled={!canExport || exporting}
           >
@@ -317,7 +317,7 @@ export default function ExportAuditLogs() {
                   <Button
                     type="button"
                     variant={format === "csv" ? "default" : "outline"}
-                    className={cx("w-full", format === "csv" ? "bg-[#dc2551] hover:bg-[#b02045]" : "")}
+                    className={cx("w-full", format === "csv" ? "bg-cyan-600 hover:bg-cyan-500" : "")}
                     onClick={() => setFormat("csv")}
                   >
                     CSV
@@ -325,7 +325,7 @@ export default function ExportAuditLogs() {
                   <Button
                     type="button"
                     variant={format === "xlsx" ? "default" : "outline"}
-                    className={cx("w-full", format === "xlsx" ? "bg-[#dc2551] hover:bg-[#b02045]" : "")}
+                    className={cx("w-full", format === "xlsx" ? "bg-cyan-600 hover:bg-cyan-500" : "")}
                     onClick={() => setFormat("xlsx")}
                   >
                     XLSX
@@ -333,7 +333,7 @@ export default function ExportAuditLogs() {
                   <Button
                     type="button"
                     variant={format === "pdf" ? "default" : "outline"}
-                    className={cx("w-full", format === "pdf" ? "bg-[#dc2551] hover:bg-[#b02045]" : "")}
+                    className={cx("w-full", format === "pdf" ? "bg-cyan-600 hover:bg-cyan-500" : "")}
                     onClick={() => setFormat("pdf")}
                   >
                     PDF
@@ -430,15 +430,15 @@ export default function ExportAuditLogs() {
                 <Label>Status</Label>
                 <div className="grid grid-cols-3 gap-2">
                   <Button type="button" variant={ok === "" ? "default" : "outline"} onClick={() => setOk("")}
-                    className={cx(ok === "" ? "bg-[#dc2551] hover:bg-[#b02045]" : "")}>
+                    className={cx(ok === "" ? "bg-cyan-600 hover:bg-cyan-500" : "")}>
                     Any
                   </Button>
                   <Button type="button" variant={ok === "true" ? "default" : "outline"} onClick={() => setOk("true")}
-                    className={cx(ok === "true" ? "bg-[#dc2551] hover:bg-[#b02045]" : "")}>
+                    className={cx(ok === "true" ? "bg-cyan-600 hover:bg-cyan-500" : "")}>
                     Success
                   </Button>
                   <Button type="button" variant={ok === "false" ? "default" : "outline"} onClick={() => setOk("false")}
-                    className={cx(ok === "false" ? "bg-[#dc2551] hover:bg-[#b02045]" : "")}>
+                    className={cx(ok === "false" ? "bg-cyan-600 hover:bg-cyan-500" : "")}>
                     Failed
                   </Button>
                 </div>
@@ -472,7 +472,7 @@ export default function ExportAuditLogs() {
               </div>
 
               <Button
-                className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
+                className="bg-cyan-600 hover:bg-cyan-500 gap-2"
                 onClick={doExport}
                 disabled={!canExport || exporting}
               >

@@ -1,38 +1,36 @@
 // src/pages/quality/aoi/AOIQueue.jsx
-import { useEffect, useMemo, useState } from "react";
 import api from "@/lib/axios";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  CheckCircle2,
-  ClipboardList,
-  Cpu,
-  Eye,
-  Filter,
-  PauseCircle,
-  PlayCircle,
-  RefreshCw,
-  Search,
-  ShieldAlert,
-  Timer,
-  XCircle,
+    CheckCircle2,
+    Cpu,
+    Eye,
+    Filter,
+    PauseCircle,
+    PlayCircle,
+    RefreshCw,
+    Search,
+    ShieldAlert,
+    Timer
 } from "lucide-react";
 
 function cx(...parts) {
@@ -550,7 +548,7 @@ export default function AOIQueue() {
                           {String(r.status).toLowerCase() === "queued" ? (
                             <Button
                               size="sm"
-                              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                               disabled={acting}
                               onClick={() => action("start", r)}
                             >
@@ -673,7 +671,7 @@ export default function AOIQueue() {
           ) : null}
 
           <AlertDialogFooter>
-            <AlertDialogAction onClick={() => setViewOpen(false)} className="bg-[#dc2551] hover:bg-[#b02045]">
+            <AlertDialogAction onClick={() => setViewOpen(false)} className="bg-cyan-600 hover:bg-cyan-500">
               Close
             </AlertDialogAction>
           </AlertDialogFooter>

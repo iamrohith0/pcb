@@ -1,37 +1,37 @@
 // src/pages/admin/masters/UOMMaster.jsx
-import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Plus,
-  RefreshCw,
-  Search,
-  Filter,
-  Download,
-  Ruler,
-  Pencil,
-  Trash2,
-  Eye,
-  FileDown,
-  X,
-  ShieldCheck,
+    Download,
+    Eye,
+    FileDown,
+    Filter,
+    Pencil,
+    Plus,
+    RefreshCw,
+    Ruler,
+    Search,
+    ShieldCheck,
+    Trash2,
+    X,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import api from "@/lib/axios";
@@ -386,7 +386,7 @@ export default function UOMMaster() {
             XLSX
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={openCreate}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={openCreate}>
             <Plus className="h-4 w-4" />
             New UOM
           </Button>
@@ -449,7 +449,7 @@ export default function UOMMaster() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <Button type="submit" className="bg-[#dc2551] hover:bg-[#b02045]">
+                  <Button type="submit" className="bg-cyan-600 hover:bg-cyan-500">
                     Search
                   </Button>
                   <Button type="button" variant="outline" onClick={clearFilters} disabled={filtersCount === 0}>
@@ -481,7 +481,7 @@ export default function UOMMaster() {
               title="No UOMs found"
               description="Try changing filters or create your first unit of measurement."
               action={
-                <Button className="bg-[#dc2551] hover:bg-[#b02045] gap-2" onClick={openCreate}>
+                <Button className="bg-cyan-600 hover:bg-cyan-500 gap-2" onClick={openCreate}>
                   <Plus className="h-4 w-4" />
                   New UOM
                 </Button>

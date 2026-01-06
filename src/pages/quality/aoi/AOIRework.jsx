@@ -1,35 +1,35 @@
 // src/pages/quality/aoi/AOIRework.jsx
-import { useEffect, useMemo, useState } from "react";
 import api from "@/lib/axios";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  CheckCircle2,
-  ClipboardList,
-  Download,
-  Filter,
-  RefreshCw,
-  Search,
-  ShieldAlert,
-  SlidersHorizontal,
-  Wrench,
+    CheckCircle2,
+    ClipboardList,
+    Download,
+    Filter,
+    RefreshCw,
+    Search,
+    ShieldAlert,
+    SlidersHorizontal,
+    Wrench,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -488,7 +488,7 @@ export default function AOIRework() {
             <RefreshCw className={cx("h-4 w-4", loading ? "animate-spin" : "")} />
             Refresh
           </Button>
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={handleExport} disabled={exporting}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={handleExport} disabled={exporting}>
             <Download className={cx("h-4 w-4", exporting ? "animate-pulse" : "")} />
             {exporting ? "Exporting..." : "Export"}
           </Button>
@@ -667,7 +667,7 @@ export default function AOIRework() {
                           {String(r.state || "").toLowerCase() === "unassigned" ? (
                             <Button
                               size="sm"
-                              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                               onClick={() => openAction(r, "assign")}
                             >
                               <Wrench className="h-4 w-4" />
@@ -678,7 +678,7 @@ export default function AOIRework() {
                           {String(r.state || "").toLowerCase() === "on_hold" ? (
                             <Button
                               size="sm"
-                              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                               onClick={() => openAction(r, "release")}
                             >
                               Release
@@ -821,7 +821,7 @@ export default function AOIRework() {
 
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => setViewOpen(false)}>Close</AlertDialogCancel>
-            <AlertDialogAction onClick={() => setViewOpen(false)} className="bg-[#dc2551] hover:bg-[#b02045]">
+            <AlertDialogAction onClick={() => setViewOpen(false)} className="bg-cyan-600 hover:bg-cyan-500">
               Done
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -934,7 +934,7 @@ export default function AOIRework() {
               onClick={doAction}
               disabled={saving}
               className={cx(
-                actionMode === "complete" ? "bg-emerald-600 hover:bg-emerald-700" : "bg-[#dc2551] hover:bg-[#b02045]"
+                actionMode === "complete" ? "bg-emerald-600 hover:bg-emerald-700" : "bg-cyan-600 hover:bg-cyan-500"
               )}
             >
               {saving ? "Saving…" : actionMode === "assign" ? "Assign" : actionMode === "complete" ? "Complete" : actionMode === "hold" ? "Hold" : "Release"}

@@ -1,8 +1,8 @@
 // src/pages/maintenance/breakdowns/BreakdownCreate.jsx
 import { useEffect, useMemo, useState } from "react";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,18 +10,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertTriangle,
-  CalendarClock,
-  CheckCircle2,
-  ClipboardList,
-  Factory,
-  Hammer,
-  Loader2,
-  MapPin,
-  Settings2,
-  ShieldCheck,
-  Tag,
-  Wrench,
+    AlertTriangle,
+    CalendarClock,
+    CheckCircle2,
+    ClipboardList,
+    Factory,
+    Hammer,
+    Loader2,
+    MapPin,
+    Settings2,
+    ShieldCheck,
+    Tag,
+    Wrench,
 } from "lucide-react";
 
 /**
@@ -565,7 +565,7 @@ export default function BreakdownCreate() {
 
             <Button
               type="submit"
-              className="w-full gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+              className="w-full gap-2 bg-cyan-600 hover:bg-cyan-500"
               disabled={submitting || loadingOptions}
             >
               {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}

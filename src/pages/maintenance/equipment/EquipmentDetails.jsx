@@ -2,46 +2,35 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertTriangle,
-  ArrowLeft,
-  Calendar,
-  CheckCircle2,
-  ClipboardList,
-  Clock,
-  Download,
-  Factory,
-  FileText,
-  History,
-  MapPin,
-  Pencil,
-  QrCode,
-  RefreshCw,
-  Settings2,
-  ShieldCheck,
-  Timer,
-  Trash2,
-  Wrench,
+    AlertTriangle,
+    ArrowLeft,
+    Calendar,
+    CheckCircle2,
+    ClipboardList,
+    Clock,
+    Download,
+    Factory,
+    FileText,
+    History,
+    MapPin,
+    Pencil,
+    QrCode,
+    RefreshCw,
+    Settings2,
+    ShieldCheck,
+    Timer,
+    Trash2,
+    Wrench,
 } from "lucide-react";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 
 /**
  * EquipmentDetails.jsx (PCBxpress - PCB Manufacturing ERP)
@@ -504,14 +493,14 @@ export default function EquipmentDetails() {
           </Button>
 
           {!editMode ? (
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={() => setEditMode(true)}>
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={() => setEditMode(true)}>
               <Pencil className="h-4 w-4" />
               Edit
             </Button>
           ) : (
             <>
               <Button
-                className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                 onClick={onSave}
                 disabled={saving}
               >

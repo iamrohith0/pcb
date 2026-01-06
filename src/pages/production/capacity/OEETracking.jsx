@@ -1,27 +1,25 @@
 // src/pages/production/wip/OEETracking.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import {
-  Activity,
-  AlertTriangle,
-  BarChart3,
-  CalendarDays,
-  CheckCircle2,
-  Download,
-  Factory,
-  Filter,
-  Gauge,
-  Loader2,
-  RefreshCw,
-  Search,
-  Timer,
-  Wrench,
+    Activity,
+    AlertTriangle,
+    CheckCircle2,
+    Download,
+    Factory,
+    Filter,
+    Gauge,
+    Loader2,
+    RefreshCw,
+    Search,
+    Timer,
+    Wrench
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
 /**
  * OEE Tracking (PCB Manufacturing ERP)
@@ -381,7 +379,7 @@ export default function OEETracking() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => exportCsv(filteredRows, { from, to })}
             disabled={loading || filteredRows.length === 0}
           >
@@ -439,7 +437,7 @@ export default function OEETracking() {
                 <Filter className="h-4 w-4" />
                 Reset
               </Button>
-              <Button className="w-full bg-[#dc2551] hover:bg-[#b02045]" onClick={onApply} disabled={loading} type="button">
+              <Button className="w-full bg-cyan-600 hover:bg-cyan-500" onClick={onApply} disabled={loading} type="button">
                 Apply
               </Button>
             </div>

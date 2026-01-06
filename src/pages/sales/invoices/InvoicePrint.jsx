@@ -185,7 +185,7 @@ export default function InvoicePrint() {
             <Download className="mr-2 h-4 w-4" />
             Download PDF
           </Button>
-          <Button className="bg-[#dc2551] hover:bg-[#B02045]" onClick={() => window.print()} disabled={!invoice}>
+          <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={() => window.print()} disabled={!invoice}>
             <Printer className="mr-2 h-4 w-4" />
             Print
           </Button>

@@ -2,38 +2,38 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  Barcode,
-  CheckCircle2,
-  ClipboardCheck,
-  ClipboardList,
-  Factory,
-  Hash,
-  PackageCheck,
-  RefreshCw,
-  ScanLine,
-  Search,
-  ShieldCheck,
-  Truck,
-  XCircle,
+    Barcode,
+    CheckCircle2,
+    ClipboardCheck,
+    ClipboardList,
+    Factory,
+    Hash,
+    PackageCheck,
+    RefreshCw,
+    ScanLine,
+    Search,
+    ShieldCheck,
+    Truck,
+    XCircle,
 } from "lucide-react";
 
 import api from "@/lib/axios";
@@ -437,7 +437,7 @@ export default function PickConfirm() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => setConfirmOpen(true)}
             disabled={loading || !canEdit}
           >
@@ -613,7 +613,7 @@ export default function PickConfirm() {
 
             <div className="flex flex-wrap items-center gap-2">
               <Button
-                className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                 onClick={applyScan}
                 disabled={loading || !canEdit}
               >

@@ -1,29 +1,27 @@
 // src/pages/engineering/cam/CAMJobs.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  BadgeCheck,
-  Calendar,
-  CircleDot,
-  Filter,
-  Layers,
-  Loader2,
-  Plus,
-  RefreshCw,
-  Search,
-  ShieldAlert,
-  SlidersHorizontal,
-  Tag,
-  Timer,
+    BadgeCheck,
+    Calendar,
+    CircleDot,
+    Filter,
+    Layers,
+    Loader2,
+    Plus,
+    RefreshCw,
+    Search,
+    ShieldAlert,
+    SlidersHorizontal,
+    Tag
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 
 import camJobsApi from "@/services/camJobs.service";
@@ -257,7 +255,7 @@ export default function CAMJobs() {
             {showFilters ? "Hide Filters" : "Show Filters"}
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" asChild>
             <Link to="/dashboard/engineering/cam/create">
               <Plus className="h-4 w-4" />
               New CAM Job
@@ -322,7 +320,7 @@ export default function CAMJobs() {
                 <Button variant="outline" onClick={reset}>
                   Reset
                 </Button>
-                <Button className="bg-[#dc2551] hover:bg-[#b02045]" onClick={apply}>
+                <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={apply}>
                   Apply
                 </Button>
               </div>
@@ -426,7 +424,7 @@ export default function CAMJobs() {
               <p className="font-semibold text-gray-900">No CAM jobs found</p>
               <p className="mt-1 text-sm text-gray-500">Try changing filters or create a new CAM job.</p>
               <div className="mt-4 flex justify-center">
-                <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
+                <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" asChild>
                   <Link to="/dashboard/engineering/cam/create">
                     <Plus className="h-4 w-4" />
                     New CAM Job

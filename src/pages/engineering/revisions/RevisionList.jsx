@@ -362,7 +362,7 @@ export default function RevisionList() {
             Refresh
           </Button>
 
-          <Button asChild className="gap-2 bg-[#DC2551] hover:bg-[#B02045]">
+          <Button asChild className="gap-2 bg-cyan-600 hover:bg-cyan-500">
             <Link to="/dashboard/engineering/revisions/create">
               <FilePlus2 className="h-4 w-4" />
               New Revision
@@ -471,7 +471,7 @@ export default function RevisionList() {
               </Button>
               <Button
                 type="button"
-                className="w-full bg-[#DC2551] hover:bg-[#B02045]"
+                className="w-full bg-cyan-600 hover:bg-cyan-500"
                 onClick={() =>
                   syncQueryToUrl({ search, job, status, finish, layers })
                 }
@@ -624,7 +624,7 @@ export default function RevisionList() {
                           <Button
                             type="button"
                             size="sm"
-                            className="gap-2 bg-[#DC2551] hover:bg-[#B02045]"
+                            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                             onClick={() => navigate(`/dashboard/engineering/revisions/${r.id}`)}
                           >
                             <Eye className="h-4 w-4" />

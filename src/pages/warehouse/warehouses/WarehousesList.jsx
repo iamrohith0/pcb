@@ -1,25 +1,25 @@
 // src/pages/warehouse/warehouses/WarehousesList.jsx
+import {
+    Building2,
+    ChevronLeft,
+    ChevronRight,
+    Eye,
+    Pencil,
+    Plus,
+    RefreshCcw,
+    Search,
+    Trash2,
+    Warehouse as WarehouseIcon,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  Building2,
-  ChevronLeft,
-  ChevronRight,
-  Eye,
-  Pencil,
-  Plus,
-  RefreshCcw,
-  Search,
-  Trash2,
-  Warehouse as WarehouseIcon,
-} from "lucide-react";
 
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 import api from "@/lib/axios";
 
@@ -216,7 +216,7 @@ export default function WarehousesList() {
           </Button>
 
           <Link to="/warehouse/warehouses/create">
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500">
               <Plus className="h-4 w-4" />
               New Warehouse
             </Button>

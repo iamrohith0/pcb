@@ -1,34 +1,34 @@
 // src/pages/warehouse/locations/LocationMap.jsx
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  Box,
-  Boxes,
-  Building2,
-  Grid3X3,
-  Layers3,
-  MapPin,
-  QrCode,
-  RefreshCw,
-  Search,
-  ShieldAlert,
-  Warehouse as WarehouseIcon,
+    ArrowLeft,
+    Box,
+    Boxes,
+    Building2,
+    Grid3X3,
+    Layers3,
+    MapPin,
+    QrCode,
+    RefreshCw,
+    Search,
+    ShieldAlert,
+    Warehouse as WarehouseIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -304,7 +304,7 @@ export default function LocationMap() {
             Refresh
           </Button>
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => navigate("/warehouse/locations/create")}
           >
             <MapPin className="h-4 w-4" />
@@ -633,7 +633,7 @@ export default function LocationMap() {
                         "justify-start gap-2",
                         selected.status === "blocked"
                           ? "bg-green-600 hover:bg-green-700"
-                          : "bg-[#dc2551] hover:bg-[#b02045]"
+                          : "bg-cyan-600 hover:bg-cyan-500"
                       )}
                       onClick={requestToggleBlock}
                     >

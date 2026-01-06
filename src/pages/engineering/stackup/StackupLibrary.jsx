@@ -324,7 +324,7 @@ export default function StackupLibrary() {
           </Button>
 
           <Link to="/dashboard/engineering/stackup/create">
-            <Button className="gap-2 bg-[#DC2551] hover:bg-[#B02045]">
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500">
               <Plus className="h-4 w-4" />
               New Stackup
             </Button>
@@ -532,7 +532,7 @@ export default function StackupLibrary() {
               No templates match your filters.
               <div className="mt-3">
                 <Link to="/engineering/stackup/create">
-                  <Button className="gap-2 bg-[#DC2551] hover:bg-[#B02045]">
+                  <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500">
                     <Plus className="h-4 w-4" />
                     Create first template
                   </Button>

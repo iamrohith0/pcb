@@ -319,7 +319,7 @@ export default function QuotationCreate() {
           <Button
             type="submit"
             form="quote-form"
-            className="bg-[#dc2551] hover:bg-[#B02045]"
+            className="bg-cyan-600 hover:bg-cyan-500"
             disabled={saving}
           >
             {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
@@ -718,7 +718,7 @@ export default function QuotationCreate() {
                 <Plus className="mr-2 h-4 w-4" />
                 Add Line
               </Button>
-              <Button type="submit" className="bg-[#dc2551] hover:bg-[#B02045]" disabled={saving}>
+              <Button type="submit" className="bg-cyan-600 hover:bg-cyan-500" disabled={saving}>
                 {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle2 className="mr-2 h-4 w-4" />}
                 Create Quotation
               </Button>

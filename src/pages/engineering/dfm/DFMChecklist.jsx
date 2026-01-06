@@ -1,22 +1,22 @@
 // src/pages/engineering/dfm/DFMChecklist.jsx
-import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  AlertTriangle,
-  CheckCircle2,
-  ClipboardCheck,
-  Download,
-  FilePlus2,
-  Filter,
-  Loader2,
-  Save,
-  Search,
-  ShieldCheck,
-  XCircle,
+    AlertTriangle,
+    CheckCircle2,
+    ClipboardCheck,
+    Download,
+    FilePlus2,
+    Filter,
+    Loader2,
+    Save,
+    Search,
+    ShieldCheck,
+    XCircle,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -380,7 +380,7 @@ export default function DFMChecklist() {
           </Button>
 
           <Button
-            className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
+            className="bg-cyan-600 hover:bg-cyan-500 gap-2"
             onClick={handleSave}
             disabled={saving || loading || !canSave}
           >

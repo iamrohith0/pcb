@@ -355,7 +355,7 @@ export default function PurchaseOrderApprove() {
                             <div className="flex items-start justify-between gap-3">
                               <div>
                                 <div className="flex items-center gap-2">
-                                  <span className={cx("font-semibold", active ? "text-[#B02045]" : "text-gray-900")}>
+                                  <span className={cx("font-semibold", active ? "text-cyan-600" : "text-gray-900")}>
                                     {p.id}
                                   </span>
                                   {statusBadge(p.status)}

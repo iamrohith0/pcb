@@ -1,35 +1,35 @@
 // src/pages/sales/orders/SalesOrderEdit.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  Building2,
-  Loader2,
-  Plus,
-  Save,
-  Trash2,
-  RefreshCw,
-  CalendarDays,
-  FileText,
-  User,
-  Phone,
-  Mail,
-  MapPin,
+    ArrowLeft,
+    Building2,
+    CalendarDays,
+    FileText,
+    Loader2,
+    Mail,
+    MapPin,
+    Phone,
+    Plus,
+    RefreshCw,
+    Save,
+    Trash2,
+    User,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
 import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
-import salesOrdersApi from "@/services/sales/salesOrders.service";
 import customersApi from "@/services/sales/customers.service";
+import salesOrdersApi from "@/services/sales/salesOrders.service";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -359,7 +359,7 @@ export default function SalesOrderEdit() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={handleSave}
             disabled={loading || saving}
           >
@@ -779,7 +779,7 @@ export default function SalesOrderEdit() {
               </Button>
 
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-                <Button type="submit" className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" disabled={saving}>
+                <Button type="submit" className="gap-2 bg-cyan-600 hover:bg-cyan-500" disabled={saving}>
                   {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                   Save Changes
                 </Button>

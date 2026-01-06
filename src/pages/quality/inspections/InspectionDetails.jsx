@@ -2,29 +2,29 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 import {
-  ArrowLeft,
-  BadgeCheck,
-  ClipboardCheck,
-  Download,
-  Edit3,
-  FileText,
-  Link2,
-  Loader2,
-  Paperclip,
-  Printer,
-  ShieldAlert,
-  Trash2,
+    ArrowLeft,
+    BadgeCheck,
+    ClipboardCheck,
+    Download,
+    Edit3,
+    FileText,
+    Link2,
+    Loader2,
+    Paperclip,
+    Printer,
+    ShieldAlert,
+    Trash2,
 } from "lucide-react";
 
 import { ConfirmationDialog } from "@/components/ConfirmationDialog";
@@ -199,7 +199,7 @@ export default function InspectionDetails() {
                 <ArrowLeft className="h-4 w-4" />
                 Back
               </Button>
-              <Button className="bg-[#dc2551] hover:bg-[#b02045]" asChild>
+              <Button className="bg-cyan-600 hover:bg-cyan-500" asChild>
                 <Link to="/quality/inspections">Go to Inspections</Link>
               </Button>
             </div>
@@ -275,7 +275,7 @@ export default function InspectionDetails() {
             Export
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" asChild>
             <Link to={`/quality/inspections/${id}/edit`}>
               <Edit3 className="h-4 w-4" />
               Edit

@@ -1,26 +1,26 @@
 // src/pages/warehouse/warehouses/WarehouseEdit.jsx
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { ConfirmationDialog } from "@/components/ConfirmationDialog";
-import { Badge } from "@/components/ui/badge";
+import api from "@/lib/axios";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  Building2,
-  CheckCircle2,
-  Loader2,
-  MapPin,
-  Phone,
-  Save,
-  Trash2,
-  Warehouse as WarehouseIcon,
+    ArrowLeft,
+    Building2,
+    CheckCircle2,
+    Loader2,
+    MapPin,
+    Phone,
+    Save,
+    Trash2,
+    Warehouse as WarehouseIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import api from "@/lib/axios";
 
 /**
  * PCBxpress ERP - Warehouse Edit
@@ -304,7 +304,7 @@ export default function WarehouseEdit() {
           <Button
             type="submit"
             form="warehouse-edit-form"
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             disabled={!canSave}
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}

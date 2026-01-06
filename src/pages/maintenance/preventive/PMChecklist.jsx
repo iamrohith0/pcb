@@ -2,38 +2,38 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertCircle,
-  CheckCircle2,
-  ClipboardCheck,
-  Download,
-  Factory,
-  Filter,
-  Plus,
-  RefreshCw,
-  Search,
-  Settings2,
-  ShieldAlert,
-  Trash2,
-  Wrench,
+    AlertCircle,
+    CheckCircle2,
+    ClipboardCheck,
+    Download,
+    Factory,
+    Filter,
+    Plus,
+    RefreshCw,
+    Search,
+    Settings2,
+    ShieldAlert,
+    Trash2,
+    Wrench,
 } from "lucide-react";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 /**
@@ -359,7 +359,7 @@ export default function PMChecklist() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() =>
               toast({
                 title: "Create PM checklist (placeholder)",

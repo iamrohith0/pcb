@@ -2,38 +2,38 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import api from "@/lib/axios";
 
 import {
-  ArrowLeft,
-  CheckCircle2,
-  CircleSlash2,
-  Filter,
-  Loader2,
-  Plus,
-  RefreshCw,
-  Search,
-  ShieldCheck,
-  Trash2,
-  User2,
-  UserCircle2,
+    ArrowLeft,
+    CheckCircle2,
+    CircleSlash2,
+    Filter,
+    Loader2,
+    Plus,
+    RefreshCw,
+    Search,
+    ShieldCheck,
+    Trash2,
+    User2,
+    UserCircle2,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -343,7 +343,7 @@ export default function UsersList() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={applyFilters}>
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={applyFilters}>
               Apply
             </Button>
             <Button variant="ghost" onClick={clearFilters}>

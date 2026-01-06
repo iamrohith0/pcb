@@ -1,28 +1,28 @@
 // src/pages/production/wip/WIPDashboard.jsx
-import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Activity,
-  AlertTriangle,
-  CheckCircle2,
-  ChevronDown,
-  Factory,
-  Filter,
-  Gauge,
-  Layers,
-  RefreshCw,
-  Search,
-  Timer,
-  TrendingDown,
-  TrendingUp,
-  Wrench,
+    Activity,
+    AlertTriangle,
+    CheckCircle2,
+    ChevronDown,
+    Factory,
+    Filter,
+    Gauge,
+    Layers,
+    RefreshCw,
+    Search,
+    Timer,
+    TrendingDown,
+    TrendingUp,
+    Wrench,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 /**
@@ -424,7 +424,7 @@ export default function WIPDashboard() {
           </Button>
           <Button
             onClick={refresh}
-            className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
+            className="bg-cyan-600 hover:bg-cyan-500 gap-2"
             disabled={loading}
           >
             <RefreshCw className={cx("h-4 w-4", loading ? "animate-spin" : "")} />

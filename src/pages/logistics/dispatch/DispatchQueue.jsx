@@ -1,30 +1,30 @@
 // src/pages/logistics/dispatch/DispatchQueue.jsx
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
-import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { motion } from "framer-motion";
 import {
-  Calendar,
-  CheckCircle2,
-  Clock3,
-  Eye,
-  FileDown,
-  PackageCheck,
-  Plus,
-  RefreshCcw,
-  Search,
-  Truck,
-  XCircle,
+    Calendar,
+    CheckCircle2,
+    Clock3,
+    Eye,
+    FileDown,
+    PackageCheck,
+    Plus,
+    RefreshCcw,
+    Search,
+    Truck,
+    XCircle,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -384,7 +384,7 @@ export default function DispatchQueue() {
             Export
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" asChild>
             <Link to="/logistics/dispatch/create">
               <Plus className="h-4 w-4" />
               New Dispatch

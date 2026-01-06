@@ -1,30 +1,30 @@
 // src/pages/production/work-orders/WorkOrderCreate.jsx
-import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import {
-  ArrowLeft,
-  BadgeCheck,
-  ClipboardList,
-  Factory,
-  FileUp,
-  Hash,
-  Layers,
-  Loader2,
-  Package,
-  Plus,
-  Save,
-  Settings2,
-  Trash2,
-  UploadCloud,
+    ArrowLeft,
+    BadgeCheck,
+    ClipboardList,
+    Factory,
+    FileUp,
+    Hash,
+    Layers,
+    Loader2,
+    Package,
+    Plus,
+    Save,
+    Settings2,
+    Trash2,
+    UploadCloud,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import ConfirmationDialog from "@/components/dialogs/ConfirmationDialog.jsx";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import ConfirmationDialog from "@/components/dialogs/ConfirmationDialog.jsx";
 
 /**
  * WorkOrderCreate.jsx (PCBxpress - PCB Manufacturing ERP)
@@ -789,7 +789,7 @@ export default function WorkOrderCreate() {
               Reset
             </Button>
             <Button
-              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
               onClick={() => setConfirmSubmit(true)}
               disabled={saving}
             >

@@ -1,30 +1,29 @@
 // src/pages/inventory/items/ItemEdit.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  CheckCircle2,
-  ClipboardList,
-  Image as ImageIcon,
-  Info,
-  Loader2,
-  Package,
-  Save,
-  ShieldCheck,
-  Tag,
-  Trash2,
-  Upload,
-  XCircle,
+    ArrowLeft,
+    CheckCircle2,
+    ClipboardList,
+    Image as ImageIcon,
+    Info,
+    Loader2,
+    Package,
+    Save,
+    ShieldCheck,
+    Tag,
+    Trash2,
+    Upload,
+    XCircle,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
 import { ConfirmationDialog } from "@/components/ConfirmationDialog";
@@ -342,7 +341,7 @@ export default function ItemEdit() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => setDeleteOpen(true)}
             disabled={loading}
           >
@@ -763,7 +762,7 @@ export default function ItemEdit() {
 
             <Button
               type="submit"
-              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
               disabled={saving}
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}

@@ -1,26 +1,26 @@
 // src/pages/engineering/cam/CAMOutputs.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  Download,
-  FileArchive,
-  FileCode2,
-  FileText,
-  Filter,
-  Loader2,
-  Package,
-  RefreshCw,
-  Search,
-  ShieldAlert,
-  SlidersHorizontal,
-  Tag,
-  UploadCloud,
-  Calendar,
+    Calendar,
+    Download,
+    FileArchive,
+    FileCode2,
+    FileText,
+    Filter,
+    Loader2,
+    Package,
+    RefreshCw,
+    Search,
+    ShieldAlert,
+    SlidersHorizontal,
+    Tag,
+    UploadCloud,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -256,7 +256,7 @@ export default function CAMOutputs() {
             {showFilters ? "Hide Filters" : "Show Filters"}
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" asChild>
             <Link to="/dashboard/engineering/cam/outputs/create">
               <UploadCloud className="h-4 w-4" />
               Add Output
@@ -309,7 +309,7 @@ export default function CAMOutputs() {
                 <Button variant="outline" onClick={reset}>
                   Reset
                 </Button>
-                <Button className="bg-[#dc2551] hover:bg-[#b02045]" onClick={apply}>
+                <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={apply}>
                   Apply
                 </Button>
               </div>
@@ -403,7 +403,7 @@ export default function CAMOutputs() {
               <p className="font-semibold text-gray-900">No outputs found</p>
               <p className="mt-1 text-sm text-gray-500">Try changing filters or add an output package.</p>
               <div className="mt-4 flex justify-center">
-                <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
+                <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" asChild>
                   <Link to="/dashboard/engineering/cam/outputs/create">
                     <UploadCloud className="h-4 w-4" />
                     Add Output

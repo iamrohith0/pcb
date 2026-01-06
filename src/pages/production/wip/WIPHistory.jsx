@@ -1,29 +1,28 @@
 // src/pages/production/wip/WIPHistory.jsx
-import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  CalendarDays,
-  Clock,
-  Download,
-  Filter,
-  History,
-  RefreshCw,
-  Search,
-  Timer,
-  AlertTriangle,
-  CheckCircle2,
-  Factory,
-  Layers,
-  Wrench,
-  Activity,
+    Activity,
+    AlertTriangle,
+    ArrowLeft,
+    CalendarDays,
+    CheckCircle2,
+    Clock,
+    Download,
+    Factory,
+    History,
+    Layers,
+    RefreshCw,
+    Search,
+    Timer,
+    Wrench
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -424,7 +423,7 @@ export default function WIPHistory() {
 
           <Button
             onClick={refresh}
-            className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
+            className="bg-cyan-600 hover:bg-cyan-500 gap-2"
             disabled={loading}
           >
             <RefreshCw className={cx("h-4 w-4", loading ? "animate-spin" : "")} />

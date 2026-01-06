@@ -1,26 +1,26 @@
 // src/pages/traceability/batch/Barcode.jsx
-import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Barcode as BarcodeIcon,
-  ClipboardCopy,
-  Download,
-  Filter,
-  RefreshCcw,
-  Search,
-  Printer,
-  QrCode,
-  Layers,
-  Hash,
-  Building2,
-  Factory,
-  PackageCheck,
+    Barcode as BarcodeIcon,
+    Building2,
+    ClipboardCopy,
+    Download,
+    Factory,
+    Filter,
+    Hash,
+    Layers,
+    PackageCheck,
+    Printer,
+    QrCode,
+    RefreshCcw,
+    Search,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 // NOTE: Create this service file if you don't already have it:
@@ -388,7 +388,7 @@ export default function Barcode() {
 
           <div className="flex items-center gap-2">
             <Button
-              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
               onClick={() => {
                 setPage(1);
                 fetchRows();

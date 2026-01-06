@@ -1,35 +1,33 @@
 // src/pages/traceability/recall/RecallImpact.jsx
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 import { motion } from "framer-motion";
 import {
-  AlertTriangle,
-  ArrowLeft,
-  Box,
-  Boxes,
-  Building2,
-  Calendar,
-  Download,
-  Factory,
-  FileSearch2,
-  Filter,
-  Link as LinkIcon,
-  Loader2,
-  Package,
-  RefreshCcw,
-  ShieldAlert,
-  Truck,
-  Users,
-  Wrench,
-  XCircle,
+    AlertTriangle,
+    ArrowLeft,
+    Boxes,
+    Building2,
+    Calendar,
+    Download,
+    Factory,
+    FileSearch2,
+    Filter,
+    Link as LinkIcon,
+    Loader2,
+    RefreshCcw,
+    ShieldAlert,
+    Truck,
+    Users,
+    Wrench,
+    XCircle
 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
 import { useMemo, useState } from "react";
-import api from "@/lib/axios";
+import { Link, useLocation } from "react-router-dom";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -278,7 +276,7 @@ export default function RecallImpact() {
                 </Button>
 
                 <Button
-                  className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                  className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                   onClick={analyze}
                   disabled={isLoading || !canAnalyze}
                   title={!canAnalyze ? "Enter an anchor to analyze" : "Analyze impact"}
@@ -544,7 +542,7 @@ export default function RecallImpact() {
                 </Link>
               </Button>
               <Button
-                className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                 onClick={analyze}
                 disabled={isLoading || !canAnalyze}
               >

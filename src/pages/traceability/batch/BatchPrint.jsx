@@ -1,24 +1,24 @@
 // src/pages/traceability/batch/BatchPrint.jsx
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  Barcode,
-  Building2,
-  Calendar,
-  Factory,
-  Hash,
-  Printer,
-  QrCode,
-  ShieldCheck,
-  User,
+    ArrowLeft,
+    Barcode,
+    Building2,
+    Calendar,
+    Factory,
+    Hash,
+    Printer,
+    QrCode,
+    ShieldCheck,
+    User,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import api from "@/lib/axios";
 
 /**
  * PCBxpress ERP - Batch Print
@@ -200,7 +200,7 @@ export default function BatchPrint() {
               Back
             </Link>
           </Button>
-          <Button onClick={handlePrint} className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" disabled={loading || !batch}>
+          <Button onClick={handlePrint} className="gap-2 bg-cyan-600 hover:bg-cyan-500" disabled={loading || !batch}>
             <Printer className="h-4 w-4" />
             Print
           </Button>

@@ -1,28 +1,28 @@
 // src/pages/logistics/dispatch/DispatchCreate.jsx
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  CalendarClock,
-  PackageCheck,
-  Plus,
-  Save,
-  Search,
-  Trash2,
-  Truck,
+    ArrowLeft,
+    CalendarClock,
+    PackageCheck,
+    Plus,
+    Save,
+    Search,
+    Trash2,
+    Truck,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -313,7 +313,7 @@ export default function DispatchCreate() {
           <Button
             onClick={() => setConfirmOpen(true)}
             disabled={!canSubmit || isSaving}
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
           >
             <Save className="h-4 w-4" />
             {isSaving ? "Saving..." : "Save Dispatch"}
@@ -766,7 +766,7 @@ export default function DispatchCreate() {
             <Button
               type="submit"
               disabled={!canSubmit || isSaving}
-              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             >
               <Save className="h-4 w-4" />
               {isSaving ? "Saving..." : "Create Dispatch"}

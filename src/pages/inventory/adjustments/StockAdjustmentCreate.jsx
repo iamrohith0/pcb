@@ -1,24 +1,24 @@
 // src/pages/inventory/adjustments/StockAdjustmentCreate.jsx
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  Plus,
-  Trash2,
-  Save,
-  ArrowLeft,
-  Loader2,
-  PackageSearch,
-  Warehouse,
-  Hash,
-  CalendarDays,
+    ArrowLeft,
+    CalendarDays,
+    Hash,
+    Loader2,
+    PackageSearch,
+    Plus,
+    Save,
+    Trash2,
+    Warehouse,
 } from "lucide-react";
 
 import api from "@/lib/axios";
@@ -315,7 +315,7 @@ export default function StockAdjustmentCreate() {
             <ArrowLeft className="h-4 w-4" />
             Back
           </Button>
-          <Button onClick={handleSave} className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" disabled={saving}>
+          <Button onClick={handleSave} className="gap-2 bg-cyan-600 hover:bg-cyan-500" disabled={saving}>
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             Save
           </Button>
@@ -717,7 +717,7 @@ export default function StockAdjustmentCreate() {
               <ArrowLeft className="h-4 w-4" />
               Cancel
             </Button>
-            <Button onClick={handleSave} className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" disabled={saving}>
+            <Button onClick={handleSave} className="gap-2 bg-cyan-600 hover:bg-cyan-500" disabled={saving}>
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Adjustment
             </Button>

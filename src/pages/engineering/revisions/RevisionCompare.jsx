@@ -363,7 +363,7 @@ export default function RevisionCompare() {
 
               <Button
                 type="button"
-                className="gap-2 bg-[#DC2551] hover:bg-[#B02045]"
+                className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                 onClick={() => runCompare({ job: jobCode, from: fromRev, to: toRev })}
                 disabled={!canCompare || loading}
               >
@@ -538,7 +538,7 @@ export default function RevisionCompare() {
 
                 <Button
                   type="button"
-                  className="gap-2 bg-[#DC2551] hover:bg-[#B02045]"
+                  className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                   onClick={() => {
                     const text = JSON.stringify(payload, null, 2);
                     navigator.clipboard

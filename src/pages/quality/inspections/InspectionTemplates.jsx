@@ -1,25 +1,25 @@
 // src/pages/quality/inspections/InspectionTemplates.jsx
-import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  CheckCircle2,
-  ClipboardList,
-  Copy,
-  FileDown,
-  Pencil,
-  Plus,
-  RefreshCcw,
-  Search,
-  Trash2,
+    CheckCircle2,
+    ClipboardList,
+    Copy,
+    FileDown,
+    Pencil,
+    Plus,
+    RefreshCcw,
+    Search,
+    Trash2,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 import inspectionTemplatesService from "@/services/quality/inspection-templates.service";
 
@@ -331,7 +331,7 @@ export default function InspectionTemplates() {
             Export JSON
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={openCreate}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={openCreate}>
             <Plus className="h-4 w-4" />
             New Template
           </Button>
@@ -695,7 +695,7 @@ export default function InspectionTemplates() {
                   <Button variant="outline" onClick={() => setDrawerOpen(false)} disabled={saving}>
                     Cancel
                   </Button>
-                  <Button className="bg-[#dc2551] hover:bg-[#b02045]" onClick={handleSave} disabled={saving}>
+                  <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={handleSave} disabled={saving}>
                     {saving ? "Saving..." : "Save Template"}
                   </Button>
                 </div>

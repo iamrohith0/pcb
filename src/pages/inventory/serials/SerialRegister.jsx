@@ -245,7 +245,7 @@ export default function SerialRegister() {
             </Button>
           </Link>
           <Button
-            className="bg-[#DC2551] hover:bg-[#B02045]"
+            className="bg-cyan-600 hover:bg-cyan-500"
             onClick={handleCreate}
             disabled={creating}
           >
@@ -394,7 +394,7 @@ export default function SerialRegister() {
                     key={s}
                     type="button"
                     variant={labelSize === s ? "default" : "outline"}
-                    className={cx(labelSize === s ? "bg-[#DC2551] hover:bg-[#B02045]" : "")}
+                    className={cx(labelSize === s ? "bg-cyan-600 hover:bg-cyan-500" : "")}
                     onClick={() => {
                       setLabelSize(s);
                       syncParams({ size: s });
@@ -414,7 +414,7 @@ export default function SerialRegister() {
                     key={l}
                     type="button"
                     variant={labelLayout === l ? "default" : "outline"}
-                    className={cx(labelLayout === l ? "bg-[#DC2551] hover:bg-[#B02045]" : "")}
+                    className={cx(labelLayout === l ? "bg-cyan-600 hover:bg-cyan-500" : "")}
                     onClick={() => {
                       setLabelLayout(l);
                       syncParams({ layout: l });
@@ -429,7 +429,7 @@ export default function SerialRegister() {
             <div className="md:col-span-12 flex flex-wrap items-center gap-2 pt-2">
               <Button
                 type="submit"
-                className="bg-[#DC2551] hover:bg-[#B02045]"
+                className="bg-cyan-600 hover:bg-cyan-500"
                 disabled={creating || !isValid}
               >
                 {creating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />}
@@ -603,7 +603,7 @@ export default function SerialRegister() {
             <p className="text-xs font-semibold text-gray-700">Actions</p>
             <div className="mt-3 flex flex-wrap gap-2">
               <Button
-                className="bg-[#DC2551] hover:bg-[#B02045]"
+                className="bg-cyan-600 hover:bg-cyan-500"
                 onClick={() => {
                   setPreviewOpen(false);
                   if (serials[0]) handleOpenPrintForOne(serials[0]);

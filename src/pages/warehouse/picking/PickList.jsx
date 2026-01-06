@@ -1,39 +1,38 @@
 // src/pages/warehouse/picking/PickList.jsx
 import { useEffect, useMemo, useState } from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  ArrowRight,
-  Barcode,
-  CalendarDays,
-  CheckCircle2,
-  ClipboardCheck,
-  ClipboardList,
-  Filter,
-  Hash,
-  PackageCheck,
-  RefreshCw,
-  Search,
-  Truck,
-  XCircle,
+    ArrowRight,
+    Barcode,
+    CalendarDays,
+    ClipboardCheck,
+    ClipboardList,
+    Filter,
+    Hash,
+    PackageCheck,
+    RefreshCw,
+    Search,
+    Truck,
+    XCircle
 } from "lucide-react";
 
 import api from "@/lib/axios";
@@ -309,7 +308,7 @@ export default function PickList() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => toast({ title: "Coming soon", description: "Pick List creation UI can be added next." })}
           >
             <ClipboardCheck className="h-4 w-4" />

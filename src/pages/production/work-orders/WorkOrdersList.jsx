@@ -1,34 +1,31 @@
 // src/pages/production/work-orders/WorkOrdersList.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  Calendar,
-  ChevronRight,
-  Factory,
-  Filter,
-  Hash,
-  Layers,
-  Package,
-  PauseCircle,
-  PlayCircle,
-  RefreshCw,
-  Search,
-  SlidersHorizontal,
-  Timer,
-  Truck,
-  AlertTriangle,
-  CheckCircle2,
-  BadgeCheck,
-  X,
+    AlertTriangle,
+    BadgeCheck,
+    Calendar,
+    CheckCircle2,
+    ChevronRight,
+    Filter,
+    Hash,
+    Layers,
+    Package,
+    PauseCircle,
+    PlayCircle,
+    RefreshCw,
+    Search,
+    SlidersHorizontal,
+    Timer,
+    X
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 
 function cx(...parts) {
@@ -331,7 +328,7 @@ export default function WorkOrdersList() {
           </Button>
 
           <Button
-            className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
+            className="bg-cyan-600 hover:bg-cyan-500 gap-2"
             onClick={() => toast({ title: "Create", description: "Hook route to WorkOrderCreate page." })}
           >
             + New Work Order
@@ -554,7 +551,7 @@ export default function WorkOrdersList() {
                         </Button>
 
                         <Button
-                          className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
+                          className="bg-cyan-600 hover:bg-cyan-500 gap-2"
                           onClick={() =>
                             toast({
                               title: "Quick action",

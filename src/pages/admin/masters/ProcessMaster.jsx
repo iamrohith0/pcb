@@ -1,33 +1,33 @@
 // src/pages/production/masters/ProcessMaster.jsx
-import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import {
-  BadgeCheck,
-  Factory,
-  Filter,
-  Loader2,
-  Plus,
-  RefreshCw,
-  Search,
-  Trash2,
-  Edit3,
-  Wrench,
-  Download,
-  ArrowRightLeft,
-  Link2,
-  Route,
-  Layers3,
-  Timer,
+    ArrowRightLeft,
+    BadgeCheck,
+    Download,
+    Edit3,
+    Factory,
+    Filter,
+    Layers3,
+    Link2,
+    Loader2,
+    Plus,
+    RefreshCw,
+    Route,
+    Search,
+    Timer,
+    Trash2,
+    Wrench,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog.jsx";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import { ConfirmationDialog } from "@/components/ConfirmationDialog.jsx";
 
 /**
  * ProcessMaster.jsx (PCBxpress - PCB Manufacturing ERP)
@@ -380,7 +380,7 @@ export default function ProcessMaster() {
               Export CSV
             </Button>
 
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={openCreate}>
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={openCreate}>
               <Plus className="h-4 w-4" />
               New Process
             </Button>
@@ -816,7 +816,7 @@ export default function ProcessMaster() {
                       Cancel
                     </Button>
                     <Button
-                      className="bg-[#dc2551] hover:bg-[#b02045]"
+                      className="bg-cyan-600 hover:bg-cyan-500"
                       onClick={saveForm}
                       disabled={saving}
                     >

@@ -1,30 +1,30 @@
 // src/pages/sales/invoices/InvoiceCreate.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  Calendar,
-  FileText,
-  Loader2,
-  Plus,
-  Receipt,
-  Search,
-  Trash2,
-  IndianRupee,
-  Percent,
-  Truck,
-  Building2,
-  CheckCircle2,
-  Hash,
-  Info,
+    ArrowLeft,
+    Building2,
+    Calendar,
+    CheckCircle2,
+    FileText,
+    Hash,
+    IndianRupee,
+    Info,
+    Loader2,
+    Percent,
+    Plus,
+    Receipt,
+    Search,
+    Trash2,
+    Truck,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import customersService from "@/services/sales/customers.service";
@@ -479,7 +479,7 @@ export default function InvoiceCreate() {
           </Button>
           <Button
             onClick={onSubmit}
-            className="bg-[#dc2551] hover:bg-[#b02045]"
+            className="bg-cyan-600 hover:bg-cyan-500"
             disabled={saving}
           >
             {saving ? (
@@ -1084,7 +1084,7 @@ export default function InvoiceCreate() {
               <div className="mx-auto max-w-xl rounded-2xl border bg-white/95 p-3 shadow-lg backdrop-blur">
                 <Button
                   type="submit"
-                  className="w-full bg-[#dc2551] hover:bg-[#b02045]"
+                  className="w-full bg-cyan-600 hover:bg-cyan-500"
                   disabled={saving}
                 >
                   {saving ? (

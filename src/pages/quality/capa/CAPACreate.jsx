@@ -1,19 +1,19 @@
 // src/pages/quality/capa/CAPACreate.jsx
 import { useMemo, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
-  Select,
-  SelectItem,
+    Select,
+    SelectItem,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 import { ArrowLeft, Save, ShieldCheck } from "lucide-react";
 
@@ -204,7 +204,7 @@ export default function CAPACreate() {
           <Button
             className={cx(
               "gap-2",
-              "bg-[#dc2551] hover:bg-[#b02045]"
+              "bg-cyan-600 hover:bg-cyan-500"
             )}
             disabled={!canSubmit}
             onClick={handleSave}
@@ -486,7 +486,7 @@ export default function CAPACreate() {
           </Button>
           <Button
             type="submit"
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             disabled={!canSubmit}
           >
             <Save className="h-4 w-4" />

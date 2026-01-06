@@ -1,28 +1,28 @@
 // src/pages/production/scheduling/ScheduleBoard.jsx
-import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
 import {
-  CalendarDays,
-  ChevronLeft,
-  ChevronRight,
-  Filter,
-  RefreshCw,
-  Search,
-  SlidersHorizontal,
-  Wrench,
-  Layers,
-  Factory,
-  ClipboardList,
-  AlertTriangle,
-  CheckCircle2,
+    AlertTriangle,
+    CalendarDays,
+    CheckCircle2,
+    ChevronLeft,
+    ChevronRight,
+    ClipboardList,
+    Factory,
+    Filter,
+    Layers,
+    RefreshCw,
+    Search,
+    SlidersHorizontal,
+    Wrench,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 /**
@@ -253,7 +253,7 @@ function DrawerModal({ open, onClose, job }) {
           </div>
 
           <div className="flex gap-2">
-            <Button className="bg-[#dc2551] hover:bg-[#b02045]" onClick={() => alert("Hook to API: reschedule")}>
+            <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={() => alert("Hook to API: reschedule")}>
               Reschedule
             </Button>
             <Button variant="outline" onClick={() => alert("Hook to API: open Work Order details")}>
@@ -521,7 +521,7 @@ export default function ScheduleBoard() {
           </Button>
           <Button
             onClick={refresh}
-            className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
+            className="bg-cyan-600 hover:bg-cyan-500 gap-2"
             disabled={loading}
           >
             <RefreshCw className={cx("h-4 w-4", loading ? "animate-spin" : "")} />

@@ -2,26 +2,26 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  ArrowLeft,
-  Box,
-  ClipboardList,
-  Copy,
-  FileText,
-  MapPin,
-  Package,
-  ShieldCheck,
-  Truck,
-  User,
+    ArrowLeft,
+    Box,
+    ClipboardList,
+    Copy,
+    FileText,
+    MapPin,
+    Package,
+    ShieldCheck,
+    Truck,
+    User,
 } from "lucide-react";
 
 /**
@@ -629,7 +629,7 @@ export default function ShipmentCreate() {
               disabled={creating || !canCreate}
               className={cx(
                 "gap-2",
-                canCreate ? "bg-[#dc2551] hover:bg-[#b02045]" : "bg-gray-300 text-gray-700 hover:bg-gray-300"
+                canCreate ? "bg-cyan-600 hover:bg-cyan-500" : "bg-gray-300 text-gray-700 hover:bg-gray-300"
               )}
               title={!canCreate ? "Fill required fields" : "Create shipment"}
             >

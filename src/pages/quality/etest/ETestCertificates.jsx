@@ -1,38 +1,38 @@
 // src/pages/quality/certificates/ETestCertificates.jsx
-import { useEffect, useMemo, useState } from "react";
 import api from "@/lib/axios";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  CheckCircle2,
-  ClipboardCheck,
-  Download,
-  Eye,
-  FileBadge,
-  FileSearch,
-  FileText,
-  Plus,
-  RefreshCw,
-  ShieldCheck,
-  Trash2,
-  XCircle,
+    CheckCircle2,
+    ClipboardCheck,
+    Download,
+    Eye,
+    FileBadge,
+    FileSearch,
+    FileText,
+    Plus,
+    RefreshCw,
+    ShieldCheck,
+    Trash2,
+    XCircle,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -477,7 +477,7 @@ export default function ETestCertificates() {
             <RefreshCw className={cx("h-4 w-4", loading ? "animate-spin" : "")} />
             Refresh
           </Button>
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={openCreate}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={openCreate}>
             <Plus className="h-4 w-4" />
             New Certificate
           </Button>
@@ -776,7 +776,7 @@ export default function ETestCertificates() {
 
           <AlertDialogFooter>
             <AlertDialogCancel disabled={uploading}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={submitCreate} disabled={uploading} className="bg-[#dc2551] hover:bg-[#b02045]">
+            <AlertDialogAction onClick={submitCreate} disabled={uploading} className="bg-cyan-600 hover:bg-cyan-500">
               {uploading ? "Saving…" : "Save"}
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -823,7 +823,7 @@ export default function ETestCertificates() {
           <AlertDialogFooter>
             <AlertDialogCancel>Close</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-[#dc2551] hover:bg-[#b02045]"
+              className="bg-cyan-600 hover:bg-cyan-500"
               onClick={() => selected && downloadCert(selected)}
               disabled={exporting}
             >

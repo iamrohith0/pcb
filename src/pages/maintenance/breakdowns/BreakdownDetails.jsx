@@ -1,40 +1,40 @@
 // src/pages/maintenance/breakdowns/BreakdownDetails.jsx
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { motion } from "framer-motion";
 import {
-  Activity,
-  AlertTriangle,
-  ArrowLeft,
-  BadgeCheck,
-  CalendarDays,
-  Clock,
-  Cpu,
-  Download,
-  FileText,
-  HardHat,
-  MapPin,
-  Pencil,
-  Save,
-  Settings2,
-  ShieldCheck,
-  Timer,
-  Trash2,
-  Wrench,
+    Activity,
+    AlertTriangle,
+    ArrowLeft,
+    BadgeCheck,
+    CalendarDays,
+    Clock,
+    Cpu,
+    Download,
+    FileText,
+    HardHat,
+    MapPin,
+    Pencil,
+    Save,
+    Settings2,
+    ShieldCheck,
+    Timer,
+    Trash2,
+    Wrench,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -362,7 +362,7 @@ export default function BreakdownDetails() {
               Edit
             </Button>
           ) : (
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={onSave} disabled={saving}>
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={onSave} disabled={saving}>
               <Save className="h-4 w-4" />
               {saving ? "Saving..." : "Save"}
             </Button>
@@ -603,7 +603,7 @@ export default function BreakdownDetails() {
                 >
                   Cancel
                 </Button>
-                <Button className="bg-[#dc2551] hover:bg-[#b02045] gap-2" onClick={onSave} disabled={saving}>
+                <Button className="bg-cyan-600 hover:bg-cyan-500 gap-2" onClick={onSave} disabled={saving}>
                   <Save className="h-4 w-4" />
                   {saving ? "Saving..." : "Save Changes"}
                 </Button>
@@ -627,7 +627,7 @@ export default function BreakdownDetails() {
                 placeholder="Add note (inspection result, vendor call, spare ETA, etc.)"
               />
               <Button
-                className="w-full bg-[#dc2551] hover:bg-[#b02045]"
+                className="w-full bg-cyan-600 hover:bg-cyan-500"
                 onClick={onAddNote}
                 disabled={saving || !noteText.trim()}
               >

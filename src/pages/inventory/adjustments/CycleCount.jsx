@@ -526,7 +526,7 @@ export default function CycleCount() {
             Refresh
           </Button>
 
-          <Button className="gap-2 bg-[#DC2551] hover:bg-[#B02045]" onClick={() => setCreateOpen(true)}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={() => setCreateOpen(true)}>
             <Plus className="h-4 w-4" />
             New Session
           </Button>
@@ -691,7 +691,7 @@ export default function CycleCount() {
               <div className="rounded-xl border bg-gray-50 p-6 text-sm text-gray-700">
                 No sessions found.
                 <div className="mt-3">
-                  <Button className="bg-[#DC2551] hover:bg-[#B02045]" onClick={() => setCreateOpen(true)}>
+                  <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={() => setCreateOpen(true)}>
                     Create Session
                   </Button>
                 </div>
@@ -801,7 +801,7 @@ export default function CycleCount() {
 
                       {active.status === "draft" || active.status === "in_progress" ? (
                         <Button
-                          className="gap-2 bg-[#DC2551] hover:bg-[#B02045]"
+                          className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                           disabled={actionLoading}
                           onClick={() => doAction("submit")}
                         >
@@ -909,7 +909,7 @@ export default function CycleCount() {
 
                     <div className="md:col-span-12 flex items-end justify-end">
                       <Button
-                        className="gap-2 bg-[#DC2551] hover:bg-[#B02045]"
+                        className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                         onClick={addLine}
                         disabled={lineSaving || active.status === "posted"}
                       >
@@ -1043,7 +1043,7 @@ export default function CycleCount() {
             <AlertDialogCancel disabled={creating}>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={createSession}
-              className="bg-[#DC2551] hover:bg-[#B02045]"
+              className="bg-cyan-600 hover:bg-cyan-500"
               disabled={creating}
             >
               {creating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />}

@@ -1,28 +1,27 @@
 // src/pages/inventory/lots/LotCreate.jsx
+import {
+    ArrowLeft,
+    Barcode,
+    CalendarDays,
+    CheckCircle2,
+    Factory,
+    Hash,
+    Loader2,
+    PackageSearch,
+    Save,
+    ShieldCheck,
+    Tag,
+    Truck,
+    XCircle,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import {
-  ArrowLeft,
-  Barcode,
-  CalendarDays,
-  CheckCircle2,
-  Factory,
-  Hash,
-  Loader2,
-  PackageSearch,
-  Save,
-  ShieldCheck,
-  Tag,
-  Truck,
-  XCircle,
-} from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import inventoryItemsService from "@/services/inventory/items.service";
@@ -229,7 +228,7 @@ export default function LotCreate() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             type="submit"
             form="lot-create-form"
             disabled={saving}
@@ -545,7 +544,7 @@ export default function LotCreate() {
               <Button
                 type="submit"
                 form="lot-create-form"
-                className="w-full gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                className="w-full gap-2 bg-cyan-600 hover:bg-cyan-500"
                 disabled={saving}
               >
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
@@ -572,7 +571,7 @@ export default function LotCreate() {
               </Link>
             </Button>
 
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" type="submit" form="lot-create-form" disabled={saving}>
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" type="submit" form="lot-create-form" disabled={saving}>
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Create
             </Button>

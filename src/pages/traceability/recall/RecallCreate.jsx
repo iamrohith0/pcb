@@ -1,33 +1,33 @@
 // src/pages/traceability/recall/RecallCreate.jsx
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 import { motion } from "framer-motion";
 import {
-  AlertTriangle,
-  ArrowLeft,
-  Building2,
-  Calendar,
-  CheckCircle2,
-  ClipboardList,
-  FileSearch2,
-  Hash,
-  Loader2,
-  PackageSearch,
-  ShieldAlert,
-  Truck,
-  XCircle,
-  Link as LinkIcon,
-  Plus,
-  Trash2,
+    AlertTriangle,
+    ArrowLeft,
+    Building2,
+    Calendar,
+    CheckCircle2,
+    ClipboardList,
+    FileSearch2,
+    Hash,
+    Link as LinkIcon,
+    Loader2,
+    PackageSearch,
+    Plus,
+    ShieldAlert,
+    Trash2,
+    Truck,
+    XCircle,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
 import { useMemo, useState } from "react";
-import api from "@/lib/axios";
+import { Link, useNavigate } from "react-router-dom";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -364,7 +364,7 @@ export default function RecallCreate() {
                   Validate Scope
                 </Button>
 
-                <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={handleSave} disabled={isSaving}>
+                <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={handleSave} disabled={isSaving}>
                   {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
                   Create Recall
                 </Button>
@@ -801,7 +801,7 @@ export default function RecallCreate() {
                   Cancel
                 </Link>
               </Button>
-              <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={handleSave} disabled={isSaving}>
+              <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={handleSave} disabled={isSaving}>
                 {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
                 Create Recall
               </Button>

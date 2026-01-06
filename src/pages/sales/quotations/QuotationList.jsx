@@ -225,7 +225,7 @@ export default function QuotationList() {
             Refresh
           </Button>
 
-          <Button className="bg-[#dc2551] hover:bg-[#B02045]" asChild>
+          <Button className="bg-cyan-600 hover:bg-cyan-500" asChild>
             <Link to="/dashboard/sales/quotations/create">
               <Plus className="mr-2 h-4 w-4" />
               New Quotation
@@ -292,7 +292,7 @@ export default function QuotationList() {
             </div>
 
             <div className="md:col-span-12 flex flex-wrap items-center gap-2">
-              <Button type="submit" className="bg-[#dc2551] hover:bg-[#B02045]">
+              <Button type="submit" className="bg-cyan-600 hover:bg-cyan-500">
                 Apply
               </Button>
               <Button type="button" variant="outline" onClick={onReset}>
@@ -332,7 +332,7 @@ export default function QuotationList() {
               <p className="mt-3 text-sm font-semibold text-gray-900">No quotations found</p>
               <p className="mt-1 text-sm text-gray-600">Try adjusting filters or create a new quotation.</p>
               <div className="mt-4">
-                <Button className="bg-[#dc2551] hover:bg-[#B02045]" asChild>
+                <Button className="bg-cyan-600 hover:bg-cyan-500" asChild>
                   <Link to="/dashboard/sales/quotations/create">
                     <Plus className="mr-2 h-4 w-4" />
                     New Quotation

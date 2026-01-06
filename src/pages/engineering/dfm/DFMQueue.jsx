@@ -1,27 +1,27 @@
 // src/pages/engineering/dfm/DFMQueue.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ClipboardCheck,
-  Filter,
-  Loader2,
-  Search,
-  RefreshCw,
-  Eye,
-  Plus,
-  ArrowRight,
-  Calendar,
-  UserCircle2,
-  Layers,
-  FileText,
-  BadgeCheck,
-  AlertTriangle,
-  XCircle,
+    AlertTriangle,
+    ArrowRight,
+    BadgeCheck,
+    Calendar,
+    ClipboardCheck,
+    Eye,
+    FileText,
+    Filter,
+    Layers,
+    Loader2,
+    Plus,
+    RefreshCw,
+    Search,
+    UserCircle2,
+    XCircle,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -254,7 +254,7 @@ export default function DFMQueue() {
           </Button>
 
           <Button
-            className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
+            className="bg-cyan-600 hover:bg-cyan-500 gap-2"
             onClick={() => navigate("/dashboard/engineering/dfm/checklist")}
           >
             <Plus className="h-4 w-4" />
@@ -433,7 +433,7 @@ export default function DFMQueue() {
                         </Button>
 
                         <Button
-                          className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
+                          className="bg-cyan-600 hover:bg-cyan-500 gap-2"
                           onClick={() => navigate(`/dashboard/engineering/dfm/review?jobId=${encodeURIComponent(r.id)}`)}
                         >
                           <Eye className="h-4 w-4" />
@@ -466,7 +466,7 @@ export default function DFMQueue() {
                       </Button>
 
                       <Button
-                        className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
+                        className="bg-cyan-600 hover:bg-cyan-500 gap-2"
                         onClick={() => navigate(`/dashboard/engineering/dfm/review?jobId=${encodeURIComponent(r.id)}`)}
                       >
                         <ArrowRight className="h-4 w-4" />

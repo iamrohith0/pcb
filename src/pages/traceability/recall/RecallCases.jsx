@@ -1,26 +1,26 @@
 // src/pages/traceability/recall/RecallCases.jsx
+import {
+    AlertTriangle,
+    ArrowLeft,
+    BadgeCheck,
+    ChevronLeft,
+    ChevronRight,
+    Eye,
+    Filter,
+    Loader2,
+    Plus,
+    RefreshCcw,
+    Search,
+    ShieldCheck,
+    Truck,
+    XCircle,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import {
-  AlertTriangle,
-  ArrowLeft,
-  BadgeCheck,
-  ChevronLeft,
-  ChevronRight,
-  Eye,
-  Filter,
-  Loader2,
-  Plus,
-  RefreshCcw,
-  Search,
-  ShieldCheck,
-  Truck,
-  XCircle,
-} from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -258,7 +258,7 @@ export default function RecallCases() {
 
           {/* If you later add create page: /traceability/recall/new */}
           <Link to="/traceability/recall/new">
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500">
               <Plus className="h-4 w-4" />
               New Recall
             </Button>
@@ -476,7 +476,7 @@ export default function RecallCases() {
               Genealogy Search
             </Button>
             <Button
-              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
               onClick={() => navigate("/traceability/recall/new")}
             >
               <Plus className="h-4 w-4" />

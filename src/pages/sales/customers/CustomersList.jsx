@@ -1,28 +1,28 @@
 // src/pages/sales/customers/CustomersList.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  Building2,
-  ChevronLeft,
-  ChevronRight,
-  Download,
-  Filter,
-  Loader2,
-  Mail,
-  MapPin,
-  Phone,
-  Plus,
-  RefreshCw,
-  Search,
-  Trash2,
-  User2,
+    Building2,
+    ChevronLeft,
+    ChevronRight,
+    Download,
+    Filter,
+    Loader2,
+    Mail,
+    MapPin,
+    Phone,
+    Plus,
+    RefreshCw,
+    Search,
+    Trash2,
+    User2,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -230,7 +230,7 @@ export default function CustomersList() {
             Export (CSV)
           </Button>
 
-          <Button asChild className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+          <Button asChild className="gap-2 bg-cyan-600 hover:bg-cyan-500">
             <Link to="new">
               <Plus className="h-4 w-4" />
               New Customer
@@ -292,7 +292,7 @@ export default function CustomersList() {
                 <RefreshCw className="h-4 w-4" />
                 Reset
               </Button>
-              <Button onClick={applyFilters} className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+              <Button onClick={applyFilters} className="gap-2 bg-cyan-600 hover:bg-cyan-500">
                 <Filter className="h-4 w-4" />
                 Apply
               </Button>
@@ -328,7 +328,7 @@ export default function CustomersList() {
               <div className="mt-4 flex justify-center">
                 <Button
                   onClick={() => navigate("new")}
-                  className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                  className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                 >
                   <Plus className="h-4 w-4" />
                   Add Customer

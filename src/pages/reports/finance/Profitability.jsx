@@ -1,26 +1,26 @@
 // src/pages/reports/finance/Profitability.jsx
+import {
+    ArrowDownToLine,
+    BarChart3,
+    ChevronLeft,
+    ChevronRight,
+    Download,
+    Filter,
+    Loader2,
+    RefreshCcw,
+    Search,
+    TrendingUp,
+    XCircle,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  ArrowDownToLine,
-  BarChart3,
-  ChevronLeft,
-  ChevronRight,
-  Download,
-  Filter,
-  Loader2,
-  RefreshCcw,
-  Search,
-  TrendingUp,
-  XCircle,
-} from "lucide-react";
 
-import api from "@/lib/axios";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -285,7 +285,7 @@ export default function Profitability() {
             Refresh
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={onExport} disabled={exporting}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={onExport} disabled={exporting}>
             {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
             Export
           </Button>

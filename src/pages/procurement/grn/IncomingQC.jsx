@@ -2,41 +2,41 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import api from "@/lib/axios";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  ArrowLeft,
-  BadgeCheck,
-  CalendarDays,
-  CheckCircle2,
-  ClipboardCheck,
-  FileSearch2,
-  FlaskConical,
-  Loader2,
-  PackageSearch,
-  Search,
-  ShieldCheck,
-  Tag,
-  Trash2,
-  Truck,
-  XCircle,
+    ArrowLeft,
+    BadgeCheck,
+    CalendarDays,
+    CheckCircle2,
+    ClipboardCheck,
+    FileSearch2,
+    FlaskConical,
+    Loader2,
+    PackageSearch,
+    Search,
+    ShieldCheck,
+    Tag,
+    Trash2,
+    Truck,
+    XCircle,
 } from "lucide-react";
 
 /**
@@ -551,7 +551,7 @@ export default function IncomingQC() {
           <Button
             onClick={submitIQC}
             disabled={saving || loading}
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <ClipboardCheck className="h-4 w-4" />}
             Submit IQC
@@ -720,7 +720,7 @@ export default function IncomingQC() {
               <p className="text-sm font-medium text-gray-800">No GRN selected</p>
               <p className="mt-1 text-sm text-gray-600">Select a GRN pending QC to load items.</p>
               <div className="mt-4 flex justify-center">
-                <Button onClick={() => setPickerOpen(true)} className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+                <Button onClick={() => setPickerOpen(true)} className="gap-2 bg-cyan-600 hover:bg-cyan-500">
                   <PackageSearch className="h-4 w-4" />
                   Select GRN
                 </Button>
@@ -1084,7 +1084,7 @@ export default function IncomingQC() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={saving}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={clearForm} className="bg-[#dc2551] hover:bg-[#b02045]" disabled={saving}>
+            <AlertDialogAction onClick={clearForm} className="bg-cyan-600 hover:bg-cyan-500" disabled={saving}>
               Clear
             </AlertDialogAction>
           </AlertDialogFooter>

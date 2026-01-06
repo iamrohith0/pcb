@@ -4,25 +4,25 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 import {
-  ArrowRight,
-  CheckCircle2,
-  Clock,
-  Filter,
-  MapPin,
-  RefreshCcw,
-  Search,
-  ShieldCheck,
-  Truck,
-  XCircle,
+    ArrowRight,
+    CheckCircle2,
+    Clock,
+    Filter,
+    MapPin,
+    RefreshCcw,
+    Search,
+    ShieldCheck,
+    Truck,
+    XCircle,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -274,7 +274,7 @@ export default function TrackingDashboard() {
             {bulkSyncing ? "Syncing..." : "Bulk Carrier Sync"}
           </Button>
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => navigate("/logistics/dispatch/create")}
           >
             <Truck className="h-4 w-4" />
@@ -376,7 +376,7 @@ export default function TrackingDashboard() {
             </Button>
 
             <Button
-              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
               onClick={() => toast({ title: "Advanced Filters", description: "Hook: date range, destination, SLA buckets." })}
             >
               <ArrowRight className="h-4 w-4" />
@@ -476,7 +476,7 @@ export default function TrackingDashboard() {
                         </Button>
 
                         <Button
-                          className="bg-[#dc2551] hover:bg-[#b02045]"
+                          className="bg-cyan-600 hover:bg-cyan-500"
                           asChild
                           title="Open shipment details"
                         >

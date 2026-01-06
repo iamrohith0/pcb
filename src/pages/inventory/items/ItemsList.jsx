@@ -1,25 +1,25 @@
 // src/pages/inventory/items/ItemsList.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  Boxes,
-  Plus,
-  Search,
-  RefreshCw,
-  Eye,
-  Pencil,
-  Trash2,
-  Filter,
-  X,
-  Loader2,
-  AlertTriangle,
+    AlertTriangle,
+    Boxes,
+    Eye,
+    Filter,
+    Loader2,
+    Pencil,
+    Plus,
+    RefreshCw,
+    Search,
+    Trash2,
+    X,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import { ConfirmationDialog } from "@/components/ConfirmationDialog";
@@ -280,7 +280,7 @@ export default function ItemsList() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => navigate("/inventory/items/create")}
           >
             <Plus className="h-4 w-4" />
@@ -404,7 +404,7 @@ export default function ItemsList() {
                         Try adjusting filters or create a new item.
                       </p>
                       <Button
-                        className="mt-2 gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                        className="mt-2 gap-2 bg-cyan-600 hover:bg-cyan-500"
                         onClick={() => navigate("/inventory/items/create")}
                       >
                         <Plus className="h-4 w-4" />

@@ -398,7 +398,7 @@ export default function StockTransfer() {
             Print
           </Button>
 
-          <Button className="bg-[#DC2551] hover:bg-[#B02045]" onClick={handleSubmit} disabled={!canSubmit}>
+          <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={handleSubmit} disabled={!canSubmit}>
             {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle2 className="mr-2 h-4 w-4" />}
             {saving ? "Saving..." : "Create Transfer"}
           </Button>

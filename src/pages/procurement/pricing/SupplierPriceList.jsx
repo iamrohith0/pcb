@@ -1,40 +1,40 @@
 // src/pages/procurement/pricing/SupplierPriceList.jsx
-import { useEffect, useMemo, useState } from "react";
 import api from "@/lib/axios";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  BadgeIndianRupee,
-  Building2,
-  CalendarClock,
-  Copy,
-  Download,
-  FileSpreadsheet,
-  Filter,
-  Loader2,
-  Plus,
-  RefreshCcw,
-  Save,
-  Search,
-  Trash2,
-  Upload,
+    BadgeIndianRupee,
+    Building2,
+    CalendarClock,
+    Copy,
+    Download,
+    FileSpreadsheet,
+    Filter,
+    Loader2,
+    Plus,
+    RefreshCcw,
+    Save,
+    Search,
+    Trash2,
+    Upload,
 } from "lucide-react";
 
 /**
@@ -461,7 +461,7 @@ export default function SupplierPriceList() {
             </span>
           </label>
 
-          <Button onClick={addRow} className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" disabled={savingAll}>
+          <Button onClick={addRow} className="gap-2 bg-cyan-600 hover:bg-cyan-500" disabled={savingAll}>
             <Plus className="h-4 w-4" />
             Add Row
           </Button>
@@ -800,7 +800,7 @@ export default function SupplierPriceList() {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDelete}
-              className="bg-[#dc2551] hover:bg-[#b02045]"
+              className="bg-cyan-600 hover:bg-cyan-500"
             >
               Delete
             </AlertDialogAction>

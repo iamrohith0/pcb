@@ -1,37 +1,37 @@
 // src/pages/admin/users/UserCreate.jsx
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import api from "@/lib/axios";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { Badge } from "@/components/ui/badge";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  Building2,
-  ChevronLeft,
-  Mail,
-  Phone,
-  ShieldCheck,
-  UserPlus,
-  User,
-  KeyRound,
-  Hash,
-  BadgeCheck,
+    BadgeCheck,
+    Building2,
+    ChevronLeft,
+    Hash,
+    KeyRound,
+    Mail,
+    Phone,
+    ShieldCheck,
+    User,
+    UserPlus,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -248,7 +248,7 @@ export default function UserCreate() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={handleSubmit}
             disabled={saving || loadingMeta || !isValid}
           >
@@ -497,7 +497,7 @@ export default function UserCreate() {
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-[#dc2551] hover:bg-[#b02045]"
+                  className="bg-cyan-600 hover:bg-cyan-500"
                   disabled={saving || loadingMeta || !isValid}
                 >
                   {saving ? "Creating..." : "Create User"}

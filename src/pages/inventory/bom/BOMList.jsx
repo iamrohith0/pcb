@@ -2,40 +2,40 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  ClipboardList,
-  Plus,
-  Search,
-  RefreshCw,
-  Filter,
-  Trash2,
-  Pencil,
-  Eye,
-  Split,
-  ArrowUpDown,
-  Loader2,
-  Layers,
-  Package,
+    ArrowUpDown,
+    ClipboardList,
+    Eye,
+    Filter,
+    Layers,
+    Loader2,
+    Package,
+    Pencil,
+    Plus,
+    RefreshCw,
+    Search,
+    Split,
+    Trash2,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -292,7 +292,7 @@ export default function BOMList() {
             Refresh
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" asChild>
             <Link to="/inventory/bom/create">
               <Plus className="h-4 w-4" />
               New BOM
@@ -359,7 +359,7 @@ export default function BOMList() {
             <Button variant="outline" className="gap-2" onClick={handleReset}>
               Reset
             </Button>
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={handleApplyFilters}>
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={handleApplyFilters}>
               Apply
             </Button>
           </div>

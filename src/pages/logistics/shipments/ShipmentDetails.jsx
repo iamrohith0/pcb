@@ -1,32 +1,32 @@
 // src/pages/logistics/shipments/ShipmentDetails.jsx
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
-import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  Box,
-  Calendar,
-  CheckCircle2,
-  ClipboardCopy,
-  FileDown,
-  MapPin,
-  Package,
-  Phone,
-  RefreshCcw,
-  Save,
-  ShieldCheck,
-  Truck,
+    ArrowLeft,
+    Box,
+    Calendar,
+    CheckCircle2,
+    ClipboardCopy,
+    FileDown,
+    MapPin,
+    Package,
+    Phone,
+    RefreshCcw,
+    Save,
+    ShieldCheck,
+    Truck,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -366,7 +366,7 @@ export default function ShipmentDetails() {
             Mark Delivered
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={requestSave}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={requestSave}>
             <Save className="h-4 w-4" />
             Save
           </Button>

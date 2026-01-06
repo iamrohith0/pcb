@@ -342,7 +342,7 @@ export default function SerialHistory() {
                   const value = el?.value?.trim();
                   if (value) setSearchParams({ serial: value });
                 }}
-                className="bg-[#DC2551] hover:bg-[#B02045]"
+                className="bg-cyan-600 hover:bg-cyan-500"
               >
                 <Search className="mr-2 h-4 w-4" />
                 Search
@@ -389,7 +389,7 @@ export default function SerialHistory() {
           </Button>
           <Button
             onClick={() => setShowFilters((s) => !s)}
-            className="bg-[#DC2551] hover:bg-[#B02045]"
+            className="bg-cyan-600 hover:bg-cyan-500"
           >
             <SlidersHorizontal className="mr-2 h-4 w-4" />
             {showFilters ? "Hide Filters" : "Show Filters"}

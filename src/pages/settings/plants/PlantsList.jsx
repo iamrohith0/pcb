@@ -1,26 +1,26 @@
 // src/pages/settings/plants/PlantsList.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  Building2,
-  Factory,
-  Plus,
-  Search,
-  RefreshCcw,
-  Pencil,
-  Eye,
-  ToggleLeft,
-  ToggleRight,
-  MapPin,
-  Hash,
-  Globe2,
-  Mail,
-  Phone,
+    Building2,
+    Eye,
+    Factory,
+    Globe2,
+    Hash,
+    Mail,
+    MapPin,
+    Pencil,
+    Phone,
+    Plus,
+    RefreshCcw,
+    Search,
+    ToggleLeft,
+    ToggleRight,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -64,7 +64,7 @@ function EmptyState({ q }) {
       <div className="mt-1 text-sm text-gray-500">
         {q ? "Try a different search term." : "Create your first plant to manage PCB operations by location."}
       </div>
-      <Button asChild className="mt-5 bg-[#dc2551] hover:bg-[#b02045]">
+      <Button asChild className="mt-5 bg-cyan-600 hover:bg-cyan-500">
         <Link to="/settings/plants/new">
           <Plus className="mr-2 h-4 w-4" />
           Add Plant
@@ -189,7 +189,7 @@ export default function PlantsList() {
             Refresh
           </Button>
 
-          <Button asChild className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+          <Button asChild className="gap-2 bg-cyan-600 hover:bg-cyan-500">
             <Link to="/settings/plants/new">
               <Plus className="h-4 w-4" />
               Add Plant
@@ -215,7 +215,7 @@ export default function PlantsList() {
             <Button
               type="button"
               variant={status === "all" ? "default" : "outline"}
-              className={cx("w-full", status === "all" && "bg-[#dc2551] hover:bg-[#b02045]")}
+              className={cx("w-full", status === "all" && "bg-cyan-600 hover:bg-cyan-500")}
               onClick={() => setStatus("all")}
             >
               All
@@ -223,7 +223,7 @@ export default function PlantsList() {
             <Button
               type="button"
               variant={status === "active" ? "default" : "outline"}
-              className={cx("w-full", status === "active" && "bg-[#dc2551] hover:bg-[#b02045]")}
+              className={cx("w-full", status === "active" && "bg-cyan-600 hover:bg-cyan-500")}
               onClick={() => setStatus("active")}
             >
               Active
@@ -231,7 +231,7 @@ export default function PlantsList() {
             <Button
               type="button"
               variant={status === "inactive" ? "default" : "outline"}
-              className={cx("w-full", status === "inactive" && "bg-[#dc2551] hover:bg-[#b02045]")}
+              className={cx("w-full", status === "inactive" && "bg-cyan-600 hover:bg-cyan-500")}
               onClick={() => setStatus("inactive")}
             >
               Inactive
@@ -307,7 +307,7 @@ export default function PlantsList() {
                     </Button>
                     <Button
                       size="sm"
-                      className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                      className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                       onClick={() => goEdit(p.id)}
                     >
                       <Pencil className="h-4 w-4" />

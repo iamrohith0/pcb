@@ -1,36 +1,36 @@
 // src/pages/quality/capa/CAPAEffectiveness.jsx
-import { useEffect, useMemo, useState } from "react";
 import api from "@/lib/axios";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  BarChart3,
-  CheckCircle2,
-  ClipboardCheck,
-  Download,
-  Filter,
-  RefreshCw,
-  Search,
-  ShieldAlert,
-  SlidersHorizontal,
-  TrendingUp,
+    BarChart3,
+    CheckCircle2,
+    ClipboardCheck,
+    Download,
+    Filter,
+    RefreshCw,
+    Search,
+    ShieldAlert,
+    SlidersHorizontal,
+    TrendingUp,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -570,7 +570,7 @@ export default function CAPAEffectiveness() {
             <RefreshCw className={cx("h-4 w-4", loading ? "animate-spin" : "")} />
             Refresh
           </Button>
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={handleExport} disabled={exporting}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={handleExport} disabled={exporting}>
             <Download className={cx("h-4 w-4", exporting ? "animate-pulse" : "")} />
             {exporting ? "Exporting..." : "Export"}
           </Button>
@@ -753,7 +753,7 @@ export default function CAPAEffectiveness() {
 
                           <Button
                             size="sm"
-                            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                             onClick={() => openReview(r)}
                           >
                             <ClipboardCheck className="h-4 w-4" />
@@ -866,7 +866,7 @@ export default function CAPAEffectiveness() {
 
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => setViewOpen(false)}>Close</AlertDialogCancel>
-            <AlertDialogAction onClick={() => setViewOpen(false)} className="bg-[#dc2551] hover:bg-[#b02045]">
+            <AlertDialogAction onClick={() => setViewOpen(false)} className="bg-cyan-600 hover:bg-cyan-500">
               Done
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -964,7 +964,7 @@ export default function CAPAEffectiveness() {
             <AlertDialogAction
               onClick={submitReview}
               disabled={saving}
-              className="bg-[#dc2551] hover:bg-[#b02045]"
+              className="bg-cyan-600 hover:bg-cyan-500"
             >
               {saving ? "Saving…" : "Submit Review"}
             </AlertDialogAction>
@@ -996,7 +996,7 @@ export default function CAPAEffectiveness() {
             <AlertDialogAction
               onClick={doConfirm}
               disabled={saving}
-              className={confirmMode === "close" ? "bg-emerald-600 hover:bg-emerald-700" : "bg-[#dc2551] hover:bg-[#b02045]"}
+              className={confirmMode === "close" ? "bg-emerald-600 hover:bg-emerald-700" : "bg-cyan-600 hover:bg-cyan-500"}
             >
               {saving ? "Saving…" : confirmMode === "close" ? "Close" : "Reopen"}
             </AlertDialogAction>

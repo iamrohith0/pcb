@@ -2,43 +2,43 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  ArrowLeft,
-  Boxes,
-  Calculator,
-  ChevronDown,
-  ChevronRight,
-  Copy,
-  Download,
-  Filter,
-  Layers,
-  Loader2,
-  RefreshCw,
-  Search,
-  Settings2,
-  ShieldCheck,
-  Split,
-  Wand2,
+    ArrowLeft,
+    Boxes,
+    Calculator,
+    ChevronDown,
+    ChevronRight,
+    Copy,
+    Download,
+    Filter,
+    Layers,
+    Loader2,
+    RefreshCw,
+    Search,
+    Settings2,
+    ShieldCheck,
+    Split,
+    Wand2,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -557,7 +557,7 @@ export default function BOMExplode() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => fetchExplode(true)}
             disabled={refreshing}
           >
@@ -673,7 +673,7 @@ export default function BOMExplode() {
               )}
 
               <Button
-                className="ml-auto gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                className="ml-auto gap-2 bg-cyan-600 hover:bg-cyan-500"
                 onClick={() => fetchExplode(true)}
                 disabled={refreshing}
               >

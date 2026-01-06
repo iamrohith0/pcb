@@ -2,26 +2,25 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 
 import {
-  AlertCircle,
-  ArrowLeft,
-  CheckCircle2,
-  ClipboardCheck,
-  FileUp,
-  Loader2,
-  Plus,
-  Save,
-  Trash2,
+    AlertCircle,
+    ArrowLeft,
+    CheckCircle2,
+    ClipboardCheck,
+    FileUp,
+    Loader2,
+    Plus,
+    Save,
+    Trash2,
 } from "lucide-react";
 
 /**
@@ -356,7 +355,7 @@ export default function InspectionCreate() {
             Back
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={handleSubmit} disabled={saving}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={handleSubmit} disabled={saving}>
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             Save Inspection
           </Button>
@@ -419,7 +418,7 @@ export default function InspectionCreate() {
                       type="button"
                       key={s.value}
                       variant={stage === s.value ? "default" : "outline"}
-                      className={cx("h-8", stage === s.value && "bg-[#dc2551] hover:bg-[#b02045]")}
+                      className={cx("h-8", stage === s.value && "bg-cyan-600 hover:bg-cyan-500")}
                       onClick={() => setStage(s.value)}
                     >
                       {s.label}
@@ -807,7 +806,7 @@ export default function InspectionCreate() {
           </Button>
 
           <div className="flex items-center gap-2">
-            <Button type="submit" className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" disabled={saving}>
+            <Button type="submit" className="gap-2 bg-cyan-600 hover:bg-cyan-500" disabled={saving}>
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save
             </Button>

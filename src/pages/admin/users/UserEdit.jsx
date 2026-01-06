@@ -1,38 +1,38 @@
 // src/pages/admin/users/UserEdit.jsx
+import api from "@/lib/axios";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import api from "@/lib/axios";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  BadgeCheck,
-  Building2,
-  ChevronLeft,
-  Hash,
-  KeyRound,
-  Mail,
-  Phone,
-  RefreshCw,
-  ShieldCheck,
-  UserCog,
-  User,
+    BadgeCheck,
+    Building2,
+    ChevronLeft,
+    Hash,
+    KeyRound,
+    Mail,
+    Phone,
+    RefreshCw,
+    ShieldCheck,
+    User,
+    UserCog,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -322,7 +322,7 @@ export default function UserEdit() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={handleSubmit}
             disabled={!canSave}
             title={!isDirty ? "No changes to save" : !isValid ? "Fix validation errors" : ""}
@@ -596,7 +596,7 @@ export default function UserEdit() {
                   </Button>
                   <Button
                     type="submit"
-                    className="bg-[#dc2551] hover:bg-[#b02045]"
+                    className="bg-cyan-600 hover:bg-cyan-500"
                     disabled={!canSave}
                     title={!isDirty ? "No changes to save" : !isValid ? "Fix validation errors" : ""}
                   >

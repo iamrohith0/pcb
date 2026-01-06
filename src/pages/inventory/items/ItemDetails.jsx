@@ -1,35 +1,34 @@
 // src/pages/inventory/items/ItemDetails.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  BadgeCheck,
-  Barcode,
-  Boxes,
-  Building2,
-  Calendar,
-  CheckCircle2,
-  Copy,
-  Edit3,
-  FileText,
-  Info,
-  Loader2,
-  Package,
-  ShieldCheck,
-  Tag,
-  Trash2,
-  AlertTriangle,
-  Warehouse,
+    AlertTriangle,
+    ArrowLeft,
+    BadgeCheck,
+    Barcode,
+    Boxes,
+    Building2,
+    Calendar,
+    CheckCircle2,
+    Copy,
+    Edit3,
+    FileText,
+    Info,
+    Loader2,
+    Package,
+    ShieldCheck,
+    Tag,
+    Trash2,
+    Warehouse,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
-import inventoryItemsService from "@/services/inventory/items.service";
 import { ConfirmationDialog } from "@/components/ConfirmationDialog";
+import inventoryItemsService from "@/services/inventory/items.service";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -273,7 +272,7 @@ export default function ItemDetails() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => setDeleteOpen(true)}
             disabled={loading || !item}
           >

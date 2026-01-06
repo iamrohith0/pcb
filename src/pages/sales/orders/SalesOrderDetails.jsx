@@ -1,28 +1,27 @@
 // src/pages/sales/orders/SalesOrderDetails.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  Building2,
-  CalendarDays,
-  ClipboardList,
-  Download,
-  Edit3,
-  FileText,
-  Loader2,
-  PackageCheck,
-  Printer,
-  RefreshCw,
-  Send,
-  Trash2,
-  Truck,
-  User,
+    ArrowLeft,
+    Building2,
+    ClipboardList,
+    Download,
+    Edit3,
+    FileText,
+    Loader2,
+    PackageCheck,
+    Printer,
+    RefreshCw,
+    Send,
+    Trash2,
+    Truck,
+    User
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 
 import salesOrdersApi from "@/services/sales/salesOrders.service";
@@ -252,7 +251,7 @@ export default function SalesOrderDetails() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={handleSubmitToEngineering}
             disabled={actionLoading || loading}
             title="Send Sales Order to Engineering Intake (DFM/CAM)"
@@ -542,7 +541,7 @@ export default function SalesOrderDetails() {
               </CardHeader>
               <CardContent className="space-y-2">
                 <Button
-                  className="w-full gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                  className="w-full gap-2 bg-cyan-600 hover:bg-cyan-500"
                   onClick={handleSubmitToEngineering}
                   disabled={actionLoading}
                 >

@@ -2,46 +2,46 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  ArrowLeft,
-  ClipboardList,
-  Copy,
-  Edit3,
-  Factory,
-  FileDown,
-  Layers,
-  Loader2,
-  PencilLine,
-  ShieldCheck,
-  Timer,
-  Trash2,
-  CheckCircle2,
-  AlertTriangle,
-  ScanEye,
-  Zap,
-  Wrench,
-  Settings2,
-  Printer,
-  Droplet,
+    AlertTriangle,
+    ArrowLeft,
+    CheckCircle2,
+    ClipboardList,
+    Copy,
+    Droplet,
+    Edit3,
+    Factory,
+    FileDown,
+    Layers,
+    Loader2,
+    PencilLine,
+    Printer,
+    ScanEye,
+    Settings2,
+    ShieldCheck,
+    Timer,
+    Trash2,
+    Wrench,
+    Zap,
 } from "lucide-react";
 
 /**
@@ -359,7 +359,7 @@ export default function RoutingDetails() {
                 Back to list
               </Link>
             </Button>
-            <Button className="bg-[#dc2551] hover:bg-[#b02045]" asChild>
+            <Button className="bg-cyan-600 hover:bg-cyan-500" asChild>
               <Link to="/production/routing/create">Create Routing</Link>
             </Button>
           </div>
@@ -400,7 +400,7 @@ export default function RoutingDetails() {
             Clone
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={onEdit}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={onEdit}>
             <Edit3 className="h-4 w-4" />
             Edit
           </Button>

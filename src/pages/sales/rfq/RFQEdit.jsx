@@ -1,25 +1,25 @@
 // src/pages/sales/rfq/RFQEdit.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  FileText,
-  Loader2,
-  Save,
-  Plus,
-  Trash2,
-  Upload,
-  ClipboardCopy,
-  Calendar,
+    ArrowLeft,
+    Calendar,
+    ClipboardCopy,
+    FileText,
+    Loader2,
+    Plus,
+    Save,
+    Trash2,
+    Upload,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import rfqApi from "@/services/sales/rfq.service";
@@ -362,7 +362,7 @@ export default function RFQEdit() {
             </Link>
           </Button>
 
-          <Button type="submit" className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" disabled={saving}>
+          <Button type="submit" className="gap-2 bg-cyan-600 hover:bg-cyan-500" disabled={saving}>
             {saving ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -777,7 +777,7 @@ export default function RFQEdit() {
           </Link>
         </Button>
 
-        <Button type="submit" className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" disabled={saving}>
+        <Button type="submit" className="gap-2 bg-cyan-600 hover:bg-cyan-500" disabled={saving}>
           {saving ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />

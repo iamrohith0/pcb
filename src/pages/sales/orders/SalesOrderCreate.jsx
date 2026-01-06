@@ -1,19 +1,19 @@
 // src/pages/sales/orders/SalesOrderCreate.jsx
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  CalendarDays,
-  ClipboardList,
-  FileText,
-  Loader2,
-  Plus,
-  Save,
-  Trash2,
-  UploadCloud,
-  User,
+    ArrowLeft,
+    CalendarDays,
+    ClipboardList,
+    FileText,
+    Loader2,
+    Plus,
+    Save,
+    Trash2,
+    UploadCloud,
+    User,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,8 +22,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
-import salesOrdersApi from "@/services/sales/salesOrders.service";
 import customersApi from "@/services/sales/customers.service";
+import salesOrdersApi from "@/services/sales/salesOrders.service";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -274,7 +274,7 @@ export default function SalesOrderCreate() {
           <Button
             onClick={handleSubmit}
             disabled={!canSubmit || loading || bootLoading}
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
           >
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             Save Order
@@ -682,7 +682,7 @@ export default function SalesOrderCreate() {
             <Button
               type="submit"
               disabled={!canSubmit || loading}
-              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Save Sales Order

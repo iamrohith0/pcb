@@ -1,38 +1,38 @@
 // src/pages/warehouse/packing/PackConfirm.jsx
-import { Button } from "@/components/ui/button";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  Barcode,
-  Box,
-  Boxes,
-  CheckCircle2,
-  ClipboardList,
-  Hash,
-  Package,
-  QrCode,
-  RefreshCw,
-  ShieldAlert,
-  Truck,
-  Weight,
-  XCircle,
+    ArrowLeft,
+    Barcode,
+    Box,
+    Boxes,
+    CheckCircle2,
+    ClipboardList,
+    Hash,
+    Package,
+    QrCode,
+    RefreshCw,
+    ShieldAlert,
+    Truck,
+    Weight,
+    XCircle,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -336,7 +336,7 @@ export default function PackConfirm() {
           <Button
             onClick={requestConfirm}
             disabled={confirming || loading || !canConfirm}
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             title={!canConfirm ? "All items must be packed (remaining = 0) and cartons must exist" : "Confirm packing"}
           >
             <CheckCircle2 className="h-4 w-4" />
@@ -427,7 +427,7 @@ export default function PackConfirm() {
                   <Button
                     type="submit"
                     disabled={loading || !scan.trim() || pack.status === "confirmed"}
-                    className="w-full gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                    className="w-full gap-2 bg-cyan-600 hover:bg-cyan-500"
                   >
                     <Barcode className="h-4 w-4" />
                     Add Scan

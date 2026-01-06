@@ -1,22 +1,22 @@
 // src/pages/traceability/lot-genealogy/LotGenealogySearch.jsx
+import {
+    ArrowLeft,
+    Barcode,
+    ChevronRight,
+    Filter,
+    GitBranch,
+    Loader2,
+    Search,
+    ShieldCheck,
+    Workflow,
+    X,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  ArrowLeft,
-  Barcode,
-  ChevronRight,
-  Filter,
-  GitBranch,
-  Loader2,
-  Search,
-  ShieldCheck,
-  Workflow,
-  X,
-} from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -192,7 +192,7 @@ export default function LotGenealogySearch() {
           </Button>
 
           <Link to="/traceability/batch/scan">
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500">
               <Barcode className="h-4 w-4" />
               Batch Scan
             </Button>
@@ -217,7 +217,7 @@ export default function LotGenealogySearch() {
 
             <Button
               type="submit"
-              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
               disabled={!canSearch}
             >
               {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
@@ -376,7 +376,7 @@ export default function LotGenealogySearch() {
                   </div>
 
                   <div className="flex flex-col gap-2 sm:items-end">
-                    <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={openViewer}>
+                    <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={openViewer}>
                       <ChevronRight className="h-4 w-4" />
                       Open Genealogy Viewer
                     </Button>

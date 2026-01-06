@@ -1,22 +1,22 @@
 // src/pages/settings/integrations/EmailSMTP.jsx
-import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Mail,
-  Server,
-  Lock,
-  ShieldCheck,
-  Save,
-  RefreshCcw,
-  Eye,
-  EyeOff,
-  AlertTriangle,
-  CheckCircle2,
-  Send,
+    AlertTriangle,
+    CheckCircle2,
+    Eye,
+    EyeOff,
+    Lock,
+    Mail,
+    RefreshCcw,
+    Save,
+    Send,
+    Server,
+    ShieldCheck,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
@@ -233,7 +233,7 @@ export default function EmailSMTP() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={onSave}
             disabled={loading || saving}
           >
@@ -460,7 +460,7 @@ export default function EmailSMTP() {
 
             <div className="mt-4 flex items-center gap-2">
               <Button
-                className="w-full gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                className="w-full gap-2 bg-cyan-600 hover:bg-cyan-500"
                 onClick={onTest}
                 disabled={loading || testing}
               >

@@ -1,29 +1,25 @@
 // src/pages/admin/audit-logs/AuditLogDetails.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  BadgeCheck,
-  Calendar,
-  Copy,
-  Database,
-  Eye,
-  FileText,
-  Hash,
-  Info,
-  Laptop,
-  RefreshCw,
-  Shield,
-  UserCircle2,
-  Globe,
-  CheckCircle2,
-  AlertTriangle,
+    AlertTriangle,
+    ArrowLeft,
+    CheckCircle2,
+    Copy,
+    Database,
+    Eye,
+    FileText,
+    Globe,
+    Info,
+    RefreshCw,
+    Shield,
+    UserCircle2
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 // If you already have an auditLog service, replace this demo loader with:
@@ -226,7 +222,7 @@ export default function AuditLogDetails() {
           </Button>
 
           <Button
-            className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
+            className="bg-cyan-600 hover:bg-cyan-500 gap-2"
             onClick={() => copy(String(titleId), "Log ID copied")}
           >
             <Copy className="h-4 w-4" />

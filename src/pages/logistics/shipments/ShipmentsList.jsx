@@ -2,23 +2,23 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  ArrowLeft,
-  Calendar,
-  Eye,
-  Filter,
-  Package,
-  Plus,
-  RefreshCw,
-  Search,
-  Truck,
+    ArrowLeft,
+    Calendar,
+    Eye,
+    Filter,
+    Package,
+    Plus,
+    RefreshCw,
+    Search,
+    Truck,
 } from "lucide-react";
 
 /**
@@ -193,7 +193,7 @@ export default function ShipmentsList() {
             <RefreshCw className={cx("h-4 w-4", loading ? "animate-spin" : "")} />
             Refresh
           </Button>
-          <Button asChild className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+          <Button asChild className="gap-2 bg-cyan-600 hover:bg-cyan-500">
             <Link to="/logistics/shipments/create">
               <Plus className="h-4 w-4" />
               New Shipment
@@ -270,7 +270,7 @@ export default function ShipmentsList() {
             <div className="rounded-xl border border-dashed p-8 text-center">
               <p className="text-sm font-semibold text-gray-900">No shipments found</p>
               <p className="mt-1 text-sm text-gray-500">Try clearing filters or create a new shipment.</p>
-              <Button asChild className="mt-4 gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+              <Button asChild className="mt-4 gap-2 bg-cyan-600 hover:bg-cyan-500">
                 <Link to="/logistics/shipments/create">
                   <Plus className="h-4 w-4" />
                   New Shipment

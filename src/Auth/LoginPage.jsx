@@ -226,7 +226,7 @@ export default function LoginPage() {
                   <CardDescription className="text-center text-slate-600 md:text-left">
                     Access dashboards for inventory, work orders, QC, procurement, and dispatch.
                   </CardDescription>
-                  
+
                   {/* Dummy credentials for testing */}
                   <div className="mt-3 rounded-lg bg-slate-50 p-3 text-xs text-slate-600 border border-slate-200">
                     <div className="font-semibold mb-1">Demo Credentials:</div>
@@ -292,6 +292,27 @@ export default function LoginPage() {
                     >
                       {isLoading ? "Signing in..." : "Sign In"}
                     </Button>
+
+                    {/* ✅ Correct position: Links directly below Sign In */}
+                    <div className="flex flex-col items-center gap-1 pt-1 md:items-start">
+                      <Button
+                        type="button"
+                        variant="link"
+                        onClick={() => navigate("/forgot-password")}
+                        className="h-auto p-0 text-cyan-600 hover:text-cyan-700 font-normal"
+                      >
+                        Forgot Password?
+                      </Button>
+
+                      <Button
+                        type="button"
+                        variant="link"
+                        onClick={() => navigate("/reset-password")}
+                        className="h-auto p-0 text-cyan-600 hover:text-cyan-700 font-normal text-xs"
+                      >
+                        Reset Password (with token)
+                      </Button>
+                    </div>
 
                     {/* Trust footer (mobile) */}
                     <div className="pt-2 md:hidden">

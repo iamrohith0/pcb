@@ -2,26 +2,24 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select } from "@/components/ui/select"; // if your shadcn select is different, replace with your select wrapper
-import { Badge } from "@/components/ui/badge";
 
 import {
-  AlertTriangle,
-  ArrowLeft,
-  ClipboardCheck,
-  Loader2,
-  Save,
-  Search,
-  ShieldCheck,
-  Wand2,
+    AlertTriangle,
+    ArrowLeft,
+    ClipboardCheck,
+    Loader2,
+    Save,
+    Search,
+    ShieldCheck
 } from "lucide-react";
 
 /**
@@ -341,7 +339,7 @@ export default function NCRCreate() {
             <ArrowLeft className="h-4 w-4" />
             Back
           </Button>
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={() => navigate("/quality/ncr")}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={() => navigate("/quality/ncr")}>
             <ClipboardCheck className="h-4 w-4" />
             NCR List
           </Button>
@@ -647,7 +645,7 @@ export default function NCRCreate() {
 
               <Button
                 type="submit"
-                className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                 disabled={saving || loadingPrefill}
               >
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}

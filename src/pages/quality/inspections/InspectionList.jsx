@@ -1,29 +1,27 @@
 // src/pages/quality/inspections/InspectionList.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  AlertTriangle,
-  ArrowUpDown,
-  CheckCircle2,
-  ChevronLeft,
-  ChevronRight,
-  Eye,
-  FileDown,
-  Filter,
-  Plus,
-  RefreshCcw,
-  Search,
-  SlidersHorizontal,
-  XCircle,
+    AlertTriangle,
+    ArrowUpDown,
+    CheckCircle2,
+    ChevronLeft,
+    ChevronRight,
+    Eye,
+    FileDown,
+    Filter,
+    Plus,
+    RefreshCcw,
+    Search,
+    SlidersHorizontal,
+    XCircle,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select"; // if your shadcn select wrapper differs, replace with your own
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import inspectionsService from "@/services/quality/inspections.service"; // create this service (API calls) or adapt to your existing api layer
@@ -224,7 +222,7 @@ export default function InspectionList() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => navigate("/quality/inspections/create")}
           >
             <Plus className="h-4 w-4" />
@@ -286,7 +284,7 @@ export default function InspectionList() {
           </div>
 
           <div className="md:col-span-2 flex items-end gap-2">
-            <Button type="submit" className="w-full gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+            <Button type="submit" className="w-full gap-2 bg-cyan-600 hover:bg-cyan-500">
               <Filter className="h-4 w-4" />
               Apply
             </Button>

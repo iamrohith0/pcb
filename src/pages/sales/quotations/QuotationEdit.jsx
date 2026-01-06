@@ -366,7 +366,7 @@ export default function QuotationEdit() {
               Cancel
             </Link>
           </Button>
-          <Button className="bg-[#dc2551] hover:bg-[#B02045]" onClick={handleSave} disabled={saving}>
+          <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={handleSave} disabled={saving}>
             {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
             Save Changes
           </Button>
@@ -720,7 +720,7 @@ export default function QuotationEdit() {
 
               <Button
                 type="submit"
-                className="w-full bg-[#dc2551] hover:bg-[#B02045]"
+                className="w-full bg-cyan-600 hover:bg-cyan-500"
                 disabled={saving}
               >
                 {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle2 className="mr-2 h-4 w-4" />}

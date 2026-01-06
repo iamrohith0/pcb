@@ -179,7 +179,7 @@ export default function SerialLookup() {
           </Button>
 
           <Button
-            className="bg-[#DC2551] hover:bg-[#B02045]"
+            className="bg-cyan-600 hover:bg-cyan-500"
             onClick={() => doLookup()}
             disabled={loading || !canSearch}
           >
@@ -214,7 +214,7 @@ export default function SerialLookup() {
           </div>
           <div className="md:col-span-3 flex items-end gap-2">
             <Button
-              className="w-full bg-[#DC2551] hover:bg-[#B02045]"
+              className="w-full bg-cyan-600 hover:bg-cyan-500"
               onClick={() => doLookup()}
               disabled={loading || !canSearch}
             >

@@ -2,28 +2,28 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  ArrowLeft,
-  CheckCircle2,
-  ClipboardCheck,
-  Download,
-  FileText,
-  PackageCheck,
-  Printer,
-  QrCode,
-  Search,
-  ShieldCheck,
-  Truck,
-  XCircle,
+    ArrowLeft,
+    CheckCircle2,
+    ClipboardCheck,
+    Download,
+    FileText,
+    PackageCheck,
+    Printer,
+    QrCode,
+    Search,
+    ShieldCheck,
+    Truck,
+    XCircle,
 } from "lucide-react";
 
 /**
@@ -488,7 +488,7 @@ export default function DispatchChecklist() {
             Export
           </Button>
 
-          <Button onClick={handleSave} disabled={saving} className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+          <Button onClick={handleSave} disabled={saving} className="gap-2 bg-cyan-600 hover:bg-cyan-500">
             <ClipboardCheck className="h-4 w-4" />
             {saving ? "Saving..." : "Save"}
           </Button>
@@ -772,7 +772,7 @@ export default function DispatchChecklist() {
             <XCircle className="h-4 w-4" />
             Clear Search
           </Button>
-          <Button onClick={handleSave} disabled={saving} className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+          <Button onClick={handleSave} disabled={saving} className="gap-2 bg-cyan-600 hover:bg-cyan-500">
             <ClipboardCheck className="h-4 w-4" />
             {saving ? "Saving..." : "Save Checklist"}
           </Button>

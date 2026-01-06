@@ -1,33 +1,28 @@
 // src/pages/reports/inventory/StockAging.jsx
+import {
+    AlertTriangle,
+    BarChart3,
+    Calendar,
+    ChevronLeft,
+    ChevronRight,
+    Clock,
+    DollarSign,
+    Download,
+    Filter,
+    Loader2,
+    RefreshCcw,
+    Search,
+    SlidersHorizontal
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  ArrowDownToLine,
-  Boxes,
-  ChevronLeft,
-  ChevronRight,
-  Download,
-  Filter,
-  Loader2,
-  RefreshCcw,
-  Search,
-  SlidersHorizontal,
-  Calendar,
-  Clock,
-  TrendingDown,
-  AlertTriangle,
-  BarChart3,
-  DollarSign,
-  Package
-} from "lucide-react";
 
-import api from "@/lib/axios";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import api from "@/lib/axios";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -361,7 +356,7 @@ export default function StockAgingReport() {
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCcw className="h-4 w-4" />}
             Refresh
           </Button>
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={onExport} disabled={exporting}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={onExport} disabled={exporting}>
             {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
             Export
           </Button>

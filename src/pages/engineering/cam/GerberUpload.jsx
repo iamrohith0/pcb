@@ -1,22 +1,22 @@
 // src/pages/engineering/cam/GerberUpload.jsx
-import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  AlertTriangle,
-  CheckCircle2,
-  FileArchive,
-  FileCode2,
-  FileText,
-  Info,
-  Loader2,
-  ShieldCheck,
-  Trash2,
-  Upload,
+    AlertTriangle,
+    CheckCircle2,
+    FileArchive,
+    FileCode2,
+    FileText,
+    Info,
+    Loader2,
+    ShieldCheck,
+    Trash2,
+    Upload,
 } from "lucide-react";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -273,7 +273,7 @@ export default function GerberUpload() {
             Back
           </Button>
           <Button
-            className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
+            className="bg-cyan-600 hover:bg-cyan-500 gap-2"
             onClick={handleUpload}
             disabled={!canSubmit || uploading}
           >
@@ -584,7 +584,7 @@ export default function GerberUpload() {
                   {file ? humanSize(file.size) : "Choose a ZIP with Gerbers + drill."}
                 </p>
               </div>
-              <Button className="bg-[#dc2551] hover:bg-[#b02045] gap-2" disabled={!canSubmit || uploading} type="submit">
+              <Button className="bg-cyan-600 hover:bg-cyan-500 gap-2" disabled={!canSubmit || uploading} type="submit">
                 {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CloudUpload className="h-4 w-4" />}
                 Upload
               </Button>

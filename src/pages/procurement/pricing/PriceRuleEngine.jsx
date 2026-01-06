@@ -391,7 +391,7 @@ export default function PriceRuleEngine() {
                   <Download className="mr-2 h-4 w-4" />
                   Export
                 </Button>
-                <Button className="bg-[#DC2551] hover:bg-[#B02045]" onClick={() => openEditor(null)}>
+                <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={() => openEditor(null)}>
                   <Plus className="mr-2 h-4 w-4" />
                   New Rule
                 </Button>
@@ -738,7 +738,7 @@ export default function PriceRuleEngine() {
                   <Button variant="outline" onClick={closeEditor}>
                     Cancel
                   </Button>
-                  <Button className="bg-[#DC2551] hover:bg-[#B02045]" onClick={saveRule}>
+                  <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={saveRule}>
                     <Save className="mr-2 h-4 w-4" />
                     Save
                   </Button>

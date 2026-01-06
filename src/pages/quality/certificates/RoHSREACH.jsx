@@ -2,42 +2,41 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  CalendarDays,
-  CheckCircle2,
-  Copy,
-  Download,
-  FileBadge2,
-  FileText,
-  Loader2,
-  RefreshCcw,
-  Save,
-  Search,
-  Send,
-  ShieldCheck,
-  Trash2,
-  XCircle,
+    CalendarDays,
+    CheckCircle2,
+    Copy,
+    Download,
+    FileBadge2,
+    FileText,
+    Loader2,
+    RefreshCcw,
+    Save,
+    Search,
+    Send,
+    ShieldCheck,
+    Trash2
 } from "lucide-react";
 
 function cx(...parts) {
@@ -406,7 +405,7 @@ export default function RoHSREACH() {
               </Button>
 
               <Button
-                className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                 onClick={handleSend}
                 disabled={!canSend || sending}
               >

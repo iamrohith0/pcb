@@ -1,36 +1,34 @@
 // src/pages/engineering/dfm/NetlistComparison.jsx
-import { useEffect, useMemo, useState } from "react";
 import api from "@/lib/axios";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  CheckCircle2,
-  ChevronDown,
-  ChevronRight,
-  Download,
-  GitCompare,
-  RefreshCw,
-  Search,
-  ShieldCheck,
-  Upload,
-  XCircle,
+    ChevronDown,
+    ChevronRight,
+    Download,
+    GitCompare,
+    RefreshCw,
+    Search,
+    ShieldCheck,
+    Upload
 } from "lucide-react";
 
 function cx(...parts) {
@@ -436,7 +434,7 @@ export default function NetlistComparison() {
             Reset
           </Button>
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={doCompare}
             disabled={!canCompare || loading}
           >
@@ -577,7 +575,7 @@ export default function NetlistComparison() {
                 </Button>
                 <Button
                   size="sm"
-                  className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                  className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                   onClick={doCompare}
                   disabled={!canCompare || loading}
                 >
@@ -611,7 +609,7 @@ export default function NetlistComparison() {
           <div className="flex flex-wrap items-center gap-2">
             <Button
               variant={activeTab === "summary" ? "default" : "outline"}
-              className={cx(activeTab === "summary" ? "bg-[#dc2551] hover:bg-[#b02045]" : "", "gap-2")}
+              className={cx(activeTab === "summary" ? "bg-cyan-600 hover:bg-cyan-500" : "", "gap-2")}
               onClick={() => setActiveTab("summary")}
             >
               <ShieldCheck className="h-4 w-4" />
@@ -761,7 +759,7 @@ export default function NetlistComparison() {
                 setExportOpen(false);
                 exportCSV();
               }}
-              className="bg-[#dc2551] hover:bg-[#b02045]"
+              className="bg-cyan-600 hover:bg-cyan-500"
               disabled={!hasResult}
             >
               Export

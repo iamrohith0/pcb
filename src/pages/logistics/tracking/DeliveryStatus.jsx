@@ -1,31 +1,31 @@
 // src/pages/logistics/tracking/DeliveryStatus.jsx
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
-import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  CheckCircle2,
-  ClipboardCopy,
-  Clock,
-  MapPin,
-  PackageCheck,
-  PackageOpen,
-  RefreshCcw,
-  Search,
-  ShieldCheck,
-  Truck,
-  XCircle,
+    ArrowLeft,
+    CheckCircle2,
+    ClipboardCopy,
+    Clock,
+    MapPin,
+    PackageCheck,
+    PackageOpen,
+    RefreshCcw,
+    Search,
+    ShieldCheck,
+    Truck,
+    XCircle,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -291,7 +291,7 @@ export default function DeliveryStatus() {
             {polling ? "Syncing..." : "Sync Carrier"}
           </Button>
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => {
               const el = document.getElementById("manual-update");
               el?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -514,7 +514,7 @@ export default function DeliveryStatus() {
               </Button>
 
               <Button
-                className="bg-[#dc2551] hover:bg-[#b02045] gap-2"
+                className="bg-cyan-600 hover:bg-cyan-500 gap-2"
                 onClick={addTimelineEvent}
                 disabled={saving}
               >

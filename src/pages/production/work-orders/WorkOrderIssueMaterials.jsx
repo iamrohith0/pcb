@@ -1,29 +1,29 @@
 // src/pages/production/work-orders/WorkOrderIssueMaterials.jsx
-import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import {
-  ArrowLeft,
-  Barcode,
-  CheckCircle2,
-  ClipboardCheck,
-  Factory,
-  Hash,
-  Loader2,
-  PackageOpen,
-  Scan,
-  Search,
-  Trash2,
-  Truck,
-  Warehouse,
+    ArrowLeft,
+    Barcode,
+    CheckCircle2,
+    ClipboardCheck,
+    Factory,
+    Hash,
+    Loader2,
+    PackageOpen,
+    Scan,
+    Search,
+    Trash2,
+    Truck,
+    Warehouse,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import ConfirmationDialog from "@/components/dialogs/ConfirmationDialog.jsx";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import ConfirmationDialog from "@/components/dialogs/ConfirmationDialog.jsx";
 
 /**
  * WorkOrderIssueMaterials.jsx (PCBxpress - PCB Manufacturing ERP)
@@ -403,7 +403,7 @@ export default function WorkOrderIssueMaterials() {
             </div>
 
             <div className="flex items-end">
-              <Button onClick={fetchWO} className="w-full bg-[#dc2551] hover:bg-[#b02045]" disabled={loadingWo}>
+              <Button onClick={fetchWO} className="w-full bg-cyan-600 hover:bg-cyan-500" disabled={loadingWo}>
                 {loadingWo ? <Loader2 className="h-4 w-4 animate-spin" /> : "Load WO"}
               </Button>
             </div>
@@ -759,7 +759,7 @@ export default function WorkOrderIssueMaterials() {
             </Button>
 
             <Button
-              className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
               onClick={() => setConfirmSubmit(true)}
               disabled={submitting || !lines.length}
             >

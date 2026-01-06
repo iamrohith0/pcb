@@ -1,28 +1,28 @@
 // src/pages/production/wip/WIPMove.jsx
-import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import {
-  ArrowRight,
-  Barcode,
-  CheckCircle2,
-  ClipboardList,
-  Factory,
-  Info,
-  Loader2,
-  PackageCheck,
-  PlayCircle,
-  RefreshCw,
-  ScanLine,
-  ShieldAlert,
-  Wrench,
-  XCircle,
+    ArrowRight,
+    Barcode,
+    CheckCircle2,
+    ClipboardList,
+    Factory,
+    Info,
+    Loader2,
+    PackageCheck,
+    PlayCircle,
+    RefreshCw,
+    ScanLine,
+    ShieldAlert,
+    Wrench,
+    XCircle,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 /**
@@ -370,7 +370,7 @@ export default function WIPMove() {
               </div>
 
               <Button
-                className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                 onClick={runLookup}
                 disabled={lookupLoading}
               >
@@ -572,7 +572,7 @@ export default function WIPMove() {
                 <Button
                   onClick={submitMove}
                   disabled={loading}
-                  className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                  className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                 >
                   {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
                   Save Move

@@ -397,7 +397,7 @@ export default function StockLedger() {
                 />
               </div>
 
-              <Button className="bg-[#DC2551] hover:bg-[#B02045]" onClick={fetchLedger} disabled={loading}>
+              <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={fetchLedger} disabled={loading}>
                 {loading ? "Loading…" : "Apply"}
               </Button>
             </div>

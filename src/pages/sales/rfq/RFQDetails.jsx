@@ -1,40 +1,40 @@
 // src/pages/sales/rfq/RFQDetails.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  BadgeCheck,
-  Calendar,
-  Check,
-  ClipboardCopy,
-  Download,
-  Edit3,
-  FileText,
-  Loader2,
-  Mail,
-  Phone,
-  Trash2,
-  Truck,
-  User2,
+    ArrowLeft,
+    BadgeCheck,
+    Calendar,
+    Check,
+    ClipboardCopy,
+    Download,
+    Edit3,
+    FileText,
+    Loader2,
+    Mail,
+    Phone,
+    Trash2,
+    Truck,
+    User2,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import rfqApi from "@/services/sales/rfq.service";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 function cx(...parts) {
@@ -257,7 +257,7 @@ export default function RFQDetails() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => {
               // Optional route you can implement later:
               // /sales/quotations/create?fromRfq=ID
@@ -371,7 +371,7 @@ export default function RFQDetails() {
                     </Button>
                     <Button
                       size="sm"
-                      className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                      className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                       onClick={() => window.open(`mailto:${header.contactEmail}`, "_blank")}
                     >
                       <Mail className="h-4 w-4" />
@@ -400,7 +400,7 @@ export default function RFQDetails() {
                     </Button>
                     <Button
                       size="sm"
-                      className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                      className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                       onClick={() => window.open(`tel:${header.contactPhone}`, "_blank")}
                     >
                       <Phone className="h-4 w-4" />
@@ -536,7 +536,7 @@ export default function RFQDetails() {
                       </Button>
                       <Button
                         size="sm"
-                        className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                        className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                         onClick={() => downloadAttachment(a)}
                         disabled={!url}
                       >

@@ -1,36 +1,36 @@
 // src/pages/production/routing/RoutingSteps.jsx
-import { useMemo, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
+import { useMemo, useState } from "react";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  ArrowDown,
-  ArrowUp,
-  Clock,
-  Copy,
-  Layers,
-  Plus,
-  Save,
-  ShieldCheck,
-  Trash2,
-  AlertTriangle,
-  Wand2,
-  CheckCircle2,
+    AlertTriangle,
+    ArrowDown,
+    ArrowUp,
+    CheckCircle2,
+    Clock,
+    Copy,
+    Layers,
+    Plus,
+    Save,
+    ShieldCheck,
+    Trash2,
+    Wand2,
 } from "lucide-react";
 
 /**
@@ -285,7 +285,7 @@ export default function RoutingSteps({
             <Save className="h-4 w-4" />
             Export JSON
           </Button>
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={() => addStep(null)}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={() => addStep(null)}>
             <Plus className="h-4 w-4" />
             Add Step
           </Button>
@@ -380,7 +380,7 @@ export default function RoutingSteps({
                 <Button variant="outline" onClick={() => applyTemplate("2L")}>
                   Load 2L Template
                 </Button>
-                <Button className="bg-[#dc2551] hover:bg-[#b02045]" onClick={() => addStep(null)}>
+                <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={() => addStep(null)}>
                   Add Step
                 </Button>
               </div>

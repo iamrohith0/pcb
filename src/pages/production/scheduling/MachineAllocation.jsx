@@ -1,37 +1,37 @@
 // src/pages/production/scheduling/MachineAllocation.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
+import { useEffect, useMemo, useState } from "react";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  CalendarDays,
-  CheckCircle2,
-  Clock,
-  Filter,
-  Layers,
-  Plus,
-  RefreshCw,
-  Save,
-  Search,
-  Settings2,
-  ShieldCheck,
-  Trash2,
-  Wrench,
+    CalendarDays,
+    CheckCircle2,
+    Clock,
+    Filter,
+    Layers,
+    Plus,
+    RefreshCw,
+    Save,
+    Search,
+    Settings2,
+    ShieldCheck,
+    Trash2,
+    Wrench,
 } from "lucide-react";
 
 /**
@@ -411,7 +411,7 @@ export default function MachineAllocation() {
             Reset
           </Button>
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => {
               // convenience: open allocation on first machine & first date if available
               const m = filteredMachines[0];
@@ -814,7 +814,7 @@ export default function MachineAllocation() {
                 <Button variant="outline" onClick={closeEditor}>
                   Cancel
                 </Button>
-                <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={saveAllocation}>
+                <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={saveAllocation}>
                   <Save className="h-4 w-4" />
                   Save
                 </Button>

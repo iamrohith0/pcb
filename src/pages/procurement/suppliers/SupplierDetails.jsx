@@ -1,41 +1,41 @@
 // src/pages/procurement/suppliers/SupplierDetails.jsx
+import api from "@/lib/axios";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import api from "@/lib/axios";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  ArrowLeft,
-  Building2,
-  CalendarDays,
-  ClipboardList,
-  Edit3,
-  FileText,
-  Loader2,
-  Mail,
-  MapPin,
-  Phone,
-  ShieldCheck,
-  Trash2,
-  Truck,
-  Users,
-  BadgePercent,
+    ArrowLeft,
+    BadgePercent,
+    Building2,
+    CalendarDays,
+    ClipboardList,
+    Edit3,
+    FileText,
+    Loader2,
+    Mail,
+    MapPin,
+    Phone,
+    ShieldCheck,
+    Trash2,
+    Truck,
+    Users,
 } from "lucide-react";
 
 /**
@@ -314,7 +314,7 @@ export default function SupplierDetails() {
               >
                 Cancel
               </Button>
-              <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={saveChanges} disabled={saving}>
+              <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={saveChanges} disabled={saving}>
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
                 Save
               </Button>
@@ -664,7 +664,7 @@ export default function SupplierDetails() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction className="bg-[#dc2551] hover:bg-[#b02045]" onClick={deleteSupplier}>
+            <AlertDialogAction className="bg-cyan-600 hover:bg-cyan-500" onClick={deleteSupplier}>
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

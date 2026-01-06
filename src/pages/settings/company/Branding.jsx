@@ -1,23 +1,23 @@
 // src/pages/settings/company/Branding.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 
 import {
-  Building2,
-  Image as ImageIcon,
-  Loader2,
-  RefreshCw,
-  Save,
-  Upload,
-  XCircle,
+    Building2,
+    Image as ImageIcon,
+    Loader2,
+    RefreshCw,
+    Save,
+    Upload,
+    XCircle,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -261,7 +261,7 @@ export default function Branding() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={handleSave}
             disabled={saving}
           >

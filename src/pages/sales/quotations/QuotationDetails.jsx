@@ -427,7 +427,7 @@ export default function QuotationDetails() {
             Send
           </Button>
 
-          <Button className="bg-[#dc2551] hover:bg-[#B02045]" onClick={handleConvertToSO}>
+          <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={handleConvertToSO}>
             <CheckCircle2 className="mr-2 h-4 w-4" />
             Convert to Sales Order
           </Button>
@@ -644,7 +644,7 @@ export default function QuotationDetails() {
                 Print
               </Button>
 
-              <Button className="bg-[#dc2551] hover:bg-[#B02045]" onClick={handleConvertToSO}>
+              <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={handleConvertToSO}>
                 <CheckCircle2 className="mr-2 h-4 w-4" />
                 Convert to Sales Order
               </Button>

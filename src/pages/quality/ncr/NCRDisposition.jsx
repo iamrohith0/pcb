@@ -1,23 +1,22 @@
 // src/pages/quality/ncr/NCRDisposition.jsx
-import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  ArrowLeft,
-  BadgeCheck,
-  ClipboardCheck,
-  FileDown,
-  Link2,
-  RefreshCcw,
-  Save,
-  ShieldCheck,
+    ArrowLeft,
+    BadgeCheck,
+    ClipboardCheck,
+    FileDown,
+    Link2,
+    RefreshCcw,
+    Save,
+    ShieldCheck,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 import ncrService from "@/services/quality/ncr.service";
@@ -288,7 +287,7 @@ export default function NCRDisposition() {
           </Link>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={handleSave}
             disabled={!canSave || saving || loading}
           >

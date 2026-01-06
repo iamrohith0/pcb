@@ -628,7 +628,7 @@ export default function RevisionCreate() {
 
             <Button
               type="submit"
-              className="gap-2 bg-[#DC2551] hover:bg-[#B02045]"
+              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
               disabled={!canSubmit || saving}
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <FilePlus2 className="h-4 w-4" />}
@@ -670,7 +670,7 @@ export default function RevisionCreate() {
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={submit}
-              className={cx("gap-2", "bg-[#DC2551] hover:bg-[#B02045]")}
+              className={cx("gap-2", "bg-cyan-600 hover:bg-cyan-500")}
             >
               <CheckCircle2 className="h-4 w-4" />
               Confirm Create

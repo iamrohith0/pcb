@@ -1,26 +1,25 @@
 // src/pages/sales/customers/CustomerCreate.jsx
-import { useMemo, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  Building2,
-  CheckCircle2,
-  Loader2,
-  Mail,
-  Phone,
-  MapPin,
-  ShieldCheck,
-  Package,
-  CreditCard,
-  User,
+    ArrowLeft,
+    Building2,
+    CheckCircle2,
+    CreditCard,
+    Loader2,
+    Mail,
+    MapPin,
+    Package,
+    Phone,
+    ShieldCheck
 } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import customersService from "@/services/sales/customers.service";
@@ -249,7 +248,7 @@ export default function CustomerCreate() {
           </Button>
           <Button
             onClick={onSubmit}
-            className="bg-[#dc2551] hover:bg-[#b02045]"
+            className="bg-cyan-600 hover:bg-cyan-500"
             disabled={submitting}
           >
             {submitting ? (
@@ -729,7 +728,7 @@ export default function CustomerCreate() {
               <div className="mx-auto max-w-xl rounded-2xl border bg-white/95 p-3 shadow-lg backdrop-blur">
                 <Button
                   type="submit"
-                  className="w-full bg-[#dc2551] hover:bg-[#b02045]"
+                  className="w-full bg-cyan-600 hover:bg-cyan-500"
                   disabled={submitting}
                 >
                   {submitting ? (

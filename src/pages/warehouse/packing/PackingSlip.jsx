@@ -2,39 +2,36 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  Box,
-  Building2,
-  CheckCircle2,
-  Copy,
-  Download,
-  FileText,
-  Hash,
-  Package,
-  Printer,
-  RefreshCw,
-  Search,
-  ShieldCheck,
-  Truck,
-  Wand2,
+    Box,
+    Copy,
+    Download,
+    FileText,
+    Hash,
+    Package,
+    Printer,
+    RefreshCw,
+    Search,
+    ShieldCheck,
+    Wand2
 } from "lucide-react";
 
 import api from "@/lib/axios";
@@ -672,7 +669,7 @@ export default function PackingSlip() {
             Copy JSON
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" asChild>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" asChild>
             <Link to="/warehouse/packing">Back to Packing</Link>
           </Button>
         </div>
@@ -710,7 +707,7 @@ export default function PackingSlip() {
               <Download className="h-4 w-4" />
               Export PDF
             </Button>
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={() => setConfirmPrint(true)} disabled={loading}>
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={() => setConfirmPrint(true)} disabled={loading}>
               <Printer className="h-4 w-4" />
               Print
             </Button>

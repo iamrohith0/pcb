@@ -1,30 +1,30 @@
 // src/pages/traceability/batch/BatchRegister.jsx
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  Barcode,
-  ClipboardList,
-  Factory,
-  Hash,
-  Layers,
-  Loader2,
-  Package,
-  QrCode,
-  Search,
-  ShieldCheck,
-  Tag,
-  User,
-  Calendar,
+    ArrowLeft,
+    Barcode,
+    Calendar,
+    ClipboardList,
+    Factory,
+    Hash,
+    Layers,
+    Loader2,
+    Package,
+    QrCode,
+    Search,
+    ShieldCheck,
+    Tag,
+    User,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import api from "@/lib/axios";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -502,7 +502,7 @@ export default function BatchRegister() {
                   <div className="flex flex-wrap items-center gap-2 pt-2">
                     <Button
                       type="submit"
-                      className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                      className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                       disabled={loading}
                     >
                       {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ClipboardList className="h-4 w-4" />}

@@ -561,7 +561,7 @@ export default function MaterialRules() {
             Export CSV
           </Button>
 
-          <Button className="gap-2 bg-[#DC2551] hover:bg-[#B02045]" onClick={openCreate}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={openCreate}>
             <FilePlus2 className="h-4 w-4" />
             New Rule
           </Button>
@@ -639,7 +639,7 @@ export default function MaterialRules() {
               <Button type="button" variant="outline" onClick={clearFilters} className="w-full">
                 Clear
               </Button>
-              <Button type="button" className="w-full bg-[#DC2551] hover:bg-[#B02045]" onClick={applyFilters}>
+              <Button type="button" className="w-full bg-cyan-600 hover:bg-cyan-500" onClick={applyFilters}>
                 Apply
               </Button>
             </div>
@@ -1068,7 +1068,7 @@ export default function MaterialRules() {
             <AlertDialogCancel disabled={saving}>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={saveRule}
-              className="bg-[#DC2551] hover:bg-[#B02045]"
+              className="bg-cyan-600 hover:bg-cyan-500"
               disabled={saving}
             >
               {saving ? (

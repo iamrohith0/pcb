@@ -1,32 +1,30 @@
 // src/pages/sales/customers/CustomerDetails.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  Building2,
-  ClipboardCopy,
-  FileText,
-  Loader2,
-  Mail,
-  MapPin,
-  Phone,
-  Pencil,
-  ShieldCheck,
-  BadgeCheck,
-  AlertTriangle,
-  ExternalLink,
-  Package,
-  Truck,
-  CreditCard,
-  User2,
+    AlertTriangle,
+    ArrowLeft,
+    BadgeCheck,
+    Building2,
+    ClipboardCopy,
+    CreditCard,
+    ExternalLink,
+    FileText,
+    Loader2,
+    Mail,
+    MapPin,
+    Package,
+    Pencil,
+    Phone,
+    ShieldCheck
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 import customersService from "@/services/sales/customers.service";
 
@@ -274,7 +272,7 @@ export default function CustomerDetails() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => navigate(`/sales/quotations/new?customerId=${encodeURIComponent(id)}`)}
           >
             <FileText className="h-4 w-4" />

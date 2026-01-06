@@ -1,28 +1,28 @@
 // src/pages/procurement/grn/GRNList.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  Calendar,
-  CheckCircle2,
-  Download,
-  Eye,
-  Filter,
-  Hash,
-  Loader2,
-  Plus,
-  RefreshCcw,
-  Search,
-  Truck,
-  Warehouse,
-  X,
+    Calendar,
+    CheckCircle2,
+    Download,
+    Eye,
+    Filter,
+    Hash,
+    Loader2,
+    Plus,
+    RefreshCcw,
+    Search,
+    Truck,
+    Warehouse,
+    X,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 function cx(...parts) {
@@ -231,7 +231,7 @@ export default function GRNList() {
 
               {/* If you later implement GRN Create page */}
               <Button
-                className="bg-[#dc2551] hover:bg-[#b02045]"
+                className="bg-cyan-600 hover:bg-cyan-500"
                 onClick={() => toast({ title: "Create GRN", description: "Add a GRN Create page and route, then link here." })}
               >
                 <Plus className="mr-2 h-4 w-4" />

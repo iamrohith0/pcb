@@ -1,20 +1,20 @@
 // src/pages/maintenance/equipment/EquipmentHistory.jsx
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 import {
-  Activity,
-  ArrowLeft,
-  CalendarDays,
-  Filter,
-  History,
-  Search,
-  ShieldAlert,
-  Timer,
-  Wrench,
+    Activity,
+    ArrowLeft,
+    CalendarDays,
+    Filter,
+    History,
+    Search,
+    ShieldAlert,
+    Timer,
+    Wrench,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -500,7 +500,7 @@ export default function EquipmentHistory() {
               <Button
                 type="button"
                 onClick={applyFilters}
-                className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                 disabled={loading}
               >
                 <FileSearch2Icon />

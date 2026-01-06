@@ -1,22 +1,22 @@
 // src/pages/maintenance/breakdowns/BreakdownList.jsx
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { motion } from "framer-motion";
 import {
-  AlertTriangle,
-  ClipboardList,
-  Eye,
-  Filter,
-  Plus,
-  RefreshCw,
-  Search,
-  Wrench,
-  XCircle,
+    AlertTriangle,
+    ClipboardList,
+    Eye,
+    Filter,
+    Plus,
+    RefreshCw,
+    Search,
+    Wrench,
+    XCircle,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -284,7 +284,7 @@ export default function BreakdownList() {
           </Button>
 
           <Link to="/maintenance/breakdowns/create">
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500">
               <Plus className="h-4 w-4" />
               New Breakdown
             </Button>

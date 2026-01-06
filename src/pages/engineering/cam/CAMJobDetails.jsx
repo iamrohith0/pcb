@@ -1,34 +1,34 @@
 // src/pages/engineering/cam/CAMJobDetails.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  BadgeCheck,
-  Calendar,
-  CheckCircle2,
-  ClipboardList,
-  Download,
-  FileDown,
-  FileText,
-  Layers,
-  Loader2,
-  PackageOpen,
-  Pencil,
-  PlayCircle,
-  RefreshCw,
-  Send,
-  ShieldAlert,
-  Tag,
-  UserCircle2,
-  XCircle,
+    ArrowLeft,
+    BadgeCheck,
+    Calendar,
+    CheckCircle2,
+    ClipboardList,
+    Download,
+    FileDown,
+    FileText,
+    Layers,
+    Loader2,
+    PackageOpen,
+    Pencil,
+    PlayCircle,
+    RefreshCw,
+    Send,
+    ShieldAlert,
+    Tag,
+    UserCircle2,
+    XCircle,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
+import ConfirmationDialog from "@/components/dialogs/ConfirmationDialog.jsx";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import ConfirmationDialog from "@/components/dialogs/ConfirmationDialog.jsx";
 
 import camJobsApi from "@/services/camJobs.service";
 
@@ -277,7 +277,7 @@ export default function CAMJobDetails() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={() => handleQuickStatus("Released")}
           >
             <BadgeCheck className="h-4 w-4" />

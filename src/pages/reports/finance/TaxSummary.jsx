@@ -1,24 +1,24 @@
 // src/pages/reports/finance/TaxSummary.jsx
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
 import { motion } from "framer-motion";
 import {
-  Calendar,
-  Download,
-  FileSearch2,
-  Filter,
-  Loader2,
-  Percent,
-  ReceiptIndianRupee,
-  RefreshCcw,
-  ShieldCheck,
+    Calendar,
+    Download,
+    FileSearch2,
+    Filter,
+    Loader2,
+    Percent,
+    ReceiptIndianRupee,
+    RefreshCcw,
+    ShieldCheck,
 } from "lucide-react";
 import { useMemo, useState } from "react";
-import api from "@/lib/axios";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -276,7 +276,7 @@ export default function TaxSummary() {
                 </Button>
 
                 <Button
-                  className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                  className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                   onClick={run}
                   disabled={isLoading || !canRun}
                 >

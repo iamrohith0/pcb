@@ -1,25 +1,25 @@
 // src/pages/traceability/batch/BatchDetails.jsx
+import {
+    ArrowLeft,
+    Barcode,
+    Boxes,
+    Calendar,
+    CheckCircle2,
+    ClipboardList,
+    FileText,
+    Layers,
+    Package,
+    RefreshCcw,
+    ShieldCheck,
+    Truck,
+    XCircle,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import {
-  ArrowLeft,
-  Barcode,
-  Boxes,
-  Calendar,
-  CheckCircle2,
-  ClipboardList,
-  FileText,
-  Layers,
-  Package,
-  RefreshCcw,
-  ShieldCheck,
-  Truck,
-  XCircle,
-} from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -216,13 +216,13 @@ export default function BatchDetails() {
 
           {wo?.id ? (
             <Link to={`/production/work-orders/${wo.id}`}>
-              <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]">
+              <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500">
                 <ClipboardList className="h-4 w-4" />
                 View Work Order
               </Button>
             </Link>
           ) : (
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" disabled>
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" disabled>
               <ClipboardList className="h-4 w-4" />
               Work Order
             </Button>

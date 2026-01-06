@@ -2,42 +2,42 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  AlertTriangle,
-  ArrowUpDown,
-  Boxes,
-  CalendarDays,
-  CheckCircle2,
-  ClipboardList,
-  Download,
-  FileText,
-  Filter,
-  PackagePlus,
-  RefreshCw,
-  Search,
-  Send,
-  ShieldAlert,
-  ShoppingCart,
-  Truck,
-  Wrench,
+    AlertTriangle,
+    ArrowUpDown,
+    Boxes,
+    CalendarDays,
+    CheckCircle2,
+    ClipboardList,
+    Download,
+    FileText,
+    Filter,
+    PackagePlus,
+    RefreshCw,
+    Search,
+    Send,
+    ShieldAlert,
+    ShoppingCart,
+    Truck,
+    Wrench,
 } from "lucide-react";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 /**
@@ -497,7 +497,7 @@ export default function SpareReorder() {
             Export
           </Button>
 
-          <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={createDraftPO} disabled={creatingPO}>
+          <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={createDraftPO} disabled={creatingPO}>
             <Send className="h-4 w-4" />
             {creatingPO ? "Creating..." : "Create Draft PO"}
           </Button>
@@ -655,7 +655,7 @@ export default function SpareReorder() {
               Create PR
             </Button>
 
-            <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={createDraftPO} disabled={creatingPO}>
+            <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={createDraftPO} disabled={creatingPO}>
               <ShoppingCart className="h-4 w-4" />
               {creatingPO ? "Creating..." : "Create Draft PO"}
             </Button>
@@ -681,7 +681,7 @@ export default function SpareReorder() {
             <Button variant="outline" onClick={resetFilters}>
               Clear filters
             </Button>
-            <Button className="bg-[#dc2551] hover:bg-[#b02045]" onClick={load}>
+            <Button className="bg-cyan-600 hover:bg-cyan-500" onClick={load}>
               Refresh
             </Button>
           </div>
@@ -817,7 +817,7 @@ export default function SpareReorder() {
 
                     <Button
                       size="sm"
-                      className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+                      className="gap-2 bg-cyan-600 hover:bg-cyan-500"
                       onClick={() => {
                         setSelectedIds((prev) => new Set(prev).add(r.id));
                         toast({ title: "Added to batch", description: `Added ${r.name} to current reorder batch.` });

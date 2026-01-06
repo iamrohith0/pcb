@@ -1,39 +1,39 @@
 // src/pages/settings/integrations/ERPWebhooks.jsx
-import { useEffect, useMemo, useState } from "react";
-import api from "@/lib/axios";
 import { useToast } from "@/components/ui/use-toast";
+import api from "@/lib/axios";
+import { useEffect, useMemo, useState } from "react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-  Copy,
-  Globe,
-  KeyRound,
-  Link2,
-  Loader2,
-  RefreshCw,
-  Save,
-  Send,
-  Shield,
-  Trash2,
-  Webhook,
+    Copy,
+    Globe,
+    KeyRound,
+    Link2,
+    Loader2,
+    RefreshCw,
+    Save,
+    Send,
+    Shield,
+    Trash2,
+    Webhook,
 } from "lucide-react";
 
 function cx(...parts) {
@@ -352,7 +352,7 @@ export default function ERPWebhooks() {
           </Button>
 
           <Button
-            className="gap-2 bg-[#dc2551] hover:bg-[#b02045]"
+            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
             onClick={handleSave}
             disabled={saving}
           >
@@ -569,7 +569,7 @@ export default function ERPWebhooks() {
                 />
               </div>
 
-              <Button className="gap-2 bg-[#dc2551] hover:bg-[#b02045]" onClick={addTarget}>
+              <Button className="gap-2 bg-cyan-600 hover:bg-cyan-500" onClick={addTarget}>
                 <Globe className="h-4 w-4" />
                 Add target
               </Button>
