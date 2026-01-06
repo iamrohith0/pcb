@@ -26,7 +26,7 @@ import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
-import ConfirmationDialog from "@/components/dialogs/ConfirmationDialog";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import customersService from "@/services/sales/customers.service";
 
 function cx(...parts) {

@@ -1,4 +1,4 @@
-// src/pages/warehouse/warehouses/WarehouseDetails.jsx
+// src/pages/warehouse/locations/LocationDetails.jsx
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -35,31 +35,32 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 /**
- * WarehouseDetails.jsx (PCBxpress - PCB Manufacturing ERP)
- * Path: src/pages/warehouse/warehouses/WarehouseDetails.jsx
+ * LocationDetails.jsx (PCBxpress - PCB Manufacturing ERP)
+ * Path: src/pages/warehouse/locations/LocationDetails.jsx
  *
  * What this page does:
- * - Shows a single warehouse (WH) details: code, type (RM/WIP/FG/Chem), plant, address, status
- * - Shows storage summary: locations, bins, capacity usage, restricted zones (chemicals)
- * - Shows quick links: Locations, Picking, Packing, Stock Ledger, Cycle Count
+ * - Shows a single location details: code, zone, aisle, rack, bin, type, status
+ * - Shows storage summary: current stock, capacity, reserved items
+ * - Shows quick links: Stock Ledger, Move Items, Cycle Count
  *
  * Replace mocks with APIs:
- * - warehouseService.getById(id)
- * - warehouseService.update(id, payload)
- * - locationService.list({ warehouse_id })
- * - stockService.summary({ warehouse_id })
+ * - locationService.getById(id)
+ * - locationService.update(id, payload)
+ * - stockService.list({ location_id })
+ * - stockService.summary({ location_id })
  */
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
 }
 
-const WH_TYPE = {
-  RM: "Raw Materials",
-  WIP: "WIP Stores",
-  FG: "Finished Goods",
-  CHEM: "Chemicals",
-  PKG: "Packing",
+const LOCATION_TYPE = {
+  BIN: "Bin",
+  DOCK: "Dock",
+  HOLD: "Hold",
+  QC: "QC",
+  PICK: "Pick",
+  PACK: "Pack",
 };
 
 const STATUS = {
@@ -75,10 +76,11 @@ const statusBadge = (s) => {
 };
 
 const typeBadge = (t) => {
-  if (t === "CHEM") return "bg-[#dc2551]/10 text-[#dc2551]";
-  if (t === "FG") return "bg-blue-100 text-blue-800";
-  if (t === "WIP") return "bg-purple-100 text-purple-800";
-  if (t === "PKG") return "bg-indigo-100 text-indigo-800";
+  if (t === "HOLD") return "bg-amber-100 text-amber-800";
+  if (t === "QC") return "bg-blue-100 text-blue-800";
+  if (t === "PICK") return "bg-purple-100 text-purple-800";
+  if (t === "PACK") return "bg-indigo-100 text-indigo-800";
+  if (t === "DOCK") return "bg-gray-100 text-gray-800";
   return "bg-gray-100 text-gray-800";
 };
 
@@ -103,117 +105,115 @@ function Divider() {
   return <div className="h-px w-full bg-gray-100" />;
 }
 
-export default function WarehouseDetails() {
+export default function LocationDetails() {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { id } = useParams(); // e.g., "WH1" or numeric id depending on your router
+  const { id } = useParams(); // e.g., "LOC-001" or location code
 
   const [loading, setLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
-  // warehouse data (mock)
-  const [warehouse, setWarehouse] = useState(null);
+  // location data (mock)
+  const [location, setLocation] = useState(null);
 
   // edit form
   const [form, setForm] = useState({
-    name: "",
     code: "",
-    type: "RM",
-    plant: "Plant-1",
-    address: "",
+    zone: "",
+    aisle: "",
+    rack: "",
+    bin: "",
+    type: "BIN",
     status: "active",
-    is_ip_restricted: false,
+    capacity: 0,
+    reserved: false,
+    is_qc_required: false,
   });
 
   // related summaries (mock)
-  const [locations, setLocations] = useState([]);
   const [stockSummary, setStockSummary] = useState({
     sku_count: 0,
     total_qty: 0,
-    low_stock: 0,
-    expiring_lots: 0,
+    reserved_qty: 0,
+    last_activity: "",
   });
 
-  // search for locations list preview
-  const [locQuery, setLocQuery] = useState("");
+  // search for stock items list preview
+  const [stockQuery, setStockQuery] = useState("");
 
   const headerTitle = useMemo(() => {
-    if (!warehouse) return "Warehouse Details";
-    return `${warehouse.code} — ${warehouse.name}`;
-  }, [warehouse]);
+    if (!location) return "Location Details";
+    return `${location.code} — ${location.zone}-${location.aisle}-${location.rack}-${location.bin}`;
+  }, [location]);
 
-  const filteredLocations = useMemo(() => {
-    const q = locQuery.trim().toLowerCase();
-    if (!q) return locations;
-    return locations.filter((l) => {
-      const hay = [l.code, l.zone, l.aisle, l.rack, l.bin, l.type].join(" ").toLowerCase();
-      return hay.includes(q);
-    });
-  }, [locations, locQuery]);
+  const filteredStock = useMemo(() => {
+    const q = stockQuery.trim().toLowerCase();
+    if (!q) return [];
+    // Mock stock items for preview
+    return [
+      { sku: "FR4-1.6mm", qty: 150, lot: "L-20260101-001", expiry: "2026-12-31" },
+      { sku: "Copper-1oz", qty: 89, lot: "L-20260102-002", expiry: "2026-11-15" },
+    ].filter(item => 
+      item.sku.toLowerCase().includes(q) || 
+      item.lot.toLowerCase().includes(q)
+    );
+  }, [stockQuery]);
 
   const capacity = useMemo(() => {
-    if (!warehouse) return { used: 0, total: 0, pct: 0 };
-    const total = warehouse.capacity_total;
-    const used = warehouse.capacity_used;
+    if (!location) return { used: 0, total: 0, pct: 0 };
+    const total = location.capacity || 100;
+    const used = stockSummary.total_qty || 0;
     const pct = total > 0 ? Math.min(100, Math.round((used / total) * 100)) : 0;
     return { used, total, pct };
-  }, [warehouse]);
+  }, [location, stockSummary]);
 
   const fetchAll = async () => {
     setLoading(true);
     try {
-      // const wh = await warehouseService.getById(id)
-      // const locs = await locationService.list({ warehouse_id: id })
-      // const sum = await stockService.summary({ warehouse_id: id })
+      // const loc = await locationService.getById(id)
+      // const sum = await stockService.summary({ location_id: id })
       await new Promise((r) => setTimeout(r, 350));
 
-      // Mock warehouse
-      const wh = {
-        id: id || "WH1",
-        code: (id || "WH1").toUpperCase(),
-        name: "Main Stores",
-        type: "RM",
-        plant: "Plant-1",
-        address: "Industrial Estate, Block C, Kerala",
+      // Mock location
+      const loc = {
+        id: id || "LOC-001",
+        code: (id || "LOC-001").toUpperCase(),
+        zone: "A",
+        aisle: "01",
+        rack: "R1",
+        bin: "B01",
+        type: "BIN",
         status: "active",
-        is_ip_restricted: true,
+        capacity: 200,
+        reserved: false,
+        is_qc_required: false,
         created_at: "2025-10-12",
         updated_at: "2026-01-04",
-        capacity_total: 12000, // bin capacity units (example)
-        capacity_used: 6450,
-        safety_notes:
-          "RM warehouse: keep laminates in humidity-controlled zone. Chemicals only in CHEM store.",
+        notes: "Standard storage bin for laminates and prepreg materials.",
       };
 
-      // Mock locations
-      const locs = [
-        { id: "LOC-001", code: "WH1-A-01-R1-B01", zone: "A", aisle: "01", rack: "R1", bin: "B01", type: "BIN", status: "active" },
-        { id: "LOC-002", code: "WH1-A-01-R1-B02", zone: "A", aisle: "01", rack: "R1", bin: "B02", type: "BIN", status: "active" },
-        { id: "LOC-003", code: "WH1-B-02-R2-B05", zone: "B", aisle: "02", rack: "R2", bin: "B05", type: "BIN", status: "active" },
-        { id: "LOC-004", code: "WH1-QA-HOLD", zone: "QA", aisle: "-", rack: "-", bin: "-", type: "HOLD", status: "restricted" },
-        { id: "LOC-005", code: "WH1-RECEIVE-DOCK", zone: "RCV", aisle: "-", rack: "-", bin: "-", type: "DOCK", status: "active" },
-      ];
-
       // Mock summary
-      const sum = { sku_count: 318, total_qty: 28940, low_stock: 14, expiring_lots: 3 };
+      const sum = { sku_count: 2, total_qty: 239, reserved_qty: 0, last_activity: "2026-01-05" };
 
-      setWarehouse(wh);
-      setLocations(locs);
+      setLocation(loc);
       setStockSummary(sum);
 
       setForm({
-        name: wh.name,
-        code: wh.code,
-        type: wh.type,
-        plant: wh.plant,
-        address: wh.address,
-        status: wh.status,
-        is_ip_restricted: wh.is_ip_restricted,
+        code: loc.code,
+        zone: loc.zone,
+        aisle: loc.aisle,
+        rack: loc.rack,
+        bin: loc.bin,
+        type: loc.type,
+        status: loc.status,
+        capacity: loc.capacity,
+        reserved: loc.reserved,
+        is_qc_required: loc.is_qc_required,
       });
     } catch (e) {
       toast({
         title: "Failed",
-        description: "Could not load warehouse details.",
+        description: "Could not load location details.",
         variant: "destructive",
       });
     } finally {
@@ -229,10 +229,10 @@ export default function WarehouseDetails() {
   const onChange = (key, value) => setForm((p) => ({ ...p, [key]: value }));
 
   const save = async () => {
-    if (!form.name.trim() || !form.code.trim()) {
+    if (!form.code.trim() || !form.zone.trim() || !form.aisle.trim() || !form.rack.trim() || !form.bin.trim()) {
       toast({
         title: "Missing fields",
-        description: "Warehouse name and code are required.",
+        description: "Location code, zone, aisle, rack, and bin are required.",
         variant: "destructive",
       });
       return;
@@ -240,23 +240,26 @@ export default function WarehouseDetails() {
 
     setLoading(true);
     try {
-      // await warehouseService.update(id, form)
+      // await locationService.update(id, form)
       await new Promise((r) => setTimeout(r, 350));
 
-      setWarehouse((prev) => ({
+      setLocation((prev) => ({
         ...(prev || {}),
-        name: form.name.trim(),
         code: form.code.trim().toUpperCase(),
+        zone: form.zone.trim().toUpperCase(),
+        aisle: form.aisle.trim(),
+        rack: form.rack.trim().toUpperCase(),
+        bin: form.bin.trim().toUpperCase(),
         type: form.type,
-        plant: form.plant.trim(),
-        address: form.address.trim(),
         status: form.status,
-        is_ip_restricted: form.is_ip_restricted,
+        capacity: parseInt(form.capacity) || 0,
+        reserved: form.reserved,
+        is_qc_required: form.is_qc_required,
         updated_at: "2026-01-06",
       }));
       setEditMode(false);
 
-      toast({ title: "Saved", description: "Warehouse updated successfully." });
+      toast({ title: "Saved", description: "Location updated successfully." });
     } catch (e) {
       toast({
         title: "Failed",
@@ -269,15 +272,18 @@ export default function WarehouseDetails() {
   };
 
   const cancel = () => {
-    if (!warehouse) return;
+    if (!location) return;
     setForm({
-      name: warehouse.name,
-      code: warehouse.code,
-      type: warehouse.type,
-      plant: warehouse.plant,
-      address: warehouse.address,
-      status: warehouse.status,
-      is_ip_restricted: warehouse.is_ip_restricted,
+      code: location.code,
+      zone: location.zone,
+      aisle: location.aisle,
+      rack: location.rack,
+      bin: location.bin,
+      type: location.type,
+      status: location.status,
+      capacity: location.capacity,
+      reserved: location.reserved,
+      is_qc_required: location.is_qc_required,
     });
     setEditMode(false);
   };
@@ -288,12 +294,12 @@ export default function WarehouseDetails() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-start gap-3">
           <div className="grid h-11 w-11 place-items-center rounded-2xl bg-[#dc2551]/10">
-            <WarehouseIcon className="h-5 w-5 text-[#dc2551]" />
+            <MapPin className="h-5 w-5 text-[#dc2551]" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-gray-900">{headerTitle}</h1>
             <p className="text-sm text-gray-500">
-              Manage warehouse settings, locations, and inventory overview for PCB operations.
+              Manage location settings, capacity, and inventory overview for PCB operations.
             </p>
           </div>
         </div>
@@ -334,56 +340,46 @@ export default function WarehouseDetails() {
       {/* Stats */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Stat icon={Package} label="SKUs" value={stockSummary.sku_count} hint="Items stored" />
-        <Stat icon={Box} label="Total Qty" value={stockSummary.total_qty} hint="Across all bins" />
-        <Stat icon={ClipboardList} label="Low Stock" value={stockSummary.low_stock} hint="Needs replenishment" />
-        <Stat icon={CalendarDays} label="Expiring Lots" value={stockSummary.expiring_lots} hint="Chemicals / prepreg" />
+        <Stat icon={Box} label="Total Qty" value={stockSummary.total_qty} hint="Current stock" />
+        <Stat icon={ClipboardList} label="Reserved Qty" value={stockSummary.reserved_qty} hint="Allocated items" />
+        <Stat icon={CalendarDays} label="Last Activity" value={stockSummary.last_activity} hint="Stock movement" />
       </div>
 
       {/* Details + Capacity */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <Card className="lg:col-span-7">
           <CardHeader className="border-b">
-            <CardTitle className="text-base">Warehouse Information</CardTitle>
-            <CardDescription>Core identity, plant mapping, and compliance controls.</CardDescription>
+            <CardTitle className="text-base">Location Information</CardTitle>
+            <CardDescription>Zone mapping, capacity limits, and operational flags.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 p-4">
             {/* Top badges */}
             <div className="flex flex-wrap items-center gap-2">
               <Badge className={cx("rounded-full", typeBadge(form.type))}>
-                {form.type} · {WH_TYPE[form.type]}
+                {form.type} · {LOCATION_TYPE[form.type]}
               </Badge>
               <Badge className={cx("rounded-full", statusBadge(form.status))}>
                 {STATUS[form.status]}
               </Badge>
-              {form.is_ip_restricted ? (
-                <Badge className="rounded-full bg-blue-100 text-blue-800">
+              {form.reserved ? (
+                <Badge className="rounded-full bg-amber-100 text-amber-800">
                   <ShieldCheck className="mr-1 h-3.5 w-3.5" />
-                  IP Restricted
+                  Reserved
                 </Badge>
-              ) : (
-                <Badge className="rounded-full bg-gray-100 text-gray-700">Standard Access</Badge>
-              )}
+              ) : null}
+              {form.is_qc_required ? (
+                <Badge className="rounded-full bg-blue-100 text-blue-800">
+                  <BadgeCheck className="mr-1 h-3.5 w-3.5" />
+                  QC Required
+                </Badge>
+              ) : null}
             </div>
 
             <Divider />
 
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               <div className="space-y-2">
-                <Label>Warehouse Name</Label>
-                <div className="relative">
-                  <Building2 className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
-                  <Input
-                    value={form.name}
-                    onChange={(e) => onChange("name", e.target.value)}
-                    disabled={!editMode}
-                    className="pl-9"
-                    placeholder="e.g., Main Stores"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label>Warehouse Code</Label>
+                <Label>Location Code</Label>
                 <div className="relative">
                   <Hash className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
                   <Input
@@ -391,7 +387,63 @@ export default function WarehouseDetails() {
                     onChange={(e) => onChange("code", e.target.value.toUpperCase())}
                     disabled={!editMode}
                     className="pl-9"
-                    placeholder="e.g., WH1"
+                    placeholder="e.g., LOC-001"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Zone</Label>
+                <div className="relative">
+                  <Building2 className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
+                  <Input
+                    value={form.zone}
+                    onChange={(e) => onChange("zone", e.target.value.toUpperCase())}
+                    disabled={!editMode}
+                    className="pl-9"
+                    placeholder="e.g., A"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Aisle</Label>
+                <div className="relative">
+                  <Route className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
+                  <Input
+                    value={form.aisle}
+                    onChange={(e) => onChange("aisle", e.target.value)}
+                    disabled={!editMode}
+                    className="pl-9"
+                    placeholder="e.g., 01"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Rack</Label>
+                <div className="relative">
+                  <WarehouseIcon className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
+                  <Input
+                    value={form.rack}
+                    onChange={(e) => onChange("rack", e.target.value.toUpperCase())}
+                    disabled={!editMode}
+                    className="pl-9"
+                    placeholder="e.g., R1"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Bin</Label>
+                <div className="relative">
+                  <Box className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
+                  <Input
+                    value={form.bin}
+                    onChange={(e) => onChange("bin", e.target.value.toUpperCase())}
+                    disabled={!editMode}
+                    className="pl-9"
+                    placeholder="e.g., B01"
                   />
                 </div>
               </div>
@@ -409,39 +461,27 @@ export default function WarehouseDetails() {
                       "focus:ring-2 focus:ring-black/10 disabled:bg-gray-50 disabled:text-gray-700"
                     )}
                   >
-                    <option value="RM">RM — Raw Materials</option>
-                    <option value="WIP">WIP — Work In Progress</option>
-                    <option value="FG">FG — Finished Goods</option>
-                    <option value="CHEM">CHEM — Chemicals</option>
-                    <option value="PKG">PKG — Packing</option>
+                    <option value="BIN">BIN — Storage Bin</option>
+                    <option value="DOCK">DOCK — Receiving Dock</option>
+                    <option value="HOLD">HOLD — Quarantine/Hold</option>
+                    <option value="QC">QC — Quality Check</option>
+                    <option value="PICK">PICK — Picking Zone</option>
+                    <option value="PACK">PACK — Packing Zone</option>
                   </select>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label>Plant</Label>
+                <Label>Capacity</Label>
                 <div className="relative">
-                  <Factory className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
+                  <Package className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
                   <Input
-                    value={form.plant}
-                    onChange={(e) => onChange("plant", e.target.value)}
+                    type="number"
+                    value={form.capacity}
+                    onChange={(e) => onChange("capacity", parseInt(e.target.value) || 0)}
                     disabled={!editMode}
                     className="pl-9"
-                    placeholder="e.g., Plant-1"
-                  />
-                </div>
-              </div>
-
-              <div className="md:col-span-2 space-y-2">
-                <Label>Address</Label>
-                <div className="relative">
-                  <MapPin className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
-                  <Input
-                    value={form.address}
-                    onChange={(e) => onChange("address", e.target.value)}
-                    disabled={!editMode}
-                    className="pl-9"
-                    placeholder="Warehouse address"
+                    placeholder="e.g., 200"
                   />
                 </div>
               </div>
@@ -462,37 +502,51 @@ export default function WarehouseDetails() {
                   <option value="restricted">Restricted</option>
                 </select>
               </div>
+            </div>
 
+            <Divider />
+
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               <div className="space-y-2">
-                <Label>Security</Label>
-                <div className="flex items-center justify-between rounded-xl border bg-white px-3 py-2">
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck className="h-4 w-4 text-gray-600" />
-                    <div className="leading-tight">
-                      <p className="text-sm font-semibold text-gray-900">IP Restricted</p>
-                      <p className="text-xs text-gray-500">Limit warehouse actions to whitelisted IPs</p>
-                    </div>
-                  </div>
+                <Label>Operational Flags</Label>
+                <div className="flex flex-wrap gap-2">
                   <input
                     type="checkbox"
-                    checked={form.is_ip_restricted}
-                    onChange={(e) => onChange("is_ip_restricted", e.target.checked)}
+                    checked={form.reserved}
+                    onChange={(e) => onChange("reserved", e.target.checked)}
                     disabled={!editMode}
                     className="h-4 w-4 accent-[#dc2551]"
                   />
+                  <Label className="text-sm font-medium text-gray-900">Reserved Location</Label>
                 </div>
+                <p className="text-xs text-gray-500">Prevents automatic stock allocation to this location.</p>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Quality Control</Label>
+                <div className="flex flex-wrap gap-2">
+                  <input
+                    type="checkbox"
+                    checked={form.is_qc_required}
+                    onChange={(e) => onChange("is_qc_required", e.target.checked)}
+                    disabled={!editMode}
+                    className="h-4 w-4 accent-[#dc2551]"
+                  />
+                  <Label className="text-sm font-medium text-gray-900">QC Required</Label>
+                </div>
+                <p className="text-xs text-gray-500">Items in this location require quality inspection before use.</p>
               </div>
             </div>
 
-            {warehouse?.safety_notes ? (
+            {location?.notes ? (
               <>
                 <Divider />
                 <div className="rounded-2xl border bg-gray-50 p-4">
                   <div className="flex items-center gap-2">
                     <BadgeCheck className="h-4 w-4 text-gray-700" />
-                    <p className="text-sm font-semibold text-gray-900">Safety / Handling Notes</p>
+                    <p className="text-sm font-semibold text-gray-900">Notes</p>
                   </div>
-                  <p className="mt-2 text-sm text-gray-600">{warehouse.safety_notes}</p>
+                  <p className="mt-2 text-sm text-gray-600">{location.notes}</p>
                 </div>
               </>
             ) : null}
@@ -522,14 +576,14 @@ export default function WarehouseDetails() {
                 />
               </div>
               <p className="mt-2 text-xs text-gray-500">
-                Tip: keep CHEM store below 70% for safe segregation & access.
+                Tip: keep capacity below 80% for easy picking and put-away operations.
               </p>
             </div>
 
             <div className="grid grid-cols-1 gap-2">
               <Button asChild variant="outline" className="justify-between">
-                <Link to="/warehouse/locations">
-                  Locations
+                <Link to="/inventory/stock">
+                  Stock Ledger
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
@@ -548,13 +602,6 @@ export default function WarehouseDetails() {
                 </Link>
               </Button>
 
-              <Button asChild variant="outline" className="justify-between">
-                <Link to="/inventory/stock">
-                  Stock (Ledger)
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-
               <Button asChild className="justify-between bg-[#dc2551] hover:bg-[#b02045]">
                 <Link to="/inventory/stock/cycle-count">
                   Cycle Count
@@ -563,7 +610,7 @@ export default function WarehouseDetails() {
               </Button>
             </div>
 
-            {warehouse ? (
+            {location ? (
               <div className="rounded-2xl border bg-gray-50 p-4 text-xs text-gray-600">
                 <div className="flex items-center gap-2">
                   <CalendarDays className="h-4 w-4 text-gray-700" />
@@ -571,10 +618,10 @@ export default function WarehouseDetails() {
                 </div>
                 <div className="mt-2 space-y-1">
                   <p>
-                    Created: <span className="font-medium text-gray-900">{warehouse.created_at}</span>
+                    Created: <span className="font-medium text-gray-900">{location.created_at}</span>
                   </p>
                   <p>
-                    Updated: <span className="font-medium text-gray-900">{warehouse.updated_at}</span>
+                    Updated: <span className="font-medium text-gray-900">{location.updated_at}</span>
                   </p>
                 </div>
               </div>
@@ -583,25 +630,25 @@ export default function WarehouseDetails() {
         </Card>
       </div>
 
-      {/* Locations preview */}
+      {/* Stock preview */}
       <Card className="overflow-hidden">
         <CardHeader className="border-b bg-white">
-          <CardTitle className="text-base">Locations (Preview)</CardTitle>
+          <CardTitle className="text-base">Current Stock (Preview)</CardTitle>
           <CardDescription>
-            Common storage locations and special zones like QA HOLD / Receiving Dock.
+            Items currently stored in this location with lot tracking and expiry information.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4 p-4">
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div className="w-full md:max-w-lg">
-              <Label htmlFor="locSearch">Search locations</Label>
+              <Label htmlFor="stockSearch">Search stock items</Label>
               <div className="relative mt-2">
                 <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
                 <Input
-                  id="locSearch"
-                  value={locQuery}
-                  onChange={(e) => setLocQuery(e.target.value)}
-                  placeholder="Search by code, zone, aisle, rack, bin..."
+                  id="stockSearch"
+                  value={stockQuery}
+                  onChange={(e) => setStockQuery(e.target.value)}
+                  placeholder="Search by SKU, lot number..."
                   className="pl-9"
                 />
               </div>
@@ -609,9 +656,9 @@ export default function WarehouseDetails() {
 
             <div className="flex flex-wrap gap-2">
               <Button asChild variant="outline" className="gap-2">
-                <Link to="/warehouse/locations/create">
-                  <Box className="h-4 w-4" />
-                  Create Location
+                <Link to="/warehouse/locations">
+                  <MapPin className="h-4 w-4" />
+                  All Locations
                 </Link>
               </Button>
 
@@ -625,9 +672,9 @@ export default function WarehouseDetails() {
           </div>
 
           <div className="grid grid-cols-1 gap-3">
-            {filteredLocations.map((l) => (
+            {filteredStock.map((item, idx) => (
               <motion.div
-                key={l.id}
+                key={idx}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.16 }}
@@ -636,32 +683,25 @@ export default function WarehouseDetails() {
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="space-y-2">
                     <div className="flex flex-wrap items-center gap-2">
-                      <p className="text-sm font-extrabold text-gray-900">{l.code}</p>
-                      <Badge className={cx("rounded-full", statusBadge(l.status))}>
-                        {l.status === "active" ? "ACTIVE" : "RESTRICTED"}
-                      </Badge>
-                      <Badge className="rounded-full bg-gray-100 text-gray-700">{l.type}</Badge>
+                      <p className="text-sm font-extrabold text-gray-900">{item.sku}</p>
+                      <Badge className="rounded-full bg-gray-100 text-gray-700">LOT: {item.lot}</Badge>
+                      {item.expiry && (
+                        <Badge className="rounded-full bg-amber-100 text-amber-800">
+                          EXP: {item.expiry}
+                        </Badge>
+                      )}
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2 text-xs text-gray-600">
                       <span className="rounded-full bg-gray-50 px-3 py-1 ring-1 ring-inset ring-black/5">
-                        Zone: <span className="font-semibold text-gray-900">{l.zone}</span>
-                      </span>
-                      <span className="rounded-full bg-gray-50 px-3 py-1 ring-1 ring-inset ring-black/5">
-                        Aisle: <span className="font-semibold text-gray-900">{l.aisle}</span>
-                      </span>
-                      <span className="rounded-full bg-gray-50 px-3 py-1 ring-1 ring-inset ring-black/5">
-                        Rack: <span className="font-semibold text-gray-900">{l.rack}</span>
-                      </span>
-                      <span className="rounded-full bg-gray-50 px-3 py-1 ring-1 ring-inset ring-black/5">
-                        Bin: <span className="font-semibold text-gray-900">{l.bin}</span>
+                        Qty: <span className="font-semibold text-gray-900">{item.qty}</span>
                       </span>
                     </div>
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2 sm:justify-end">
                     <Button asChild variant="outline" className="gap-2">
-                      <Link to={`/warehouse/locations/${encodeURIComponent(l.id)}`}>
+                      <Link to={`/inventory/stock/${encodeURIComponent(item.sku)}`}>
                         Details
                         <ArrowRight className="h-4 w-4" />
                       </Link>
@@ -671,13 +711,13 @@ export default function WarehouseDetails() {
               </motion.div>
             ))}
 
-            {filteredLocations.length === 0 ? (
+            {filteredStock.length === 0 ? (
               <div className="rounded-2xl border border-dashed bg-white p-8 text-center">
                 <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-gray-50">
-                  <MapPin className="h-5 w-5 text-gray-700" />
+                  <Package className="h-5 w-5 text-gray-700" />
                 </div>
-                <p className="mt-3 text-sm font-semibold text-gray-900">No locations found</p>
-                <p className="mt-1 text-sm text-gray-500">Try another search term.</p>
+                <p className="mt-3 text-sm font-semibold text-gray-900">No stock found</p>
+                <p className="mt-1 text-sm text-gray-500">This location is currently empty or no items match your search.</p>
               </div>
             ) : null}
           </div>

@@ -26,7 +26,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
-import ConfirmationDialog from "@/components/dialogs/ConfirmationDialog";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 import salesOrdersApi from "@/services/sales/salesOrders.service";
 import customersApi from "@/services/sales/customers.service";

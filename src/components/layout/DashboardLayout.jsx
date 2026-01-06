@@ -20,8 +20,11 @@ import {
   FileSearch2,
   FileText,
   FolderKanban,
+  GitBranch,
   GitCompare,
   Hash,
+  Plus,
+  Search,
   LayoutDashboard,
   LayoutGrid,
   Layers,
@@ -31,7 +34,6 @@ import {
   Package,
   Palette,
   Percent,
-  Plus,
   QrCode,
   Route,
   ScanLine,
@@ -232,11 +234,15 @@ export default function DashboardLayout() {
     const traceability = {
       title: "Traceability",
       items: [
-        { to: "/dashboard/traceability/lots", label: "Lot Tracking", icon: QrCode },
-        { to: "/dashboard/traceability/serials", label: "Serial Tracking", icon: ScanLine },
-        { to: "/dashboard/traceability/genealogy", label: "Batch Genealogy", icon: Layers },
         { to: "/dashboard/traceability/batch", label: "Batch Management", icon: Boxes },
+        { to: "/dashboard/traceability/batch/register", label: "Batch Register", icon: FileText },
+        { to: "/dashboard/traceability/batch/scan", label: "Batch Scan", icon: ScanLine },
+        { to: "/dashboard/traceability/lot-genealogy", label: "Batch Genealogy", icon: Layers },
+        { to: "/dashboard/traceability/lot-genealogy/search", label: "Lot Genealogy Search", icon: Search },
+        { to: "/dashboard/traceability/lot-genealogy/tree", label: "Genealogy Tree", icon: GitBranch },
         { to: "/dashboard/traceability/recall", label: "Recall Management", icon: ShieldCheck },
+        { to: "/dashboard/traceability/recall/create", label: "Create Recall", icon: Plus },
+        { to: "/dashboard/traceability/recall/impact", label: "Recall Impact", icon: AlertTriangle },
       ],
     };
 
@@ -266,6 +272,20 @@ export default function DashboardLayout() {
         { to: "/dashboard/logistics/tracking/status", label: "Delivery Status", icon: Clock },
         { to: "/dashboard/logistics/tracking/pod", label: "POD Upload", icon: FileText },
         { to: "/dashboard/logistics/tracking/carriers", label: "Carrier Integration", icon: Ship },
+      ],
+    };
+
+    const warehouse = {
+      title: "Warehouse",
+      items: [
+        { to: "/dashboard/warehouse/warehouses", label: "Warehouses", icon: Warehouse },
+        { to: "/dashboard/warehouse/warehouses/create", label: "Create Warehouse", icon: Plus },
+        { to: "/dashboard/warehouse/locations", label: "Locations", icon: MapPin },
+        { to: "/dashboard/warehouse/locations/create", label: "Create Location", icon: Plus },
+        { to: "/dashboard/warehouse/picking", label: "Picking", icon: PackageCheck },
+        { to: "/dashboard/warehouse/picking/wave", label: "Pick Wave", icon: LayoutGrid },
+        { to: "/dashboard/warehouse/packing", label: "Packing", icon: Package },
+        { to: "/dashboard/warehouse/packing/slip", label: "Packing Slip", icon: FileText },
       ],
     };
 
@@ -332,6 +352,7 @@ export default function DashboardLayout() {
       procurement: ["super_admin", "admin", "procurement"].includes(role),
       inventory: ["super_admin", "admin", "procurement", "store", "production_manager"].includes(role),
       logistics: ["super_admin", "admin", "procurement", "store", "production_manager"].includes(role),
+      warehouse: ["super_admin", "admin", "procurement", "store", "production_manager"].includes(role),
       traceability: ["super_admin", "admin", "quality_manager", "production_manager", "store"].includes(role),
       maintenance: ["super_admin", "admin", "production_manager"].includes(role),
       reports: ["super_admin", "admin", "production_manager", "quality_manager", "sales", "procurement"].includes(role),
@@ -345,6 +366,7 @@ export default function DashboardLayout() {
     if (can.inventory) sections.push(inventory);
     if (can.procurement) sections.push(procurement);
     if (can.logistics) sections.push(logistics);
+    if (can.warehouse) sections.push(warehouse);
     if (can.traceability) sections.push(traceability);
     if (can.maintenance) sections.push(maintenance);
     if (can.reports) sections.push(reports);

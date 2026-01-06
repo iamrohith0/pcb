@@ -155,6 +155,43 @@ import StackupCreate from './pages/engineering/stackup/StackupCreate.jsx'
 import StackupDetails from './pages/engineering/stackup/StackupDetails.jsx'
 import MaterialRules from './pages/engineering/stackup/MaterialRules.jsx'
 
+// Maintenance Pages
+import EquipmentList from './pages/maintenance/equipment/EquipmentList.jsx'
+import EquipmentCreate from './pages/maintenance/equipment/EquipmentCreate.jsx'
+import EquipmentDetails from './pages/maintenance/equipment/EquipmentDetails.jsx'
+import EquipmentHistory from './pages/maintenance/equipment/EquipmentHistory.jsx'
+import PMSchedule from './pages/maintenance/preventive/PMSchedule.jsx'
+import PMCreate from './pages/maintenance/preventive/PMCreate.jsx'
+import PMChecklist from './pages/maintenance/preventive/PMChecklist.jsx'
+import PMCalendar from './pages/maintenance/preventive/PMCalendar.jsx'
+import BreakdownList from './pages/maintenance/breakdowns/BreakdownList.jsx'
+import BreakdownCreate from './pages/maintenance/breakdowns/BreakdownCreate.jsx'
+import BreakdownDetails from './pages/maintenance/breakdowns/BreakdownDetails.jsx'
+import DowntimeAnalysis from './pages/maintenance/breakdowns/DowntimeAnalysis.jsx'
+import SparesStock from './pages/maintenance/spares/SparesStock.jsx'
+import SpareIssue from './pages/maintenance/spares/SpareIssue.jsx'
+import SpareReturn from './pages/maintenance/spares/SpareReturn.jsx'
+import SpareReorder from './pages/maintenance/spares/SpareReorder.jsx'
+
+// Warehouse Pages
+import WarehousesList from './pages/warehouse/warehouses/WarehousesList.jsx'
+import WarehouseCreate from './pages/warehouse/warehouses/WarehouseCreate.jsx'
+import WarehouseDetails from './pages/warehouse/warehouses/WarehouseDetails.jsx'
+import WarehouseEdit from './pages/warehouse/warehouses/WarehouseEdit.jsx'
+import LocationsList from './pages/warehouse/locations/LocationsList.jsx'
+import LocationCreate from './pages/warehouse/locations/LocationCreate.jsx'
+import LocationDetails from './pages/warehouse/locations/LocationDetails.jsx'
+import LocationEdit from './pages/warehouse/locations/LocationEdit.jsx'
+import LocationMap from './pages/warehouse/locations/LocationMap.jsx'
+import PickList from './pages/warehouse/picking/PickList.jsx'
+import PickWave from './pages/warehouse/picking/PickWave.jsx'
+import PickConfirm from './pages/warehouse/picking/PickConfirm.jsx'
+import PickExceptions from './pages/warehouse/picking/PickExceptions.jsx'
+import PackList from './pages/warehouse/packing/PackList.jsx'
+import PackingSlip from './pages/warehouse/packing/PackingSlip.jsx'
+import PackConfirm from './pages/warehouse/packing/PackConfirm.jsx'
+import LabelPrint from './pages/warehouse/packing/LabelPrint.jsx'
+
 // Production Pages
 import WorkOrdersList from './pages/production/work-orders/WorkOrdersList.jsx'
 import WorkOrderCreate from './pages/production/work-orders/WorkOrderCreate.jsx'
@@ -202,6 +239,20 @@ import SerialLookup from './pages/inventory/serials/SerialLookup.jsx'
 import SerialRegister from './pages/inventory/serials/SerialRegister.jsx'
 import SerialPrint from './pages/inventory/serials/SerialPrint.jsx'
 import SerialHistory from './pages/inventory/serials/SerialHistory.jsx'
+
+// Traceability Pages
+import BatchDetails from './pages/traceability/batch/BatchDetails.jsx'
+import BatchRegister from './pages/traceability/batch/BatchRegister.jsx'
+import BatchScan from './pages/traceability/batch/BatchScan.jsx'
+import BatchPrint from './pages/traceability/batch/BatchPrint.jsx'
+import LotGenealogySearch from './pages/traceability/lot-genealogy/LotGenealogySearch.jsx'
+import LotGenealogyTree from './pages/traceability/lot-genealogy/LotGenealogyTree.jsx'
+import ComponentLinking from './pages/traceability/lot-genealogy/ComponentLinking.jsx'
+import SupplierTrace from './pages/traceability/lot-genealogy/SupplierTrace.jsx'
+import RecallCases from './pages/traceability/recall/RecallCases.jsx'
+import RecallCreate from './pages/traceability/recall/RecallCreate.jsx'
+import RecallImpact from './pages/traceability/recall/RecallImpact.jsx'
+import RecallReports from './pages/traceability/recall/RecallReports.jsx'
 
 // Protected route wrapper
 function ProtectedRoute({ children }) {
@@ -402,6 +453,23 @@ function App() {
             <Route path="inventory/serials/print" element={<SerialPrint />} />
             <Route path="inventory/serials/history" element={<SerialHistory />} />
             
+            {/* Traceability Routes */}
+            <Route path="traceability/batch" element={<BatchDetails />} />
+            <Route path="traceability/batch/details" element={<BatchDetails />} />
+            <Route path="traceability/batch/register" element={<BatchRegister />} />
+            <Route path="traceability/batch/scan" element={<BatchScan />} />
+            <Route path="traceability/batch/print" element={<BatchPrint />} />
+            <Route path="traceability/lot-genealogy" element={<LotGenealogySearch />} />
+            <Route path="traceability/lot-genealogy/search" element={<LotGenealogySearch />} />
+            <Route path="traceability/lot-genealogy/tree" element={<LotGenealogyTree />} />
+            <Route path="traceability/lot-genealogy/linking" element={<ComponentLinking />} />
+            <Route path="traceability/lot-genealogy/supplier" element={<SupplierTrace />} />
+            <Route path="traceability/recall" element={<RecallCases />} />
+            <Route path="traceability/recall/cases" element={<RecallCases />} />
+            <Route path="traceability/recall/create" element={<RecallCreate />} />
+            <Route path="traceability/recall/impact" element={<RecallImpact />} />
+            <Route path="traceability/recall/reports" element={<RecallReports />} />
+            
             {/* Procurement Routes */}
             <Route path="procurement/suppliers" element={<SuppliersList />} />
             <Route path="procurement/suppliers/create" element={<SupplierCreate />} />
@@ -421,6 +489,25 @@ function App() {
             <Route path="procurement/pricing/lead-time" element={<LeadTimeMatrix />} />
             <Route path="procurement/pricing/cost-history" element={<CostHistory />} />
             
+            {/* Warehouse Routes */}
+            <Route path="warehouse/warehouses" element={<WarehousesList />} />
+            <Route path="warehouse/warehouses/create" element={<WarehouseCreate />} />
+            <Route path="warehouse/warehouses/:id" element={<WarehouseDetails />} />
+            <Route path="warehouse/warehouses/:id/edit" element={<WarehouseEdit />} />
+            <Route path="warehouse/locations" element={<LocationsList />} />
+            <Route path="warehouse/locations/create" element={<LocationCreate />} />
+            <Route path="warehouse/locations/:id" element={<LocationDetails />} />
+            <Route path="warehouse/locations/:id/edit" element={<LocationEdit />} />
+            <Route path="warehouse/locations/map" element={<LocationMap />} />
+            <Route path="warehouse/picking" element={<PickList />} />
+            <Route path="warehouse/picking/wave" element={<PickWave />} />
+            <Route path="warehouse/picking/confirm" element={<PickConfirm />} />
+            <Route path="warehouse/picking/exceptions" element={<PickExceptions />} />
+            <Route path="warehouse/packing" element={<PackList />} />
+            <Route path="warehouse/packing/slip" element={<PackingSlip />} />
+            <Route path="warehouse/packing/confirm" element={<PackConfirm />} />
+            <Route path="warehouse/packing/label" element={<LabelPrint />} />
+            
             {/* Logistics Routes */}
             <Route path="logistics/dispatch" element={<DispatchChecklist />} />
             <Route path="logistics/dispatch/create" element={<DispatchCreate />} />
@@ -434,6 +521,25 @@ function App() {
             <Route path="logistics/tracking/status" element={<DeliveryStatus />} />
             <Route path="logistics/tracking/pod" element={<PODUpload />} />
             <Route path="logistics/tracking/carriers" element={<CarrierIntegration />} />
+            
+            {/* Maintenance Routes */}
+            <Route path="maintenance/equipment" element={<EquipmentList />} />
+            <Route path="maintenance/equipment/create" element={<EquipmentCreate />} />
+            <Route path="maintenance/equipment/:id" element={<EquipmentDetails />} />
+            <Route path="maintenance/equipment/:id/history" element={<EquipmentHistory />} />
+            <Route path="maintenance/pm" element={<PMSchedule />} />
+            <Route path="maintenance/pm/create" element={<PMCreate />} />
+            <Route path="maintenance/pm/checklist" element={<PMChecklist />} />
+            <Route path="maintenance/pm/calendar" element={<PMCalendar />} />
+            <Route path="maintenance/work-orders" element={<Navigate to="/dashboard/maintenance/pm" replace />} />
+            <Route path="maintenance/breakdowns" element={<BreakdownList />} />
+            <Route path="maintenance/breakdowns/create" element={<BreakdownCreate />} />
+            <Route path="maintenance/breakdowns/:id" element={<BreakdownDetails />} />
+            <Route path="maintenance/breakdowns/downtime" element={<DowntimeAnalysis />} />
+            <Route path="maintenance/spares" element={<SparesStock />} />
+            <Route path="maintenance/spares/issue" element={<SpareIssue />} />
+            <Route path="maintenance/spares/return" element={<SpareReturn />} />
+            <Route path="maintenance/spares/reorder" element={<SpareReorder />} />
             
             {/* Admin Routes */}
             <Route path="admin/users" element={<UsersList />} />

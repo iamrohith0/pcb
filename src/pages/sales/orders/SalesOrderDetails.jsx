@@ -27,7 +27,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 import salesOrdersApi from "@/services/sales/salesOrders.service";
 
-import ConfirmationDialog from "@/components/dialogs/ConfirmationDialog";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
