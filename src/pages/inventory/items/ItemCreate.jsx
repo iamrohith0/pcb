@@ -12,6 +12,7 @@ import {
     Loader2,
     PackagePlus,
     Save,
+    ShieldCheck,
     Tag,
     Trash2,
 } from "lucide-react";

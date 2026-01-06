@@ -473,7 +473,7 @@ export default function PanelDetails() {
                   <Button variant="outline">Go to DFM Review</Button>
                 </Link>
                 <Link
-                  to={`/production/work-orders/create?jobId=${encodeURIComponent(panel.jobId)}&panelId=${encodeURIComponent(panel.id)}`}
+                  to={`/dashboard/production/work-orders/create?jobId=${encodeURIComponent(panel.jobId)}&panelId=${encodeURIComponent(panel.id)}`}
                   className="inline-flex"
                 >
                   <Button>Create Work Order</Button>

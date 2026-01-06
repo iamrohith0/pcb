@@ -285,6 +285,259 @@ function App() {
   return (
     <>
         <Routes>
+          {/* Redirect routes for backward compatibility */}
+          <Route path="/production/routing" element={<Navigate to="/dashboard/production/routing" replace />} />
+          <Route path="/production/routing/create" element={<Navigate to="/dashboard/production/routing/create" replace />} />
+          <Route path="/production/routing/:id" element={<Navigate to="/dashboard/production/routing/:id" replace />} />
+          <Route path="/production/routing/:id/steps" element={<Navigate to="/dashboard/production/routing/:id/steps" replace />} />
+          
+          {/* Quality redirect routes for backward compatibility */}
+          <Route path="/quality/inspections" element={<Navigate to="/dashboard/quality/inspections" replace />} />
+          <Route path="/quality/inspections/create" element={<Navigate to="/dashboard/quality/inspections/create" replace />} />
+          <Route path="/quality/inspections/:id" element={<Navigate to="/dashboard/quality/inspections/:id" replace />} />
+          <Route path="/quality/inspections/templates" element={<Navigate to="/dashboard/quality/inspections/templates" replace />} />
+          <Route path="/quality/ncr" element={<Navigate to="/dashboard/quality/ncr" replace />} />
+          <Route path="/quality/ncr/create" element={<Navigate to="/dashboard/quality/ncr/create" replace />} />
+          <Route path="/quality/ncr/:id" element={<Navigate to="/dashboard/quality/ncr/:id" replace />} />
+          <Route path="/quality/ncr/disposition" element={<Navigate to="/dashboard/quality/ncr/disposition" replace />} />
+          <Route path="/quality/capa" element={<Navigate to="/dashboard/quality/capa" replace />} />
+          <Route path="/quality/capa/create" element={<Navigate to="/dashboard/quality/capa/create" replace />} />
+          <Route path="/quality/capa/:id" element={<Navigate to="/dashboard/quality/capa/:id" replace />} />
+          <Route path="/quality/capa/effectiveness" element={<Navigate to="/dashboard/quality/capa/effectiveness" replace />} />
+          <Route path="/quality/certificates" element={<Navigate to="/dashboard/quality/certificates" replace />} />
+          <Route path="/quality/certificates/generate" element={<Navigate to="/dashboard/quality/certificates/generate" replace />} />
+          <Route path="/quality/certificates/compliance" element={<Navigate to="/dashboard/quality/certificates/compliance" replace />} />
+          <Route path="/quality/aoi" element={<Navigate to="/dashboard/quality/aoi" replace />} />
+          <Route path="/quality/aoi/queue" element={<Navigate to="/dashboard/quality/aoi/queue" replace />} />
+          <Route path="/quality/aoi/defects" element={<Navigate to="/dashboard/quality/aoi/defects" replace />} />
+          <Route path="/quality/aoi/rework" element={<Navigate to="/dashboard/quality/aoi/rework" replace />} />
+          <Route path="/quality/etest" element={<Navigate to="/dashboard/quality/etest" replace />} />
+          <Route path="/quality/etest/queue" element={<Navigate to="/dashboard/quality/etest/queue" replace />} />
+          <Route path="/quality/etest/certificates" element={<Navigate to="/dashboard/quality/etest/certificates" replace />} />
+          <Route path="/quality/etest/netlist" element={<Navigate to="/dashboard/quality/etest/netlist" replace />} />
+          
+          {/* Production redirect routes for backward compatibility */}
+          <Route path="/production/work-orders" element={<Navigate to="/dashboard/production/work-orders" replace />} />
+          <Route path="/production/work-orders/create" element={<Navigate to="/dashboard/production/work-orders/create" replace />} />
+          <Route path="/production/work-orders/:id" element={<Navigate to="/dashboard/production/work-orders/:id" replace />} />
+          <Route path="/production/work-orders/:id/issue-materials" element={<Navigate to="/dashboard/production/work-orders/:id/issue-materials" replace />} />
+          <Route path="/production/wip" element={<Navigate to="/dashboard/production/wip" replace />} />
+          <Route path="/production/wip/history" element={<Navigate to="/dashboard/production/wip/history" replace />} />
+          <Route path="/production/wip/hold-release" element={<Navigate to="/dashboard/production/wip/hold-release" replace />} />
+          <Route path="/production/wip/move" element={<Navigate to="/dashboard/production/wip/move" replace />} />
+          <Route path="/production/capacity" element={<Navigate to="/dashboard/production/capacity" replace />} />
+          <Route path="/production/capacity/bottleneck" element={<Navigate to="/dashboard/production/capacity/bottleneck" replace />} />
+          <Route path="/production/capacity/oee" element={<Navigate to="/dashboard/production/capacity/oee" replace />} />
+          <Route path="/production/capacity/utilization" element={<Navigate to="/dashboard/production/capacity/utilization" replace />} />
+          <Route path="/production/scheduling" element={<Navigate to="/dashboard/production/scheduling" replace />} />
+          <Route path="/production/scheduling/machines" element={<Navigate to="/dashboard/production/scheduling/machines" replace />} />
+          <Route path="/production/scheduling/calendar" element={<Navigate to="/dashboard/production/scheduling/calendar" replace />} />
+          <Route path="/production/scheduling/shifts" element={<Navigate to="/dashboard/production/scheduling/shifts" replace />} />
+          
+          {/* Inventory redirect routes for backward compatibility */}
+          <Route path="/inventory/items" element={<Navigate to="/dashboard/inventory/items" replace />} />
+          <Route path="/inventory/items/create" element={<Navigate to="/dashboard/inventory/items/create" replace />} />
+          <Route path="/inventory/items/:id" element={<Navigate to="/dashboard/inventory/items/:id" replace />} />
+          <Route path="/inventory/items/:id/edit" element={<Navigate to="/dashboard/inventory/items/:id/edit" replace />} />
+          <Route path="/inventory/bom" element={<Navigate to="/dashboard/inventory/bom" replace />} />
+          <Route path="/inventory/bom/create" element={<Navigate to="/dashboard/inventory/bom/create" replace />} />
+          <Route path="/inventory/bom/:id" element={<Navigate to="/dashboard/inventory/bom/:id" replace />} />
+          <Route path="/inventory/bom/:id/explode" element={<Navigate to="/dashboard/inventory/bom/:id/explode" replace />} />
+          <Route path="/inventory/stock" element={<Navigate to="/dashboard/inventory/stock" replace />} />
+          <Route path="/inventory/stock/ledger" element={<Navigate to="/dashboard/inventory/stock/ledger" replace />} />
+          <Route path="/inventory/stock/transfer" element={<Navigate to="/dashboard/inventory/stock/transfer" replace />} />
+          <Route path="/inventory/stock/valuation" element={<Navigate to="/dashboard/inventory/stock/valuation" replace />} />
+          <Route path="/inventory/adjustments" element={<Navigate to="/dashboard/inventory/adjustments" replace />} />
+          <Route path="/inventory/adjustments/create" element={<Navigate to="/dashboard/inventory/adjustments/create" replace />} />
+          <Route path="/inventory/adjustments/:id" element={<Navigate to="/dashboard/inventory/adjustments/:id" replace />} />
+          <Route path="/inventory/adjustments/cycle-count" element={<Navigate to="/dashboard/inventory/adjustments/cycle-count" replace />} />
+          <Route path="/inventory/lots" element={<Navigate to="/dashboard/inventory/lots" replace />} />
+          <Route path="/inventory/lots/create" element={<Navigate to="/dashboard/inventory/lots/create" replace />} />
+          <Route path="/inventory/lots/:id" element={<Navigate to="/dashboard/inventory/lots/:id" replace />} />
+          <Route path="/inventory/lots/:id/trace" element={<Navigate to="/dashboard/inventory/lots/:id/trace" replace />} />
+          <Route path="/inventory/serials" element={<Navigate to="/dashboard/inventory/serials" replace />} />
+          <Route path="/inventory/serials/lookup" element={<Navigate to="/dashboard/inventory/serials/lookup" replace />} />
+          <Route path="/inventory/serials/register" element={<Navigate to="/dashboard/inventory/serials/register" replace />} />
+          <Route path="/inventory/serials/print" element={<Navigate to="/dashboard/inventory/serials/print" replace />} />
+          <Route path="/inventory/serials/history" element={<Navigate to="/dashboard/inventory/serials/history" replace />} />
+          
+          {/* Warehouse redirect routes for backward compatibility */}
+          <Route path="/warehouse/warehouses" element={<Navigate to="/dashboard/warehouse/warehouses" replace />} />
+          <Route path="/warehouse/warehouses/create" element={<Navigate to="/dashboard/warehouse/warehouses/create" replace />} />
+          <Route path="/warehouse/warehouses/:id" element={<Navigate to="/dashboard/warehouse/warehouses/:id" replace />} />
+          <Route path="/warehouse/warehouses/:id/edit" element={<Navigate to="/dashboard/warehouse/warehouses/:id/edit" replace />} />
+          <Route path="/warehouse/locations" element={<Navigate to="/dashboard/warehouse/locations" replace />} />
+          <Route path="/warehouse/locations/create" element={<Navigate to="/dashboard/warehouse/locations/create" replace />} />
+          <Route path="/warehouse/locations/:id" element={<Navigate to="/dashboard/warehouse/locations/:id" replace />} />
+          <Route path="/warehouse/locations/:id/edit" element={<Navigate to="/dashboard/warehouse/locations/:id/edit" replace />} />
+          <Route path="/warehouse/locations/map" element={<Navigate to="/dashboard/warehouse/locations/map" replace />} />
+          <Route path="/warehouse/picking" element={<Navigate to="/dashboard/warehouse/picking" replace />} />
+          <Route path="/warehouse/picking/wave" element={<Navigate to="/dashboard/warehouse/picking/wave" replace />} />
+          <Route path="/warehouse/picking/confirm" element={<Navigate to="/dashboard/warehouse/picking/confirm" replace />} />
+          <Route path="/warehouse/picking/exceptions" element={<Navigate to="/dashboard/warehouse/picking/exceptions" replace />} />
+          <Route path="/warehouse/packing" element={<Navigate to="/dashboard/warehouse/packing" replace />} />
+          <Route path="/warehouse/packing/slip" element={<Navigate to="/dashboard/warehouse/packing/slip" replace />} />
+          <Route path="/warehouse/packing/confirm" element={<Navigate to="/dashboard/warehouse/packing/confirm" replace />} />
+          <Route path="/warehouse/packing/label" element={<Navigate to="/dashboard/warehouse/packing/label" replace />} />
+          
+          {/* Logistics redirect routes for backward compatibility */}
+          <Route path="/logistics/dispatch" element={<Navigate to="/dashboard/logistics/dispatch" replace />} />
+          <Route path="/logistics/dispatch/create" element={<Navigate to="/dashboard/logistics/dispatch/create" replace />} />
+          <Route path="/logistics/dispatch/queue" element={<Navigate to="/dashboard/logistics/dispatch/queue" replace />} />
+          <Route path="/logistics/dispatch/details" element={<Navigate to="/dashboard/logistics/dispatch/details" replace />} />
+          <Route path="/logistics/shipments" element={<Navigate to="/dashboard/logistics/shipments" replace />} />
+          <Route path="/logistics/shipments/create" element={<Navigate to="/dashboard/logistics/shipments/create" replace />} />
+          <Route path="/logistics/shipments/details" element={<Navigate to="/dashboard/logistics/shipments/details" replace />} />
+          <Route path="/logistics/shipments/documents" element={<Navigate to="/dashboard/logistics/shipments/documents" replace />} />
+          <Route path="/logistics/tracking" element={<Navigate to="/dashboard/logistics/tracking" replace />} />
+          <Route path="/logistics/tracking/status" element={<Navigate to="/dashboard/logistics/tracking/status" replace />} />
+          <Route path="/logistics/tracking/pod" element={<Navigate to="/dashboard/logistics/tracking/pod" replace />} />
+          <Route path="/logistics/tracking/carriers" element={<Navigate to="/dashboard/logistics/tracking/carriers" replace />} />
+          
+          {/* Maintenance redirect routes for backward compatibility */}
+          <Route path="/maintenance/equipment" element={<Navigate to="/dashboard/maintenance/equipment" replace />} />
+          <Route path="/maintenance/equipment/create" element={<Navigate to="/dashboard/maintenance/equipment/create" replace />} />
+          <Route path="/maintenance/equipment/:id" element={<Navigate to="/dashboard/maintenance/equipment/:id" replace />} />
+          <Route path="/maintenance/equipment/:id/history" element={<Navigate to="/dashboard/maintenance/equipment/:id/history" replace />} />
+          <Route path="/maintenance/pm" element={<Navigate to="/dashboard/maintenance/pm" replace />} />
+          <Route path="/maintenance/pm/create" element={<Navigate to="/dashboard/maintenance/pm/create" replace />} />
+          <Route path="/maintenance/pm/checklist" element={<Navigate to="/dashboard/maintenance/pm/checklist" replace />} />
+          <Route path="/maintenance/pm/calendar" element={<Navigate to="/dashboard/maintenance/pm/calendar" replace />} />
+          <Route path="/maintenance/work-orders" element={<Navigate to="/dashboard/maintenance/work-orders" replace />} />
+          <Route path="/maintenance/breakdowns" element={<Navigate to="/dashboard/maintenance/breakdowns" replace />} />
+          <Route path="/maintenance/breakdowns/create" element={<Navigate to="/dashboard/maintenance/breakdowns/create" replace />} />
+          <Route path="/maintenance/breakdowns/:id" element={<Navigate to="/dashboard/maintenance/breakdowns/:id" replace />} />
+          <Route path="/maintenance/breakdowns/downtime" element={<Navigate to="/dashboard/maintenance/breakdowns/downtime" replace />} />
+          <Route path="/maintenance/spares" element={<Navigate to="/dashboard/maintenance/spares" replace />} />
+          <Route path="/maintenance/spares/issue" element={<Navigate to="/dashboard/maintenance/spares/issue" replace />} />
+          <Route path="/maintenance/spares/return" element={<Navigate to="/dashboard/maintenance/spares/return" replace />} />
+          <Route path="/maintenance/spares/reorder" element={<Navigate to="/dashboard/maintenance/spares/reorder" replace />} />
+          
+          {/* Traceability redirect routes for backward compatibility */}
+          <Route path="/traceability/batch" element={<Navigate to="/dashboard/traceability/batch" replace />} />
+          <Route path="/traceability/batch/details" element={<Navigate to="/dashboard/traceability/batch/details" replace />} />
+          <Route path="/traceability/batch/register" element={<Navigate to="/dashboard/traceability/batch/register" replace />} />
+          <Route path="/traceability/batch/scan" element={<Navigate to="/dashboard/traceability/batch/scan" replace />} />
+          <Route path="/traceability/batch/print" element={<Navigate to="/dashboard/traceability/batch/print" replace />} />
+          <Route path="/traceability/lot-genealogy" element={<Navigate to="/dashboard/traceability/lot-genealogy" replace />} />
+          <Route path="/traceability/lot-genealogy/search" element={<Navigate to="/dashboard/traceability/lot-genealogy/search" replace />} />
+          <Route path="/traceability/lot-genealogy/tree" element={<Navigate to="/dashboard/traceability/lot-genealogy/tree" replace />} />
+          <Route path="/traceability/lot-genealogy/linking" element={<Navigate to="/dashboard/traceability/lot-genealogy/linking" replace />} />
+          <Route path="/traceability/lot-genealogy/supplier" element={<Navigate to="/dashboard/traceability/lot-genealogy/supplier" replace />} />
+          <Route path="/traceability/recall" element={<Navigate to="/dashboard/traceability/recall" replace />} />
+          <Route path="/traceability/recall/cases" element={<Navigate to="/dashboard/traceability/recall/cases" replace />} />
+          <Route path="/traceability/recall/create" element={<Navigate to="/dashboard/traceability/recall/create" replace />} />
+          <Route path="/traceability/recall/impact" element={<Navigate to="/dashboard/traceability/recall/impact" replace />} />
+          <Route path="/traceability/recall/reports" element={<Navigate to="/dashboard/traceability/recall/reports" replace />} />
+          
+          {/* Engineering redirect routes for backward compatibility */}
+          <Route path="/engineering/dfm" element={<Navigate to="/dashboard/engineering/dfm" replace />} />
+          <Route path="/engineering/dfm/review" element={<Navigate to="/dashboard/engineering/dfm/review" replace />} />
+          <Route path="/engineering/dfm/report" element={<Navigate to="/dashboard/engineering/dfm/report" replace />} />
+          <Route path="/engineering/dfm/checklist" element={<Navigate to="/dashboard/engineering/dfm/checklist" replace />} />
+          <Route path="/engineering/cam" element={<Navigate to="/dashboard/engineering/cam" replace />} />
+          <Route path="/engineering/cam/create" element={<Navigate to="/dashboard/engineering/cam/create" replace />} />
+          <Route path="/engineering/cam/:id" element={<Navigate to="/dashboard/engineering/cam/:id" replace />} />
+          <Route path="/engineering/cam/outputs" element={<Navigate to="/dashboard/engineering/cam/outputs" replace />} />
+          <Route path="/engineering/cam/outputs/create" element={<Navigate to="/dashboard/engineering/cam/outputs/create" replace />} />
+          <Route path="/engineering/cam/upload" element={<Navigate to="/dashboard/engineering/cam/upload" replace />} />
+          <Route path="/engineering/panelization" element={<Navigate to="/dashboard/engineering/panelization" replace />} />
+          <Route path="/engineering/panelization/create" element={<Navigate to="/dashboard/engineering/panelization/create" replace />} />
+          <Route path="/engineering/panelization/:id" element={<Navigate to="/dashboard/engineering/panelization/:id" replace />} />
+          <Route path="/engineering/panelization/templates" element={<Navigate to="/dashboard/engineering/panelization/templates" replace />} />
+          <Route path="/engineering/revisions" element={<Navigate to="/dashboard/engineering/revisions" replace />} />
+          <Route path="/engineering/revisions/create" element={<Navigate to="/dashboard/engineering/revisions/create" replace />} />
+          <Route path="/engineering/revisions/compare" element={<Navigate to="/dashboard/engineering/revisions/compare" replace />} />
+          <Route path="/engineering/revisions/eco" element={<Navigate to="/dashboard/engineering/revisions/eco" replace />} />
+          <Route path="/engineering/stackup" element={<Navigate to="/dashboard/engineering/stackup" replace />} />
+          <Route path="/engineering/stackup/create" element={<Navigate to="/dashboard/engineering/stackup/create" replace />} />
+          <Route path="/engineering/stackup/:id" element={<Navigate to="/dashboard/engineering/stackup/:id" replace />} />
+          <Route path="/engineering/stackup/material-rules" element={<Navigate to="/dashboard/engineering/stackup/material-rules" replace />} />
+          
+          {/* Procurement redirect routes for backward compatibility */}
+          <Route path="/procurement/suppliers" element={<Navigate to="/dashboard/procurement/suppliers" replace />} />
+          <Route path="/procurement/suppliers/create" element={<Navigate to="/dashboard/procurement/suppliers/create" replace />} />
+          <Route path="/procurement/suppliers/:id" element={<Navigate to="/dashboard/procurement/suppliers/:id" replace />} />
+          <Route path="/procurement/suppliers/:id/edit" element={<Navigate to="/dashboard/procurement/suppliers/:id/edit" replace />} />
+          <Route path="/procurement/purchase-orders" element={<Navigate to="/dashboard/procurement/purchase-orders" replace />} />
+          <Route path="/procurement/purchase-orders/create" element={<Navigate to="/dashboard/procurement/purchase-orders/create" replace />} />
+          <Route path="/procurement/purchase-orders/:id" element={<Navigate to="/dashboard/procurement/purchase-orders/:id" replace />} />
+          <Route path="/procurement/purchase-orders/:id/approve" element={<Navigate to="/dashboard/procurement/purchase-orders/:id/approve" replace />} />
+          <Route path="/procurement/grn" element={<Navigate to="/dashboard/procurement/grn" replace />} />
+          <Route path="/procurement/grn/create" element={<Navigate to="/dashboard/procurement/grn/create" replace />} />
+          <Route path="/procurement/grn/:id" element={<Navigate to="/dashboard/procurement/grn/:id" replace />} />
+          <Route path="/procurement/grn/incoming-qc" element={<Navigate to="/dashboard/procurement/grn/incoming-qc" replace />} />
+          <Route path="/procurement/pricing" element={<Navigate to="/dashboard/procurement/pricing" replace />} />
+          <Route path="/procurement/pricing/create" element={<Navigate to="/dashboard/procurement/pricing/create" replace />} />
+          <Route path="/procurement/pricing/rule-engine" element={<Navigate to="/dashboard/procurement/pricing/rule-engine" replace />} />
+          <Route path="/procurement/pricing/lead-time" element={<Navigate to="/dashboard/procurement/pricing/lead-time" replace />} />
+          <Route path="/procurement/pricing/cost-history" element={<Navigate to="/dashboard/procurement/pricing/cost-history" replace />} />
+          
+          {/* Sales redirect routes for backward compatibility */}
+          <Route path="/sales/customers" element={<Navigate to="/dashboard/sales/customers" replace />} />
+          <Route path="/sales/customers/new" element={<Navigate to="/dashboard/sales/customers/new" replace />} />
+          <Route path="/sales/customers/:id" element={<Navigate to="/dashboard/sales/customers/:id" replace />} />
+          <Route path="/sales/customers/:id/edit" element={<Navigate to="/dashboard/sales/customers/:id/edit" replace />} />
+          <Route path="/sales/quotations" element={<Navigate to="/dashboard/sales/quotations" replace />} />
+          <Route path="/sales/quotations/create" element={<Navigate to="/dashboard/sales/quotations/create" replace />} />
+          <Route path="/sales/quotations/:id" element={<Navigate to="/dashboard/sales/quotations/:id" replace />} />
+          <Route path="/sales/orders" element={<Navigate to="/dashboard/sales/orders" replace />} />
+          <Route path="/sales/orders/create" element={<Navigate to="/dashboard/sales/orders/create" replace />} />
+          <Route path="/sales/orders/:id/edit" element={<Navigate to="/dashboard/sales/orders/:id/edit" replace />} />
+          <Route path="/sales/orders/:id" element={<Navigate to="/dashboard/sales/orders/:id" replace />} />
+          
+          {/* RFQ redirect routes for backward compatibility */}
+          <Route path="/sales/rfq" element={<Navigate to="/dashboard/sales/rfq" replace />} />
+          <Route path="/sales/rfq/create" element={<Navigate to="/dashboard/sales/rfq/create" replace />} />
+          <Route path="/sales/rfq/:id" element={<Navigate to="/dashboard/sales/rfq/:id" replace />} />
+          <Route path="/sales/rfq/:id/edit" element={<Navigate to="/dashboard/sales/rfq/:id/edit" replace />} />
+          
+          {/* Invoice redirect routes for backward compatibility */}
+          <Route path="/sales/invoices" element={<Navigate to="/dashboard/sales/invoices" replace />} />
+          <Route path="/sales/invoices/create" element={<Navigate to="/dashboard/sales/invoices/create" replace />} />
+          <Route path="/sales/invoices/:id" element={<Navigate to="/dashboard/sales/invoices/:id" replace />} />
+          <Route path="/sales/invoices/:id/print" element={<Navigate to="/dashboard/sales/invoices/:id/print" replace />} />
+          
+          {/* Admin redirect routes for backward compatibility */}
+          <Route path="/admin/users" element={<Navigate to="/dashboard/admin/users" replace />} />
+          <Route path="/admin/users/create" element={<Navigate to="/dashboard/admin/users/create" replace />} />
+          <Route path="/admin/users/:id" element={<Navigate to="/dashboard/admin/users/:id" replace />} />
+          <Route path="/admin/users/:id/edit" element={<Navigate to="/dashboard/admin/users/:id/edit" replace />} />
+          <Route path="/admin/roles" element={<Navigate to="/dashboard/admin/roles" replace />} />
+          <Route path="/admin/roles/create" element={<Navigate to="/dashboard/admin/roles/create" replace />} />
+          <Route path="/admin/roles/:id" element={<Navigate to="/dashboard/admin/roles/:id" replace />} />
+          <Route path="/admin/roles/:id/edit" element={<Navigate to="/dashboard/admin/roles/:id/edit" replace />} />
+          <Route path="/admin/permissions" element={<Navigate to="/dashboard/admin/permissions" replace />} />
+          <Route path="/admin/permissions/create" element={<Navigate to="/dashboard/admin/permissions/create" replace />} />
+          <Route path="/admin/permissions/audit" element={<Navigate to="/dashboard/admin/permissions/audit" replace />} />
+          <Route path="/admin/settings" element={<Navigate to="/dashboard/admin/settings" replace />} />
+          <Route path="/admin/settings/integrations" element={<Navigate to="/dashboard/admin/settings/integrations" replace />} />
+          <Route path="/admin/settings/ip-whitelist" element={<Navigate to="/dashboard/admin/settings/ip-whitelist" replace />} />
+          <Route path="/admin/settings/notifications" element={<Navigate to="/dashboard/admin/settings/notifications" replace />} />
+          <Route path="/admin/masters" element={<Navigate to="/dashboard/admin/masters" replace />} />
+          <Route path="/admin/masters/materials" element={<Navigate to="/dashboard/admin/masters/materials" replace />} />
+          <Route path="/admin/masters/processes" element={<Navigate to="/dashboard/admin/masters/processes" replace />} />
+          <Route path="/admin/masters/uom" element={<Navigate to="/dashboard/admin/masters/uom" replace />} />
+          <Route path="/admin/masters/defects" element={<Navigate to="/dashboard/admin/masters/defects" replace />} />
+          <Route path="/admin/audit-logs" element={<Navigate to="/dashboard/admin/audit-logs" replace />} />
+          <Route path="/admin/audit-logs/:id" element={<Navigate to="/dashboard/admin/audit-logs/:id" replace />} />
+          <Route path="/admin/audit-logs/export" element={<Navigate to="/dashboard/admin/audit-logs/export" replace />} />
+          
+          {/* Settings redirect routes for backward compatibility */}
+          <Route path="/settings/company/profile" element={<Navigate to="/dashboard/settings/company/profile" replace />} />
+          <Route path="/settings/company/branding" element={<Navigate to="/dashboard/settings/company/branding" replace />} />
+          <Route path="/settings/company/working-hours" element={<Navigate to="/dashboard/settings/company/working-hours" replace />} />
+          <Route path="/settings/integrations/email" element={<Navigate to="/dashboard/settings/integrations/email" replace />} />
+          <Route path="/settings/integrations/webhooks" element={<Navigate to="/dashboard/settings/integrations/webhooks" replace />} />
+          <Route path="/settings/integrations/accounting" element={<Navigate to="/dashboard/settings/integrations/accounting" replace />} />
+          <Route path="/settings/integrations/barcode" element={<Navigate to="/dashboard/settings/integrations/barcode" replace />} />
+          <Route path="/settings/numbering/documents" element={<Navigate to="/dashboard/settings/numbering/documents" replace />} />
+          <Route path="/settings/numbering/lots" element={<Navigate to="/dashboard/settings/numbering/lots" replace />} />
+          <Route path="/settings/numbering/work-orders" element={<Navigate to="/dashboard/settings/numbering/work-orders" replace />} />
+          <Route path="/settings/plants/list" element={<Navigate to="/dashboard/settings/plants/list" replace />} />
+          <Route path="/settings/plants/create" element={<Navigate to="/dashboard/settings/plants/create" replace />} />
+          <Route path="/settings/plants/shifts" element={<Navigate to="/dashboard/settings/plants/shifts" replace />} />
+          
           <Route
             path="/"
             element={
@@ -415,6 +668,7 @@ function App() {
             <Route path="production/capacity/oee" element={<OEETracking />} />
             <Route path="production/capacity/utilization" element={<UtilizationReport />} />
             <Route path="production/routing" element={<RoutingList />} />
+            <Route path="production/routing/list" element={<RoutingList />} />
             <Route path="production/routing/create" element={<RoutingCreate />} />
             <Route path="production/routing/:id" element={<RoutingDetails />} />
             <Route path="production/routing/:id/steps" element={<RoutingSteps />} />

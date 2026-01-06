@@ -329,7 +329,7 @@ export default function WorkOrdersList() {
 
           <Button
             className="bg-cyan-600 hover:bg-cyan-500 gap-2"
-            onClick={() => navigate("/production/work-orders/create")}
+            onClick={() => navigate("/dashboard/production/work-orders/create")}
           >
             + New Work Order
           </Button>

@@ -10,6 +10,10 @@ import { useToast } from "@/components/ui/use-toast";
 
 import settingsApi from "@/services/settings.service";
 
+
+
+
+
 import {
   Activity,
   ArrowRight,
@@ -139,7 +143,7 @@ export default function Dashboard() {
         title: "Create Work Order",
         desc: "Release order to production routing",
         icon: Factory,
-        to: "/production/work-orders/create",
+        to: "/dashboard/production/work-orders/create",
         tone: "prod",
       },
       {

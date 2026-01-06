@@ -229,10 +229,9 @@ export default function GRNList() {
                 Export
               </Button>
 
-              {/* If you later implement GRN Create page */}
               <Button
                 className="bg-cyan-600 hover:bg-cyan-500"
-                onClick={() => toast({ title: "Create GRN", description: "Add a GRN Create page and route, then link here." })}
+                onClick={() => navigate("/dashboard/procurement/grn/create")}
               >
                 <Plus className="mr-2 h-4 w-4" />
                 New GRN
