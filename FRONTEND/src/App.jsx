@@ -567,7 +567,7 @@ function App() {
             element={<AccessDenied />}
           />
           <Route
-            path="/settings"
+            path="/dashboard/settings"
             element={
               <ProtectedRoute>
                 <DashboardLayout />
