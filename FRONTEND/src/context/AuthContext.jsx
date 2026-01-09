@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import authService from "../services/auth.service";
 
 const AuthContext = createContext();
 
@@ -11,21 +12,36 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  console.log('AuthProvider component loaded')
-  
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Check for existing session on mount
   useEffect(() => {
-    const checkAuth = () => {
+    const checkAuth = async () => {
       try {
-        const savedUser = localStorage.getItem('user');
-        if (savedUser) {
+        const token = localStorage.getItem("token");
+        const savedUser = localStorage.getItem("user");
+
+        if (token) {
+          try {
+            const current = await authService.getCurrentUser();
+            setUser(current);
+            localStorage.setItem("user", JSON.stringify(current));
+          } catch (error) {
+            if (savedUser) {
+              setUser(JSON.parse(savedUser));
+            } else {
+              localStorage.removeItem("token");
+              localStorage.removeItem("user");
+            }
+          }
+        } else if (savedUser) {
           setUser(JSON.parse(savedUser));
         }
       } catch (error) {
-        console.error('Error checking auth:', error);
+        console.error("Error checking auth:", error);
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
       } finally {
         setLoading(false);
       }
@@ -36,12 +52,13 @@ export const AuthProvider = ({ children }) => {
 
   const login = (userData) => {
     setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
   const value = {

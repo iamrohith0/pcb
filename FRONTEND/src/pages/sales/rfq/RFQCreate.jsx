@@ -180,29 +180,38 @@ export default function RFQCreate() {
       // Otherwise remove attachments logic and send JSON.
       const useMultipart = attachments.length > 0;
 
+      const customerSummary =
+        customerId || customerName || contactName || contactEmail || contactPhone
+          ? {
+              id: customerId || null,
+              name: customerName?.trim() || null,
+              contactName: contactName || null,
+              email: contactEmail || null,
+              phone: contactPhone || null,
+            }
+          : null;
+
       const payload = {
-        rfq_no: rfqNo,
-        rfq_date: rfqDate,
-        customer_id: customerId || null,
-        customer_name: customerId ? undefined : customerName.trim(),
-        contact_name: contactName || null,
-        contact_email: contactEmail || null,
-        contact_phone: contactPhone || null,
+        rfqNo: rfqNo || null,
+        rfqDate,
+        status: "Open",
         priority,
         currency,
-        special_instructions: specialInstructions || null,
+        customer: customerSummary,
+        specialInstructions: specialInstructions || null,
+        attachments: attachments.map((f) => f.name),
         lines: lines.map((l) => ({
-          pcb_type: l.pcbType,
+          pcbType: l.pcbType,
           layers: Number(l.layers),
-          thickness_mm: Number(l.thicknessMm),
-          copper_oz: Number(l.copperOz),
+          thicknessMm: Number(l.thicknessMm),
+          copperOz: Number(l.copperOz),
           finish: l.finish,
-          solder_mask: l.solderMask,
+          solderMask: l.solderMask,
           silkscreen: l.silkscreen,
           panelization: l.panelization,
           qty: Number(l.qty),
           unit: l.unit,
-          delivery_days: Number(l.deliveryDays),
+          deliveryDays: Number(l.deliveryDays),
           notes: l.notes || null,
         })),
       };

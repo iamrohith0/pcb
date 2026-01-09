@@ -1882,6 +1882,113 @@ User Input → Form State → Validation → Service Call → API → Response �
 Login → Auth Service → Token Storage → Protected Routes → API Requests → Token Validation
 ```
 
+### 5. End-to-End ERP Flow (All 13 Modules)
+
+```mermaid
+flowchart LR
+  subgraph Governance["Governance & Configuration"]
+    Admin["2. Admin Module<br/>(users/roles/permissions/audit)"]
+    Settings["3. Super Settings Module<br/>(company/plant/series/integrations)"]
+  end
+
+  subgraph Core["Core Manufacturing Flow"]
+    Sales["4. Sales Management<br/>(RFQ → Quote → Sales Order → Invoice)"]
+    Eng["5. Engineering & CAM<br/>(DFM/CAM/panelization/revisions)"]
+    Prod["6. Production Management<br/>(WO/WIP/routing/scheduling)"]
+    WH["10. Warehouse & Logistics<br/>(pick/pack/dispatch)"]
+  end
+
+  subgraph Supply["Supply Chain"]
+    Proc["9. Procurement<br/>(suppliers/PO/GRN/pricing)"]
+    Inv["8. Inventory Management<br/>(items/stock/BOM/lots-serials)"]
+  end
+
+  subgraph Support["Quality, Traceability, Maintenance"]
+    QA["7. Quality Management<br/>(inspections/AOI/E-test/NCR/CAPA)"]
+    Trace["11. Traceability<br/>(lot/serial/process genealogy)"]
+    Maint["12. Maintenance<br/>(PM/breakdowns/spares)"]
+  end
+
+  subgraph Analytics["Analytics"]
+    Dash["1. Dashboard & Analytics"]
+    Reports["13. Reports & Analytics"]
+  end
+
+  Customer((Customer))
+  Ops[(Operational Data<br/>(API + DB))]
+
+  Admin -->|"RBAC + audit"| Sales
+  Settings -->|"masters + numbering + defaults"| Sales
+
+  Sales -->|"approved order + specs"| Eng -->|"released CAM + routing"| Prod -->|"finished goods"| WH -->|"dispatch"| Customer
+  Proc -->|"PO/GRN"| Inv -->|"material issue"| Prod
+
+  QA -->|"quality gates"| Prod
+  Maint -->|"equipment uptime"| Prod
+  Trace -.-> Sales
+  Trace -.-> Inv
+  Trace -.-> Prod
+  Trace -.-> QA
+  Trace -.-> WH
+
+  Sales --> Ops
+  Eng --> Ops
+  Prod --> Ops
+  QA --> Ops
+  Inv --> Ops
+  Proc --> Ops
+  WH --> Ops
+  Trace --> Ops
+  Maint --> Ops
+
+  Ops --> Dash
+  Ops --> Reports
+```
+
+### 6. RFQ → Dispatch Flow (Cross-Module)
+
+```mermaid
+flowchart TD
+  Customer((Customer)) --> RFQ["Sales: Create RFQ<br/>(requirements + files + quantities)"]
+  RFQ --> Feas["Engineering: Feasibility (DFM + stackup)"]
+  Feas --> DFMOK{DFM OK?}
+  DFMOK -- "No" --> Clarify["Sales ↔ Customer: clarify / update design inputs"]
+  Clarify --> Feas
+  DFMOK -- "Yes" --> Quote["Sales: Build quotation<br/>(material + process + margin)"]
+  Quote --> Approve{Approval required?}
+  Approve -- "Yes" --> Mgr["Sales Manager: approve / override pricing"]
+  Mgr --> SendQuote["Send quote"]
+  Approve -- "No" --> SendQuote["Send quote"]
+  SendQuote --> Accept{Customer accepts?}
+  Accept -- "No" --> Requote["Revise quote or close RFQ"]
+  Accept -- "Yes" --> SO["Sales: Convert to Sales Order"]
+  SO --> CAM["Engineering: CAM output + panelization<br/>(revision control)"]
+  CAM --> WO["Production: Work Order + routing + schedule"]
+
+  WO --> Mat{Materials available?}
+  Mat -- "No" --> PO["Procurement: Purchase Order"]
+  PO --> GRN["GRN / Receiving"]
+  GRN --> Stock["Inventory: receive stock + assign lots/serials"]
+  Mat -- "Yes" --> Issue["Inventory: issue materials to WO"]
+  Stock --> Issue
+
+  Issue --> Run["Production: execute stages + WIP updates"]
+  Run --> QC["Quality: in-process inspections + AOI + E-test + final QC"]
+  QC --> Pass{Pass?}
+  Pass -- "No" --> NCR["Quality: NCR/CAPA + rework"]
+  NCR --> Run
+  Pass -- "Yes" --> Ship["Warehouse/Logistics: pack + dispatch"]
+
+  %% Traceability is continuous across material, process, and inspection events
+  Issue -.-> Trace["Traceability: link material lots + operations + inspections"]
+  Run -.-> Trace
+  QC -.-> Trace
+  Ship -.-> Trace
+
+  Ship --> Invoice["Sales: invoice + payment tracking"]
+  Invoice --> BI["Dashboards/Reports: KPIs + analytics"]
+```
+
 ### Data Fetching Strategy
 
 **TanStack Query Usage**:

@@ -26,8 +26,6 @@ import api from "../lib/axios";
 import authService from "../services/auth.service";
 
 export default function LoginPage() {
-  console.log("LoginPage component loaded");
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
@@ -91,7 +89,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const { user } = await authService.login({ email, password });
+      const { user } = await authService.login({ identifier: email, password });
       setSessionUser(user);
 
       toast({
@@ -227,14 +225,6 @@ export default function LoginPage() {
                     Access dashboards for inventory, work orders, QC, procurement, and dispatch.
                   </CardDescription>
 
-                  {/* Dummy credentials for testing */}
-                  <div className="mt-3 rounded-lg bg-slate-50 p-3 text-xs text-slate-600 border border-slate-200">
-                    <div className="font-semibold mb-1">Demo Credentials:</div>
-                    <div className="grid grid-cols-1 gap-1">
-                      <div>Admin: admin@pcbxpress.com / admin123</div>
-                      <div>User: user@pcbxpress.com / user123</div>
-                    </div>
-                  </div>
                 </CardHeader>
 
                 <CardContent className="px-0">

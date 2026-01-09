@@ -102,7 +102,8 @@ export default function RFQDetails() {
         r.customer_name ??
         r.customerName ??
         (r.customer_id ? `Customer #${r.customer_id}` : ""),
-      contactName: r.contact_name ?? r.contactName ?? r.customer?.contact_name ?? "",
+      contactName:
+        r.contact_name ?? r.contactName ?? r.customer?.contactName ?? r.customer?.contact_name ?? "",
       contactEmail: r.contact_email ?? r.contactEmail ?? r.customer?.email ?? "",
       contactPhone: r.contact_phone ?? r.contactPhone ?? r.customer?.phone ?? "",
       instructions: r.special_instructions ?? r.specialInstructions ?? r.instructions ?? "",

@@ -59,16 +59,7 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-do
 
 import settingsApi from "@/services/settings.service";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -132,8 +123,8 @@ export default function DashboardLayout() {
   const [logoutOpen, setLogoutOpen] = useState(false);
   const [companyName, setCompanyName] = useState("PCBxpress ERP");
 
-  // keep your backend role keys; fallback to admin
-  const role = user?.role ?? "admin";
+  // keep your backend role keys; normalize to lowercase for matching
+  const role = (user?.role ?? "admin").toString().toLowerCase();
 
   const nav = useMemo(() => {
     // Shared (most roles)
@@ -381,7 +372,6 @@ export default function DashboardLayout() {
 
   const handleRequestLogout = () => setLogoutOpen(true);
   const handleConfirmLogout = () => {
-    setLogoutOpen(false);
     logout?.();
     navigate("/login", { replace: true });
   };
@@ -553,20 +543,18 @@ export default function DashboardLayout() {
       </div>
 
       {/* Logout confirmation dialog */}
-      <AlertDialog open={logoutOpen} onOpenChange={setLogoutOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Log out?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to log out of <span className="font-medium">{companyName}</span>?
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmLogout}>Logout</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmationDialog
+        open={logoutOpen}
+        onOpenChange={setLogoutOpen}
+        title="Log out?"
+        description={
+          <>
+            Are you sure you want to log out of <span className="font-medium">{companyName}</span>?
+          </>
+        }
+        confirmText="Logout"
+        onConfirm={handleConfirmLogout}
+      />
     </div>
   );
 }

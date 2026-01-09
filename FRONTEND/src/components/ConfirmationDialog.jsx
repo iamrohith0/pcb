@@ -118,17 +118,27 @@ const ConfirmationDialog = ({
   cancelText = "Cancel",
   onConfirm,
   variant = "default",
+  confirmVariant,
   children,
   confirmProps = {},
   cancelProps = {},
+  loading = false,
   ...props
 }) => {
+  const { disabled: confirmDisabledProp, ...confirmPropsRest } = confirmProps;
+  const { disabled: cancelDisabledProp, ...cancelPropsRest } = cancelProps;
+  const resolvedVariant = confirmVariant ?? variant;
+  const confirmDisabled = loading || confirmDisabledProp;
+  const cancelDisabled = loading || cancelDisabledProp;
+
   const handleConfirm = () => {
+    if (confirmDisabled) return;
     onConfirm?.();
     onOpenChange?.(false);
   };
 
   const handleCancel = () => {
+    if (cancelDisabled) return;
     onOpenChange?.(false);
   };
 
@@ -143,15 +153,16 @@ const ConfirmationDialog = ({
         {children && <div className="mt-4">{children}</div>}
 
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={handleCancel} {...cancelProps}>
+          <AlertDialogCancel onClick={handleCancel} disabled={cancelDisabled} {...cancelPropsRest}>
             {cancelText}
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={handleConfirm}
-            variant={variant === "destructive" ? "destructive" : "default"}
-            {...confirmProps}
+            variant={resolvedVariant === "destructive" ? "destructive" : "default"}
+            disabled={confirmDisabled}
+            {...confirmPropsRest}
           >
-            {variant === "destructive" && <Icons.trash className="mr-2 h-4 w-4" />}
+            {resolvedVariant === "destructive" && <Icons.trash className="mr-2 h-4 w-4" />}
             {confirmText}
           </AlertDialogAction>
         </AlertDialogFooter>

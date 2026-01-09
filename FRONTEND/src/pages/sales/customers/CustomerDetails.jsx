@@ -256,7 +256,7 @@ export default function CustomerDetails() {
 
         <div className="flex flex-wrap items-center gap-2">
           <Button asChild variant="outline" className="gap-2">
-            <Link to={`/sales/customers/${id}/edit`}>
+            <Link to={`/dashboard/sales/customers/${id}/edit`}>
               <Pencil className="h-4 w-4" />
               Edit
             </Link>

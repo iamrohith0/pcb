@@ -149,6 +149,30 @@ export default function CustomerCreate() {
 
   const [form, setForm] = useState(DEFAULTS);
   const [submitting, setSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const generateCustomerCode = () => {
+    // Generate a more unique code using timestamp + random + additional entropy
+    const timestamp = Date.now().toString(36).toUpperCase();
+    const random1 = Math.random().toString(36).substring(2, 6).toUpperCase();
+    const random2 = Math.random().toString(36).substring(2, 4).toUpperCase();
+    const entropy = Math.floor(Math.random() * 1000).toString(36).toUpperCase();
+    return `CUST-${timestamp}${random1}${random2}${entropy}`;
+  };
+
+  const handleGenerateCode = () => {
+    const newCode = generateCustomerCode();
+    setForm(prev => ({
+      ...prev,
+      customerCode: newCode
+    }));
+    // Clear any existing error for customer code
+    setErrors(prev => {
+      const newErrors = { ...prev };
+      delete newErrors.customerCode;
+      return newErrors;
+    });
+  };
 
   const from = useMemo(() => {
     // allow redirect back if you came here from elsewhere
@@ -171,23 +195,76 @@ export default function CustomerCreate() {
   const toggle = (path) => update(path, !path.split(".").reduce((acc, k) => acc[k], form));
 
   const validate = () => {
+    const newErrors = {};
+    
     if (!form.name.trim() && !form.companyName.trim()) {
-      toast({
-        title: "Missing required fields",
-        description: "Please provide Customer Name or Company Name.",
-        variant: "destructive",
-      });
-      return false;
+      newErrors.name = "Customer Name or Company Name is required";
+      newErrors.companyName = "Customer Name or Company Name is required";
     }
+    
     if (!form.email.trim() && !form.phone.trim()) {
-      toast({
-        title: "Missing contact info",
-        description: "Please provide at least Email or Phone.",
-        variant: "destructive",
-      });
-      return false;
+      newErrors.email = "At least Email or Phone is required";
+      newErrors.phone = "At least Email or Phone is required";
     }
-    return true;
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const extractFieldErrors = (errorResponse) => {
+    const fieldErrors = {};
+    
+    // Handle different error response formats
+    const errorData = errorResponse?.response?.data;
+    
+    if (errorData?.errors && Array.isArray(errorData.errors)) {
+      // Handle array of validation errors
+      errorData.errors.forEach(error => {
+        if (error.field) {
+          fieldErrors[error.field] = error.message || error.defaultMessage;
+        }
+      });
+    } else if (errorData?.message) {
+      // Handle constraint violation messages
+      const message = errorData.message;
+      
+      // Extract field names from constraint violation messages
+      if (message.includes('chk_customer_gstin_format')) {
+        fieldErrors.gstin = 'Invalid GSTIN format. Expected: 22AAAAA0000A1Z5';
+      }
+      if (message.includes('chk_customer_pan_format')) {
+        fieldErrors.pan = 'Invalid PAN format. Expected: AAAAA0000A';
+      }
+      if (message.includes('chk_customer_pincode_format')) {
+        fieldErrors['billing.pincode'] = 'Invalid billing pincode format. Expected: 6 digits';
+        fieldErrors['shipping.pincode'] = 'Invalid shipping pincode format. Expected: 6 digits';
+      }
+      if (message.includes('chk_customer_credit_limit_positive')) {
+        fieldErrors['credit.creditLimit'] = 'Credit limit must be positive';
+      }
+      if (message.includes('chk_customer_payment_terms_positive')) {
+        fieldErrors['credit.paymentTermsDays'] = 'Payment terms must be positive';
+      }
+      
+      // Handle duplicate key errors
+      if (message.includes('customer_code')) {
+        fieldErrors.customerCode = 'Customer code already exists';
+      }
+      if (message.includes('customers_email_key')) {
+        fieldErrors.email = 'Email already exists';
+      }
+      if (message.includes('customers_phone_key')) {
+        fieldErrors.phone = 'Phone number already exists';
+      }
+      if (message.includes('Customer name already exists')) {
+        fieldErrors.name = 'Customer name already exists';
+      }
+      if (message.includes('Company name already exists')) {
+        fieldErrors.companyName = 'Company name already exists';
+      }
+    }
+    
+    return fieldErrors;
   };
 
   const onSubmit = async (e) => {
@@ -195,6 +272,8 @@ export default function CustomerCreate() {
     if (!validate()) return;
 
     setSubmitting(true);
+    setErrors({}); // Clear previous errors
+    
     try {
       const payload = sanitizePayload(form);
       const res = await customersService.create(payload);
@@ -210,11 +289,27 @@ export default function CustomerCreate() {
       if (newId) navigate(`/sales/customers/${newId}`, { replace: true });
       else navigate(from, { replace: true });
     } catch (err) {
-      const msg =
-        err?.response?.data?.message ||
-        (Array.isArray(err?.response?.data?.errors) ? err.response.data.errors.join(", ") : null) ||
-        "Failed to create customer. Please try again.";
-      toast({ title: "Create failed", description: msg, variant: "destructive" });
+      const fieldErrors = extractFieldErrors(err);
+      
+      if (Object.keys(fieldErrors).length > 0) {
+        setErrors(fieldErrors);
+        
+        // Show a summary message
+        const errorFields = Object.keys(fieldErrors);
+        const summary = `Please fix the following fields: ${errorFields.join(", ")}`;
+        toast({
+          title: "Validation Error",
+          description: summary,
+          variant: "destructive"
+        });
+      } else {
+        // Fallback to generic error message
+        const msg =
+          err?.response?.data?.message ||
+          (Array.isArray(err?.response?.data?.errors) ? err.response.data.errors.join(", ") : null) ||
+          "Failed to create customer. Please try again.";
+        toast({ title: "Create failed", description: msg, variant: "destructive" });
+      }
     } finally {
       setSubmitting(false);
     }
@@ -287,7 +382,9 @@ export default function CustomerCreate() {
                     placeholder="e.g., Ramesh Kumar"
                     value={form.name}
                     onChange={(e) => update("name", e.target.value)}
+                    className={errors.name ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}
                   />
+                  {errors.name && <p className="text-red-600 text-sm">{errors.name}</p>}
                 </div>
 
                 <div className="space-y-2">
@@ -297,17 +394,38 @@ export default function CustomerCreate() {
                     placeholder="e.g., PCBXpress Technologies Pvt Ltd"
                     value={form.companyName}
                     onChange={(e) => update("companyName", e.target.value)}
+                    className={errors.companyName ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}
                   />
+                  {errors.companyName && <p className="text-red-600 text-sm">{errors.companyName}</p>}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="customerCode">Customer Code (optional)</Label>
-                  <Input
-                    id="customerCode"
-                    placeholder="e.g., CUST-0012"
-                    value={form.customerCode}
-                    onChange={(e) => update("customerCode", e.target.value)}
-                  />
+                  <Label htmlFor="customerCode">Customer Code</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="customerCode"
+                      placeholder="e.g., CUST-0012"
+                      value={form.customerCode}
+                      onChange={(e) => update("customerCode", e.target.value)}
+                      className={errors.customerCode ? "border-red-500 focus:border-red-500 focus:ring-red-500 flex-1" : "flex-1"}
+                      readOnly={form.customerCode && form.customerCode.startsWith('CUST-')}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleGenerateCode}
+                      className="whitespace-nowrap"
+                    >
+                      Generate Code
+                    </Button>
+                  </div>
+                  {errors.customerCode && <p className="text-red-600 text-sm">{errors.customerCode}</p>}
+                  <p className="text-xs text-gray-500">
+                    {form.customerCode && form.customerCode.startsWith('CUST-')
+                      ? "Auto-generated code (read-only)"
+                      : "Customer code will be auto-generated if left empty"
+                    }
+                  </p>
                 </div>
 
                 <div className="space-y-2">
@@ -356,9 +474,10 @@ export default function CustomerCreate() {
                       placeholder="purchasing@customer.com"
                       value={form.email}
                       onChange={(e) => update("email", e.target.value)}
-                      className="pl-9"
+                      className={`pl-9 ${errors.email ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}
                     />
                   </div>
+                  {errors.email && <p className="text-red-600 text-sm">{errors.email}</p>}
                 </div>
 
                 <div className="space-y-2">
@@ -370,9 +489,10 @@ export default function CustomerCreate() {
                       placeholder="+91 9XXXXXXXXX"
                       value={form.phone}
                       onChange={(e) => update("phone", e.target.value)}
-                      className="pl-9"
+                      className={`pl-9 ${errors.phone ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}
                     />
                   </div>
+                  {errors.phone && <p className="text-red-600 text-sm">{errors.phone}</p>}
                 </div>
 
                 <div className="space-y-2 md:col-span-2">
@@ -404,7 +524,9 @@ export default function CustomerCreate() {
                     placeholder="22AAAAA0000A1Z5"
                     value={form.gstin}
                     onChange={(e) => update("gstin", e.target.value.toUpperCase())}
+                    className={errors.gstin ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}
                   />
+                  {errors.gstin && <p className="text-red-600 text-sm">{errors.gstin}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="pan">PAN (optional)</Label>
@@ -413,7 +535,9 @@ export default function CustomerCreate() {
                     placeholder="AAAAA0000A"
                     value={form.pan}
                     onChange={(e) => update("pan", e.target.value.toUpperCase())}
+                    className={errors.pan ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}
                   />
+                  {errors.pan && <p className="text-red-600 text-sm">{errors.pan}</p>}
                 </div>
               </CardContent>
             </Card>
@@ -474,7 +598,9 @@ export default function CustomerCreate() {
                         value={form.billing.pincode}
                         onChange={(e) => update("billing.pincode", e.target.value)}
                         placeholder="6-digit"
+                        className={errors['billing.pincode'] ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}
                       />
+                      {errors['billing.pincode'] && <p className="text-red-600 text-sm">{errors['billing.pincode']}</p>}
                     </div>
                     <div className="space-y-2">
                       <Label>Country</Label>
@@ -533,7 +659,9 @@ export default function CustomerCreate() {
                         value={form.shipping.pincode}
                         onChange={(e) => update("shipping.pincode", e.target.value)}
                         placeholder="6-digit"
+                        className={errors['shipping.pincode'] ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}
                       />
+                      {errors['shipping.pincode'] && <p className="text-red-600 text-sm">{errors['shipping.pincode']}</p>}
                     </div>
                     <div className="space-y-2">
                       <Label>Country</Label>
@@ -580,7 +708,9 @@ export default function CustomerCreate() {
                     placeholder="e.g., 250000"
                     value={form.credit.creditLimit}
                     onChange={(e) => update("credit.creditLimit", e.target.value)}
+                    className={errors['credit.creditLimit'] ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}
                   />
+                  {errors['credit.creditLimit'] && <p className="text-red-600 text-sm">{errors['credit.creditLimit']}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label>Payment Terms (Days)</Label>
@@ -590,7 +720,9 @@ export default function CustomerCreate() {
                     placeholder="e.g., 30"
                     value={form.credit.paymentTermsDays}
                     onChange={(e) => update("credit.paymentTermsDays", e.target.value)}
+                    className={errors['credit.paymentTermsDays'] ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}
                   />
+                  {errors['credit.paymentTermsDays'] && <p className="text-red-600 text-sm">{errors['credit.paymentTermsDays']}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label>Currency</Label>

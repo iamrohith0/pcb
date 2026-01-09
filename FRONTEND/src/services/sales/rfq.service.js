@@ -1,5 +1,4 @@
 import axios from "@/lib/axios";
-import mockDataService from "@/services/mockData.service";
 
 /**
  * RFQ Service
@@ -14,21 +13,8 @@ const rfqService = {
       const response = await axios.get("/sales/rfqs", { params });
       return response;
     } catch (error) {
-      console.warn("RFQ API not available, using mock data:", error);
-      // Fallback to mock data
-      try {
-        const mockResponse = await mockDataService.getRFQs(params);
-        return {
-          data: mockResponse.data,
-          status: 200,
-          statusText: "OK",
-          headers: {},
-          config: {}
-        };
-      } catch (mockError) {
-        console.error("Mock data also failed:", mockError);
-        throw error;
-      }
+      console.error("RFQ API not available:", error);
+      throw error;
     }
   },
 
@@ -57,20 +43,8 @@ const rfqService = {
       const response = await axios.post("/sales/rfqs", data);
       return response;
     } catch (error) {
-      console.warn("RFQ create API not available, using mock:", error);
-      try {
-        const mockResponse = await mockDataService.createRFQ(data);
-        return {
-          data: mockResponse.data,
-          status: 201,
-          statusText: "Created",
-          headers: {},
-          config: {}
-        };
-      } catch (mockError) {
-        console.error("Mock create failed:", mockError);
-        throw error;
-      }
+      console.error("RFQ create API not available:", error);
+      throw error;
     }
   },
 
@@ -101,21 +75,16 @@ const rfqService = {
       const response = await axios.get(`/sales/rfqs/${id}`);
       return response;
     } catch (error) {
-      console.warn("RFQ get API not available, using mock:", error);
-      try {
-        const mockResponse = await mockDataService.getRFQ(id);
-        return {
-          data: mockResponse.data,
-          status: 200,
-          statusText: "OK",
-          headers: {},
-          config: {}
-        };
-      } catch (mockError) {
-        console.error("Mock get failed:", mockError);
-        throw error;
-      }
+      console.error("RFQ get API not available:", error);
+      throw error;
     }
+  },
+
+  /**
+   * Get RFQ by ID (alias)
+   */
+  async getById(id) {
+    return this.get(id);
   },
 
   /**
@@ -126,20 +95,8 @@ const rfqService = {
       const response = await axios.put(`/sales/rfqs/${id}`, data);
       return response;
     } catch (error) {
-      console.warn("RFQ update API not available, using mock:", error);
-      try {
-        const mockResponse = await mockDataService.updateRFQ(id, data);
-        return {
-          data: mockResponse.data,
-          status: 200,
-          statusText: "OK",
-          headers: {},
-          config: {}
-        };
-      } catch (mockError) {
-        console.error("Mock update failed:", mockError);
-        throw error;
-      }
+      console.error("RFQ update API not available:", error);
+      throw error;
     }
   },
 
@@ -151,20 +108,8 @@ const rfqService = {
       const response = await axios.delete(`/sales/rfqs/${id}`);
       return response;
     } catch (error) {
-      console.warn("RFQ delete API not available, using mock:", error);
-      try {
-        const mockResponse = await mockDataService.deleteRFQ(id);
-        return {
-          data: mockResponse.data,
-          status: 200,
-          statusText: "OK",
-          headers: {},
-          config: {}
-        };
-      } catch (mockError) {
-        console.error("Mock delete failed:", mockError);
-        throw error;
-      }
+      console.error("RFQ delete API not available:", error);
+      throw error;
     }
   },
 
@@ -179,17 +124,8 @@ const rfqService = {
       });
       return response;
     } catch (error) {
-      console.warn("RFQ export CSV API not available, using mock:", error);
-      // Create a mock CSV blob
-      const csvContent = "RFQ No,Customer,Date,Status,Total Qty\nRFQ-2026-001,Tech Solutions Ltd,2026-01-05,Open,1000\nRFQ-2026-002,Electronics India Pvt Ltd,2026-01-04,Quoted,2000";
-      const blob = new Blob([csvContent], { type: "text/csv" });
-      return {
-        data: blob,
-        status: 200,
-        statusText: "OK",
-        headers: {},
-        config: {}
-      };
+      console.error("RFQ export CSV API not available:", error);
+      throw error;
     }
   },
 
@@ -201,7 +137,7 @@ const rfqService = {
       const response = await axios.post(`/sales/rfqs/${rfqId}/convert-to-quotation`, quotationData);
       return response;
     } catch (error) {
-      console.warn("RFQ convert to quotation API not available:", error);
+      console.error("RFQ convert to quotation API not available:", error);
       throw error;
     }
   },

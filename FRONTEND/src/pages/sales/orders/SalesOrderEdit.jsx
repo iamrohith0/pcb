@@ -51,6 +51,12 @@ function fmtDate(d) {
   }
 }
 
+function pickAddressLine(address) {
+  if (!address) return "";
+  if (typeof address === "string") return address;
+  return address.addressLine1 || address.address_line1 || "";
+}
+
 function normalizeOrderPayload(order) {
   // maps backend fields into UI-friendly editable form state
   const orderNo = order?.order_no || order?.orderNo || "";
@@ -75,7 +81,7 @@ function normalizeOrderPayload(order) {
   const jobName = order?.job?.name || order?.job_name || order?.jobName || "";
   const priority = order?.job?.priority || order?.priority || "Normal";
   const requestedDelivery = fmtDate(
-    order?.job?.requested_delivery || order?.requested_delivery || order?.requestedDelivery
+    order?.job?.requestedDelivery || order?.job?.requested_delivery || order?.requested_delivery || order?.requestedDelivery
   );
 
   const contactName = order?.contact?.name || order?.contact_name || "";
@@ -83,9 +89,9 @@ function normalizeOrderPayload(order) {
   const contactEmail = order?.contact?.email || order?.contact_email || "";
 
   const shippingAddress =
-    order?.addresses?.shipping || order?.shipping_address || "";
+    pickAddressLine(order?.addresses?.shipping) || order?.shipping_address || "";
   const billingAddress =
-    order?.addresses?.billing || order?.billing_address || "";
+    pickAddressLine(order?.addresses?.billing) || order?.billing_address || "";
 
   const notes = order?.notes || "";
 
@@ -125,40 +131,46 @@ function normalizeOrderPayload(order) {
 }
 
 function buildUpdatePayload(form) {
-  // backend-friendly payload (safe generic)
+  const totals = calcTotals(form.lines);
   return {
-    order_no: form.orderNo,
-    order_date: form.orderDate || null,
+    orderNo: form.orderNo || null,
+    orderDate: form.orderDate || null,
     status: form.status,
-    customer_id: form.customerId || null,
-    customer_name: form.customerName || null,
-
-    po_number: form.poNumber || null,
-    po_date: form.poDate || null,
-
-    job_name: form.jobName || null,
-    priority: form.priority || "Normal",
-    requested_delivery: form.requestedDelivery || null,
-
-    contact_name: form.contactName || null,
-    contact_phone: form.contactPhone || null,
-    contact_email: form.contactEmail || null,
-
-    shipping_address: form.shippingAddress || null,
-    billing_address: form.billingAddress || null,
-
+    customerId: form.customerId || null,
+    contact: {
+      name: form.contactName || null,
+      phone: form.contactPhone || null,
+      email: form.contactEmail || null,
+    },
+    po: {
+      number: form.poNumber || null,
+      date: form.poDate || null,
+    },
+    job: {
+      name: form.jobName || null,
+      priority: form.priority || "Normal",
+      requestedDelivery: form.requestedDelivery || null,
+    },
+    addresses: {
+      shipping: form.shippingAddress ? { addressLine1: form.shippingAddress } : null,
+      billing: form.billingAddress ? { addressLine1: form.billingAddress } : null,
+    },
     notes: form.notes || null,
-
     items: (form.lines || []).map((it) => ({
       id: it.id,
       sku: it.sku,
       description: it.description,
       qty: Number(it.qty || 0),
       uom: it.uom || "pcs",
-      unit_price: Number(it.unitPrice || 0),
-      tax_pct: Number(it.taxPct || 0),
-      lead_time_days: Number(it.leadTimeDays || 0),
+      unitPrice: Number(it.unitPrice || 0),
+      taxPct: Number(it.taxPct || 0),
+      leadTimeDays: Number(it.leadTimeDays || 0),
     })),
+    totals: {
+      subTotal: totals.sub,
+      taxTotal: totals.tax,
+      grandTotal: totals.grand,
+    },
   };
 }
 

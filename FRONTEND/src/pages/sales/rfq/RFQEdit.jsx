@@ -62,12 +62,14 @@ function normalizeRfqPayload(data) {
     priority: rfq.priority ?? "Normal",
     currency: rfq.currency ?? "INR",
 
+    customerId: rfq.customer?.id ?? rfq.customer_id ?? "",
     customerName:
       rfq.customer?.name ??
       rfq.customer_name ??
       rfq.customerName ??
       (rfq.customer_id ? `Customer #${rfq.customer_id}` : ""),
-    contactName: rfq.contact_name ?? rfq.contactName ?? rfq.customer?.contact_name ?? "",
+    contactName:
+      rfq.contact_name ?? rfq.contactName ?? rfq.customer?.contactName ?? rfq.customer?.contact_name ?? "",
     contactEmail: rfq.contact_email ?? rfq.contactEmail ?? rfq.customer?.email ?? "",
     contactPhone: rfq.contact_phone ?? rfq.contactPhone ?? rfq.customer?.phone ?? "",
 
@@ -119,40 +121,41 @@ function emptyLine() {
 }
 
 function buildUpdatePayload(form) {
-  // Keep it backend-friendly. Your backend can map these.
+  const customerSummary =
+    form.customerId || form.customerName || form.contactName || form.contactEmail || form.contactPhone
+      ? {
+          id: form.customerId || null,
+          name: form.customerName || null,
+          contactName: form.contactName || null,
+          email: form.contactEmail || null,
+          phone: form.contactPhone || null,
+        }
+      : null;
+
   return {
-    rfq_no: form.rfqNo,
-    rfq_date: form.rfqDate,
+    rfqNo: form.rfqNo,
+    rfqDate: form.rfqDate,
     status: form.status,
     priority: form.priority,
     currency: form.currency,
-
-    customer_name: form.customerName,
-    contact_name: form.contactName,
-    contact_email: form.contactEmail,
-    contact_phone: form.contactPhone,
-
-    special_instructions: form.instructions,
-
-    // Attachments: just store urls + names
+    customer: customerSummary,
+    specialInstructions: form.instructions,
     attachments: form.attachments
-      .filter((a) => a.url || a.name)
-      .map((a) => ({ name: a.name, url: a.url })),
-
-    // Lines
+      .map((a) => (a?.url ? a.url : a?.name))
+      .filter(Boolean),
     lines: form.lines.map((l) => ({
       id: l.id?.startsWith("tmp-") ? undefined : l.id,
-      pcb_type: l.pcbType,
+      pcbType: l.pcbType,
       layers: Number(l.layers || 0),
-      thickness_mm: Number(l.thicknessMm || 0),
-      copper_oz: Number(l.copperOz || 0),
+      thicknessMm: Number(l.thicknessMm || 0),
+      copperOz: Number(l.copperOz || 0),
       finish: l.finish,
-      solder_mask: l.solderMask,
+      solderMask: l.solderMask,
       silkscreen: l.silkscreen,
       panelization: l.panelization,
       qty: Number(l.qty || 0),
       unit: l.unit,
-      delivery_days: Number(l.deliveryDays || 0),
+      deliveryDays: Number(l.deliveryDays || 0),
       notes: l.notes,
     })),
   };
@@ -174,6 +177,7 @@ export default function RFQEdit() {
     priority: "Normal",
     currency: "INR",
 
+    customerId: "",
     customerName: "",
     contactName: "",
     contactEmail: "",
@@ -207,6 +211,7 @@ export default function RFQEdit() {
         priority: normalized.priority || "Normal",
         currency: normalized.currency || "INR",
 
+        customerId: normalized.customerId || "",
         customerName: normalized.customerName || "",
         contactName: normalized.contactName || "",
         contactEmail: normalized.contactEmail || "",

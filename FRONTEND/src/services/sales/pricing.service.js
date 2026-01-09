@@ -1,6 +1,6 @@
 import axios from "@/lib/axios";
 
-const API_BASE = "/api/sales/pricing";
+const API_BASE = "/sales/pricing";
 
 export default {
   async getPriceRules(params = {}) {

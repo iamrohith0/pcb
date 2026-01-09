@@ -1,7 +1,7 @@
 // src/services/sales/salesOrders.service.js
 import http from "@/lib/axios";
 
-const API_BASE = "/api/v1/sales/orders";
+const API_BASE = "/sales/orders";
 
 /**
  * Service for handling sales orders API operations

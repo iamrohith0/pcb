@@ -1,0 +1,10 @@
+Backend: Spring Boot 3.x + Java 17
+Database: PostgreSQL + Redis + MongoDB
+ORM: Spring Data JPA + Hibernate
+Authentication: Spring Security + JWT
+API: REST + GraphQL
+Real-time: Spring WebFlux + WebSocket
+Testing: JUnit 5 + Mockito + TestContainers
+Build: Maven or Gradle
+Deployment: Docker + Kubernetes
+Monitoring: Spring Boot Actuator + Micrometer

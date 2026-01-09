@@ -336,89 +336,95 @@ export default function CustomersList() {
               </div>
             </div>
           ) : (
-            <div className="divide-y">
-              {rows.map((c, idx) => (
-                <motion.div
-                  key={c.id ?? idx}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2, delay: Math.min(idx * 0.02, 0.2) }}
-                  className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"
-                >
-                  {/* Left */}
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="truncate text-sm font-semibold text-gray-900">
-                        {safe(c.name, "Unnamed Customer")}
-                      </span>
-                      {statusBadge(c.status)}
-                      {c.customerCode || c.code ? (
-                        <Badge variant="outline" className="text-[11px]">
-                          {safe(c.customerCode || c.code)}
-                        </Badge>
-                      ) : null}
-                    </div>
-
-                    <div className="mt-1 flex flex-col gap-1 text-xs text-gray-600 sm:flex-row sm:items-center sm:gap-4">
-                      <span className="inline-flex items-center gap-1">
-                        <Building2 className="h-3.5 w-3.5 text-gray-400" />
-                        {safe(c.companyName || c.company, "Company not set")}
-                      </span>
-
-                      <span className="inline-flex items-center gap-1">
-                        <Mail className="h-3.5 w-3.5 text-gray-400" />
-                        {safe(c.email)}
-                      </span>
-
-                      <span className="inline-flex items-center gap-1">
-                        <Phone className="h-3.5 w-3.5 text-gray-400" />
-                        {safe(c.phone)}
-                      </span>
-                    </div>
-
-                    <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-gray-600">
-                      <span className="inline-flex items-center gap-1">
-                        <MapPin className="h-3.5 w-3.5 text-gray-400" />
-                        {formatAddress(c)}
-                      </span>
-                      {c.gstin ? (
-                        <Badge variant="secondary" className="text-[11px]">
-                          GSTIN: {c.gstin}
-                        </Badge>
-                      ) : (
-                        <Badge variant="outline" className="text-[11px]">
-                          GSTIN: —
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Right */}
-                  <div className="flex flex-wrap items-center gap-2 sm:justify-end">
-                    <Button asChild variant="outline" className="gap-2">
-                      <Link to={`/sales/customers/${c.id}`}>
-                        <User2 className="h-4 w-4" />
-                        View
-                      </Link>
-                    </Button>
-
-                    <Button asChild variant="outline" className="gap-2">
-                      <Link to={`/sales/customers/${c.id}/edit`}>
-                        Edit
-                      </Link>
-                    </Button>
-
-                    <Button
-                      variant="ghost"
-                      className="gap-2 text-rose-600 hover:bg-rose-50 hover:text-rose-700"
-                      onClick={() => openDelete(c)}
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer Name</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">GSTIN</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {rows.map((c, idx) => (
+                    <motion.tr
+                      key={c.id ?? idx}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.2, delay: Math.min(idx * 0.02, 0.2) }}
+                      className="hover:bg-gray-50"
                     >
-                      <Trash2 className="h-4 w-4" />
-                      Delete
-                    </Button>
-                  </div>
-                </motion.div>
-              ))}
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="flex flex-col">
+                          <span className="text-sm font-semibold text-gray-900">
+                            {safe(c.name, "Unnamed Customer")}
+                          </span>
+                          {c.customerCode || c.code ? (
+                            <span className="text-xs text-gray-500">
+                              {safe(c.customerCode || c.code)}
+                            </span>
+                          ) : null}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                        {safe(c.companyName || c.company, "Company not set")}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                        {safe(c.email)}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                        {safe(c.phone)}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-900 max-w-xs">
+                        <div className="truncate" title={formatAddress(c)}>
+                          {formatAddress(c)}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                        {c.gstin ? (
+                          <Badge variant="secondary" className="text-[11px]">
+                            {c.gstin}
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline" className="text-[11px]">
+                            —
+                          </Badge>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        {statusBadge(c.status)}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm font-medium space-x-2">
+                        <Button asChild variant="outline" size="sm" className="gap-2">
+                          <Link to={`/dashboard/sales/customers/${c.id}`}>
+                            <User2 className="h-3.5 w-3.5" />
+                            View
+                          </Link>
+                        </Button>
+                        <Button asChild variant="outline" size="sm" className="gap-2">
+                          <Link to={`/dashboard/sales/customers/${c.id}/edit`}>
+                            Edit
+                          </Link>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="gap-2 text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+                          onClick={() => openDelete(c)}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                          Delete
+                        </Button>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </CardContent>

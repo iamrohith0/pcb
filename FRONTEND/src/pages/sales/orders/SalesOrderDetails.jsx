@@ -48,6 +48,20 @@ function fmtDate(d) {
   }
 }
 
+function formatAddress(address) {
+  if (!address) return "-";
+  if (typeof address === "string") return address;
+  const parts = [
+    address.addressLine1 || address.address_line1,
+    address.addressLine2 || address.address_line2,
+    address.city,
+    address.state,
+    address.pincode,
+    address.country,
+  ].filter(Boolean);
+  return parts.length ? parts.join(", ") : "-";
+}
+
 function statusBadge(statusRaw) {
   const s = String(statusRaw || "Draft").toLowerCase();
   if (s.includes("draft")) return { label: "Draft", cls: "bg-gray-100 text-gray-800" };
@@ -507,14 +521,14 @@ export default function SalesOrderDetails() {
                   <div>
                     <p className="text-xs text-gray-500">Shipping Address</p>
                     <p className="whitespace-pre-wrap text-sm text-gray-800">
-                      {order?.addresses?.shipping || order?.shipping_address || "-"}
+                      {formatAddress(order?.addresses?.shipping || order?.shipping_address)}
                     </p>
                   </div>
 
                   <div>
                     <p className="text-xs text-gray-500">Billing Address</p>
                     <p className="whitespace-pre-wrap text-sm text-gray-800">
-                      {order?.addresses?.billing || order?.billing_address || "-"}
+                      {formatAddress(order?.addresses?.billing || order?.billing_address)}
                     </p>
                   </div>
                 </div>

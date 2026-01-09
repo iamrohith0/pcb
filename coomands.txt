@@ -1,0 +1,15 @@
+psql -U postgres -d pcbxpress
+
+
+
+
+to run backend - mvn spring-boot:run
+to migrate - mvn flyway:migrate
+
+
+
+Username: admin
+
+Password: admin123
+
+Email: admin@pcbxpress.com

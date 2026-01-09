@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useParams } from 'react-router-dom'
 import { Toaster } from './components/ui/toaster.jsx'
 import { useAuth } from './context/AuthContext'
 import './css/app.css'
@@ -12,6 +12,12 @@ import AccessDenied from './Auth/AccessDenied.jsx'
 import Dashboard from './pages/dashboard/Dashboard.jsx'
 import DashboardLayout from './components/layout/DashboardLayout.jsx'
 import NotFound from './pages/not-found/NotFound.jsx'
+
+function ParamRedirect({ to }) {
+  const params = useParams();
+  const resolved = to.replace(/:([a-zA-Z0-9_]+)/g, (_, key) => params[key] ?? "");
+  return <Navigate to={resolved} replace />;
+}
 
 // Admin Pages
 import UsersList from './pages/admin/users/UsersList.jsx'
@@ -36,6 +42,8 @@ import DefectCodes from './pages/admin/masters/DefectCodes.jsx'
 import AuditLogList from './pages/admin/audit-logs/AuditLogList.jsx'
 import AuditLogDetails from './pages/admin/audit-logs/AuditLogDetails.jsx'
 import ExportAuditLogs from './pages/admin/audit-logs/ExportAuditLogs.jsx'
+import AdminDashboard from './pages/admin/AdminDashboard.jsx'
+import TestAdmin from './pages/admin/TestAdmin.jsx'
 
 // Procurement Pages
 import SuppliersList from './pages/procurement/suppliers/SuppliersList.jsx'
@@ -483,14 +491,14 @@ function App() {
           <Route path="/sales/quotations/:id" element={<Navigate to="/dashboard/sales/quotations/:id" replace />} />
           <Route path="/sales/orders" element={<Navigate to="/dashboard/sales/orders" replace />} />
           <Route path="/sales/orders/create" element={<Navigate to="/dashboard/sales/orders/create" replace />} />
-          <Route path="/sales/orders/:id/edit" element={<Navigate to="/dashboard/sales/orders/:id/edit" replace />} />
-          <Route path="/sales/orders/:id" element={<Navigate to="/dashboard/sales/orders/:id" replace />} />
+          <Route path="/sales/orders/:id/edit" element={<ParamRedirect to="/dashboard/sales/orders/:id/edit" />} />
+          <Route path="/sales/orders/:id" element={<ParamRedirect to="/dashboard/sales/orders/:id" />} />
           
           {/* RFQ redirect routes for backward compatibility */}
           <Route path="/sales/rfq" element={<Navigate to="/dashboard/sales/rfq" replace />} />
           <Route path="/sales/rfq/create" element={<Navigate to="/dashboard/sales/rfq/create" replace />} />
-          <Route path="/sales/rfq/:id" element={<Navigate to="/dashboard/sales/rfq/:id" replace />} />
-          <Route path="/sales/rfq/:id/edit" element={<Navigate to="/dashboard/sales/rfq/:id/edit" replace />} />
+          <Route path="/sales/rfq/:id" element={<ParamRedirect to="/dashboard/sales/rfq/:id" />} />
+          <Route path="/sales/rfq/:id/edit" element={<ParamRedirect to="/dashboard/sales/rfq/:id/edit" />} />
           
           {/* Invoice redirect routes for backward compatibility */}
           <Route path="/sales/invoices" element={<Navigate to="/dashboard/sales/invoices" replace />} />
@@ -522,6 +530,8 @@ function App() {
           <Route path="/admin/audit-logs" element={<Navigate to="/dashboard/admin/audit-logs" replace />} />
           <Route path="/admin/audit-logs/:id" element={<Navigate to="/dashboard/admin/audit-logs/:id" replace />} />
           <Route path="/admin/audit-logs/export" element={<Navigate to="/dashboard/admin/audit-logs/export" replace />} />
+          <Route path="/admin" element={<Navigate to="/dashboard/admin" replace />} />
+          <Route path="/admin/dashboard" element={<Navigate to="/dashboard/admin" replace />} />
           
           {/* Settings redirect routes for backward compatibility */}
           <Route path="/settings/company/profile" element={<Navigate to="/dashboard/settings/company/profile" replace />} />
@@ -819,29 +829,32 @@ function App() {
             <Route path="maintenance/spares/reorder" element={<SpareReorder />} />
             
             {/* Admin Routes */}
-            <Route path="admin/users" element={<UsersList />} />
-            <Route path="admin/users/create" element={<UserCreate />} />
-            <Route path="admin/users/:id" element={<UserDetails />} />
-            <Route path="admin/users/:id/edit" element={<UserEdit />} />
-            <Route path="admin/roles" element={<RolesList />} />
-            <Route path="admin/roles/create" element={<RoleCreate />} />
-            <Route path="admin/roles/:id" element={<RoleDetails />} />
-            <Route path="admin/roles/:id/edit" element={<RoleEdit />} />
-            <Route path="admin/permissions" element={<PermissionsMatrix />} />
-            <Route path="admin/permissions/create" element={<PermissionCreate />} />
-            <Route path="admin/permissions/audit" element={<PermissionAudit />} />
-            <Route path="admin/settings" element={<AdminSettings />} />
-            <Route path="admin/settings/integrations" element={<IntegrationsAdmin />} />
-            <Route path="admin/settings/ip-whitelist" element={<IPWhitelist />} />
-            <Route path="admin/settings/notifications" element={<NotificationRules />} />
-            <Route path="admin/masters" element={<MaterialMaster />} />
-            <Route path="admin/masters/materials" element={<MaterialMaster />} />
-            <Route path="admin/masters/processes" element={<ProcessMaster />} />
-            <Route path="admin/masters/uom" element={<UOMMaster />} />
-            <Route path="admin/masters/defects" element={<DefectCodes />} />
-            <Route path="admin/audit-logs" element={<AuditLogList />} />
-            <Route path="admin/audit-logs/:id" element={<AuditLogDetails />} />
-            <Route path="admin/audit-logs/export" element={<ExportAuditLogs />} />
+            <Route path="admin" element={<AdminDashboard />}>
+              <Route index element={<TestAdmin />} />
+              <Route path="users" element={<UsersList />} />
+              <Route path="users/create" element={<UserCreate />} />
+              <Route path="users/:id" element={<UserDetails />} />
+              <Route path="users/:id/edit" element={<UserEdit />} />
+              <Route path="roles" element={<RolesList />} />
+              <Route path="roles/create" element={<RoleCreate />} />
+              <Route path="roles/:id" element={<RoleDetails />} />
+              <Route path="roles/:id/edit" element={<RoleEdit />} />
+              <Route path="permissions" element={<PermissionsMatrix />} />
+              <Route path="permissions/create" element={<PermissionCreate />} />
+              <Route path="permissions/audit" element={<PermissionAudit />} />
+              <Route path="settings" element={<AdminSettings />} />
+              <Route path="settings/integrations" element={<IntegrationsAdmin />} />
+              <Route path="settings/ip-whitelist" element={<IPWhitelist />} />
+              <Route path="settings/notifications" element={<NotificationRules />} />
+              <Route path="masters" element={<MaterialMaster />} />
+              <Route path="masters/materials" element={<MaterialMaster />} />
+              <Route path="masters/processes" element={<ProcessMaster />} />
+              <Route path="masters/uom" element={<UOMMaster />} />
+              <Route path="masters/defects" element={<DefectCodes />} />
+              <Route path="audit-logs" element={<AuditLogList />} />
+              <Route path="audit-logs/:id" element={<AuditLogDetails />} />
+              <Route path="audit-logs/export" element={<ExportAuditLogs />} />
+            </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

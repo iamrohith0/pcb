@@ -174,9 +174,9 @@ export default function SalesOrderCreate() {
   };
 
   const buildPayload = () => ({
-    order_no: orderNo || undefined,
-    order_date: orderDate,
-    customer_id: customerId,
+    orderNo: orderNo || undefined,
+    orderDate,
+    customerId,
     contact: {
       name: contactName,
       phone: contactPhone,
@@ -189,11 +189,11 @@ export default function SalesOrderCreate() {
     job: {
       name: jobName,
       priority,
-      requested_delivery: requestedDelivery || undefined,
+      requestedDelivery: requestedDelivery || undefined,
     },
     addresses: {
-      shipping: shippingAddress,
-      billing: billingAddress,
+      shipping: shippingAddress ? { addressLine1: shippingAddress } : null,
+      billing: billingAddress ? { addressLine1: billingAddress } : null,
     },
     notes,
     items: items.map((it) => ({
@@ -201,14 +201,14 @@ export default function SalesOrderCreate() {
       description: it.description,
       qty: Number(it.qty || 0),
       uom: it.uom,
-      unit_price: Number(it.unitPrice || 0),
-      tax_pct: Number(it.taxPct || 0),
-      lead_time_days: Number(it.leadTimeDays || 0),
+      unitPrice: Number(it.unitPrice || 0),
+      taxPct: Number(it.taxPct || 0),
+      leadTimeDays: Number(it.leadTimeDays || 0),
     })),
     totals: {
-      sub_total: Number(totals.subTotal || 0),
-      tax_total: Number(totals.taxTotal || 0),
-      grand_total: Number(totals.grandTotal || 0),
+      subTotal: Number(totals.subTotal || 0),
+      taxTotal: Number(totals.taxTotal || 0),
+      grandTotal: Number(totals.grandTotal || 0),
     },
   });
 

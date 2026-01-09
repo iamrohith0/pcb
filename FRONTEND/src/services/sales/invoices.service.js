@@ -1,5 +1,4 @@
 import axios from "@/lib/axios";
-import mockDataService from "@/services/mockData.service";
 
 /**
  * Invoices Service
@@ -14,21 +13,8 @@ const invoicesService = {
       const response = await axios.get("/sales/invoices", { params });
       return response;
     } catch (error) {
-      console.warn("Invoice API not available, using mock data:", error);
-      // Fallback to mock data
-      try {
-        const mockResponse = await mockDataService.getInvoices(params);
-        return {
-          data: mockResponse.data,
-          status: 200,
-          statusText: "OK",
-          headers: {},
-          config: {}
-        };
-      } catch (mockError) {
-        console.error("Mock data also failed:", mockError);
-        throw error;
-      }
+      console.error("Invoice API not available:", error);
+      throw error;
     }
   },
 
@@ -57,20 +43,8 @@ const invoicesService = {
       const response = await axios.post("/sales/invoices", data);
       return response;
     } catch (error) {
-      console.warn("Invoice create API not available, using mock:", error);
-      try {
-        const mockResponse = await mockDataService.createInvoice(data);
-        return {
-          data: mockResponse.data,
-          status: 201,
-          statusText: "Created",
-          headers: {},
-          config: {}
-        };
-      } catch (mockError) {
-        console.error("Mock create failed:", mockError);
-        throw error;
-      }
+      console.error("Invoice create API not available:", error);
+      throw error;
     }
   },
 
@@ -82,21 +56,16 @@ const invoicesService = {
       const response = await axios.get(`/sales/invoices/${id}`);
       return response;
     } catch (error) {
-      console.warn("Invoice get API not available, using mock:", error);
-      try {
-        const mockResponse = await mockDataService.getInvoice(id);
-        return {
-          data: mockResponse.data,
-          status: 200,
-          statusText: "OK",
-          headers: {},
-          config: {}
-        };
-      } catch (mockError) {
-        console.error("Mock get failed:", mockError);
-        throw error;
-      }
+      console.error("Invoice get API not available:", error);
+      throw error;
     }
+  },
+
+  /**
+   * Get invoice by ID (alias)
+   */
+  async getById(id) {
+    return this.get(id);
   },
 
   /**
@@ -107,20 +76,8 @@ const invoicesService = {
       const response = await axios.put(`/sales/invoices/${id}`, data);
       return response;
     } catch (error) {
-      console.warn("Invoice update API not available, using mock:", error);
-      try {
-        const mockResponse = await mockDataService.updateInvoice(id, data);
-        return {
-          data: mockResponse.data,
-          status: 200,
-          statusText: "OK",
-          headers: {},
-          config: {}
-        };
-      } catch (mockError) {
-        console.error("Mock update failed:", mockError);
-        throw error;
-      }
+      console.error("Invoice update API not available:", error);
+      throw error;
     }
   },
 
@@ -132,20 +89,8 @@ const invoicesService = {
       const response = await axios.delete(`/sales/invoices/${id}`);
       return response;
     } catch (error) {
-      console.warn("Invoice delete API not available, using mock:", error);
-      try {
-        const mockResponse = await mockDataService.deleteInvoice(id);
-        return {
-          data: mockResponse.data,
-          status: 200,
-          statusText: "OK",
-          headers: {},
-          config: {}
-        };
-      } catch (mockError) {
-        console.error("Mock delete failed:", mockError);
-        throw error;
-      }
+      console.error("Invoice delete API not available:", error);
+      throw error;
     }
   },
 
@@ -160,17 +105,8 @@ const invoicesService = {
       });
       return response;
     } catch (error) {
-      console.warn("Invoice export CSV API not available, using mock:", error);
-      // Create a mock CSV blob
-      const csvContent = "Invoice No,Customer,Date,Status,Amount\nINV-2026-001,Tech Solutions Ltd,2026-01-05,SENT,38522.50\nINV-2026-002,Electronics India Pvt Ltd,2026-01-04,PAID,288988.50";
-      const blob = new Blob([csvContent], { type: "text/csv" });
-      return {
-        data: blob,
-        status: 200,
-        statusText: "OK",
-        headers: {},
-        config: {}
-      };
+      console.error("Invoice export CSV API not available:", error);
+      throw error;
     }
   },
 
@@ -182,15 +118,8 @@ const invoicesService = {
       const response = await axios.post(`/sales/invoices/${id}/mark-sent`, data);
       return response;
     } catch (error) {
-      console.warn("Invoice mark as sent API not available:", error);
-      // For mock, we'll just return success
-      return {
-        data: { message: "Invoice marked as sent" },
-        status: 200,
-        statusText: "OK",
-        headers: {},
-        config: {}
-      };
+      console.error("Invoice mark as sent API not available:", error);
+      throw error;
     }
   },
 
@@ -202,15 +131,8 @@ const invoicesService = {
       const response = await axios.post(`/sales/invoices/${id}/mark-paid`, paymentData);
       return response;
     } catch (error) {
-      console.warn("Invoice mark as paid API not available:", error);
-      // For mock, we'll just return success
-      return {
-        data: { message: "Invoice marked as paid" },
-        status: 200,
-        statusText: "OK",
-        headers: {},
-        config: {}
-      };
+      console.error("Invoice mark as paid API not available:", error);
+      throw error;
     }
   },
 
@@ -222,15 +144,8 @@ const invoicesService = {
       const response = await axios.post(`/sales/invoices/${id}/cancel`, { reason });
       return response;
     } catch (error) {
-      console.warn("Invoice cancel API not available:", error);
-      // For mock, we'll just return success
-      return {
-        data: { message: "Invoice cancelled" },
-        status: 200,
-        statusText: "OK",
-        headers: {},
-        config: {}
-      };
+      console.error("Invoice cancel API not available:", error);
+      throw error;
     }
   },
 
@@ -244,18 +159,16 @@ const invoicesService = {
       });
       return response;
     } catch (error) {
-      console.warn("Invoice PDF generation API not available:", error);
-      // Create a mock PDF blob
-      const pdfContent = "%PDF-1.4 Mock PDF content";
-      const blob = new Blob([pdfContent], { type: "application/pdf" });
-      return {
-        data: blob,
-        status: 200,
-        statusText: "OK",
-        headers: {},
-        config: {}
-      };
+      console.error("Invoice PDF generation API not available:", error);
+      throw error;
     }
+  },
+
+  /**
+   * Download invoice PDF (alias)
+   */
+  async downloadPdf(id) {
+    return this.generatePdf(id);
   },
 
   /**
@@ -266,16 +179,20 @@ const invoicesService = {
       const response = await axios.post(`/sales/invoices/${id}/send-email`, emailData);
       return response;
     } catch (error) {
-      console.warn("Invoice email send API not available:", error);
-      // For mock, we'll just return success
-      return {
-        data: { message: "Invoice email sent" },
-        status: 200,
-        statusText: "OK",
-        headers: {},
-        config: {}
-      };
+      console.error("Invoice email send API not available:", error);
+      throw error;
     }
+  },
+
+  /**
+   * Update invoice status (maps to backend actions)
+   */
+  async updateStatus(id, payload = {}) {
+    const status = String(payload.status || "").toUpperCase();
+    if (status === "SENT") return this.markAsSent(id);
+    if (status === "PAID") return this.markAsPaid(id);
+    if (status === "CANCELLED" || status === "CANCELED") return this.cancel(id, payload.reason);
+    throw new Error(`Unsupported invoice status: ${status || "unknown"}`);
   },
 };
 

@@ -56,7 +56,7 @@ function normalizeListPayload(data) {
     status: r.status ?? "Open",
     priority: r.priority ?? "Normal",
     customerName: r.customer?.name ?? r.customer_name ?? r.customerName ?? "",
-    contactName: r.contact_name ?? r.contactName ?? "",
+    contactName: r.contact_name ?? r.contactName ?? r.customer?.contactName ?? r.customer?.contact_name ?? "",
     currency: r.currency ?? "INR",
     totalQty: Number(r.total_qty ?? r.totalQty ?? r.qty_total ?? 0),
     linesCount: Number(r.lines_count ?? r.linesCount ?? r.items_count ?? r.lines?.length ?? 0),

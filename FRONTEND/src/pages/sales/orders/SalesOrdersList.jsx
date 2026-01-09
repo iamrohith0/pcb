@@ -137,7 +137,7 @@ export default function SalesOrdersList() {
         page: Number(m.page ?? m.current_page ?? page ?? 1),
         limit: Number(m.limit ?? m.per_page ?? limit),
         total: Number(m.total ?? m.total_items ?? normalized.length),
-        totalPages: Number(m.total_pages ?? m.last_page ?? 1),
+        totalPages: Number(m.totalPages ?? m.total_pages ?? m.last_page ?? 1),
       };
       setMeta(nextMeta);
     } catch (err) {
@@ -412,7 +412,7 @@ export default function SalesOrdersList() {
 
                       <td className="px-4 py-3 text-right">
                         <Button variant="outline" size="sm" className="gap-2" asChild>
-                          <Link to={`/sales/orders/${r.id}`}>
+                          <Link to={`/dashboard/sales/orders/${r.id}`}>
                             <Eye className="h-4 w-4" />
                             View
                           </Link>
