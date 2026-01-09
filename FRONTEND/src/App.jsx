@@ -503,8 +503,8 @@ function App() {
           {/* Invoice redirect routes for backward compatibility */}
           <Route path="/sales/invoices" element={<Navigate to="/dashboard/sales/invoices" replace />} />
           <Route path="/sales/invoices/create" element={<Navigate to="/dashboard/sales/invoices/create" replace />} />
-          <Route path="/sales/invoices/:id" element={<Navigate to="/dashboard/sales/invoices/:id" replace />} />
-          <Route path="/sales/invoices/:id/print" element={<Navigate to="/dashboard/sales/invoices/:id/print" replace />} />
+          <Route path="/sales/invoices/:id" element={<ParamRedirect to="/dashboard/sales/invoices/:id" />} />
+          <Route path="/sales/invoices/:id/print" element={<ParamRedirect to="/dashboard/sales/invoices/:id/print" />} />
           
           {/* Admin redirect routes for backward compatibility */}
           <Route path="/admin/users" element={<Navigate to="/dashboard/admin/users" replace />} />

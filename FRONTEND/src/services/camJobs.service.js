@@ -83,6 +83,17 @@ const camJobsApi = {
     }
   },
 
+  // Download or fetch CAM job file link
+  async downloadFile(jobId, fileId) {
+    try {
+      const response = await axios.get(`/cam-jobs/${jobId}/files/${fileId}/download`);
+      return response;
+    } catch (error) {
+      console.error(`Error downloading CAM job file ${fileId}:`, error);
+      throw error;
+    }
+  },
+
   // Get CAM jobs by status
   async getByStatus(status) {
     try {

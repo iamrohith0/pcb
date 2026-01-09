@@ -493,7 +493,7 @@ export default function InvoiceList() {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => navigate(`/sales/invoices/${pickId(inv)}`)}
+                              onClick={() => navigate(`/dashboard/sales/invoices/${pickId(inv)}`)}
                             >
                               <Eye className="mr-2 h-4 w-4" />
                               View

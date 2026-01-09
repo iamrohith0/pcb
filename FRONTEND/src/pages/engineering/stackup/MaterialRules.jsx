@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
+import stackupService from "@/services/engineering/stackup.service";
 
 import {
   AlertDialog,
@@ -81,152 +82,48 @@ function riskBadge(risk) {
   return "bg-gray-100 text-gray-900";
 }
 
-/** Mock API (replace with a real axios service) */
-const materialRulesService = {
-  async list(params) {
-    await new Promise((r) => setTimeout(r, 300));
+function normalizeRule(raw = {}) {
+  const familiesRaw = raw.dielectricFamilies ?? raw.dielectric_families ?? raw.dielectricFamilies ?? [];
+  const dielectricFamilies = Array.isArray(familiesRaw)
+    ? familiesRaw
+    : String(familiesRaw)
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
 
-    const all = [
-      {
-        id: "mr_1001",
-        name: "Standard FR4 — 2 Layer (Cost Optimized)",
-        layers: 2,
-        dielectricFamilies: ["FR4"],
-        tg: "TG150",
-        thicknessMin: 0.8,
-        thicknessMax: 2.0,
-        copperOuter: "1 oz",
-        copperInner: "-",
-        impedance: false,
-        minTrace: 4,
-        minSpace: 4,
-        minDrill: 0.30,
-        annularRing: 0.10,
-        risk: "Low",
-        active: true,
-        notes: "Default for quick-turn prototypes. No controlled impedance.",
-        updatedAt: "2026-01-04T09:40:00.000Z",
-        updatedBy: "Engineering",
-      },
-      {
-        id: "mr_1002",
-        name: "Standard FR4 — 4 Layer (General)",
-        layers: 4,
-        dielectricFamilies: ["FR4", "High-Tg FR4"],
-        tg: "TG170",
-        thicknessMin: 1.2,
-        thicknessMax: 2.0,
-        copperOuter: "1 oz",
-        copperInner: "0.5 oz",
-        impedance: true,
-        minTrace: 4,
-        minSpace: 4,
-        minDrill: 0.25,
-        annularRing: 0.10,
-        risk: "Low",
-        active: true,
-        notes: "Supports impedance when stackup is approved by CAM.",
-        updatedAt: "2026-01-02T18:20:00.000Z",
-        updatedBy: "CAM",
-      },
-      {
-        id: "mr_1003",
-        name: "HDI-ish — 6 Layer (Tighter rules)",
-        layers: 6,
-        dielectricFamilies: ["High-Tg FR4"],
-        tg: "TG180",
-        thicknessMin: 1.0,
-        thicknessMax: 1.8,
-        copperOuter: "1 oz",
-        copperInner: "0.5 oz",
-        impedance: true,
-        minTrace: 3,
-        minSpace: 3,
-        minDrill: 0.20,
-        annularRing: 0.09,
-        risk: "Medium",
-        active: true,
-        notes: "Requires DFM review for via-in-pad or dense BGAs.",
-        updatedAt: "2026-01-03T12:05:00.000Z",
-        updatedBy: "Engineering Manager",
-      },
-      {
-        id: "mr_1004",
-        name: "Legacy rule (Deprecated)",
-        layers: 4,
-        dielectricFamilies: ["FR4"],
-        tg: "TG150",
-        thicknessMin: 1.6,
-        thicknessMax: 1.6,
-        copperOuter: "2 oz",
-        copperInner: "1 oz",
-        impedance: false,
-        minTrace: 6,
-        minSpace: 6,
-        minDrill: 0.35,
-        annularRing: 0.12,
-        risk: "High",
-        active: false,
-        notes: "Old high-copper recipe used for specific customer. Keep disabled.",
-        updatedAt: "2025-12-12T10:00:00.000Z",
-        updatedBy: "Admin",
-      },
-    ];
+  return {
+    id: raw.id ?? raw.rule_id ?? raw.uuid ?? "",
+    name: raw.name ?? raw.rule_name ?? "",
+    layers: raw.layers ?? raw.layer_count ?? null,
+    dielectricFamilies,
+    tg: raw.tg ?? raw.tg_rating ?? "",
+    thicknessMin: raw.thicknessMin ?? raw.thickness_min_mm ?? raw.thickness_min ?? null,
+    thicknessMax: raw.thicknessMax ?? raw.thickness_max_mm ?? raw.thickness_max ?? null,
+    copperOuter: raw.copperOuter ?? raw.copper_outer ?? "",
+    copperInner: raw.copperInner ?? raw.copper_inner ?? "",
+    impedance: raw.impedance ?? raw.controlled_impedance ?? false,
+    minTrace: raw.minTrace ?? raw.min_trace_mil ?? raw.min_trace ?? null,
+    minSpace: raw.minSpace ?? raw.min_space_mil ?? raw.min_space ?? null,
+    minDrill: raw.minDrill ?? raw.min_drill_mm ?? raw.min_drill ?? null,
+    annularRing: raw.annularRing ?? raw.annular_ring_mm ?? raw.annular_ring ?? null,
+    risk: raw.risk ?? raw.risk_level ?? "",
+    active: typeof raw.active === "boolean" ? raw.active : raw.is_active ?? true,
+    notes: raw.notes ?? "",
+    updatedAt: raw.updatedAt ?? raw.updated_at ?? raw.modified_at ?? "",
+    updatedBy: raw.updatedBy ?? raw.updated_by ?? raw.modified_by ?? "",
+  };
+}
 
-    const {
-      search = "",
-      layers = "All",
-      active = "All",
-      page = 1,
-      pageSize = 10,
-    } = params || {};
-
-    let filtered = [...all];
-    const q = (search || "").trim().toLowerCase();
-    if (q) {
-      filtered = filtered.filter((x) => {
-        const blob = [
-          x.name,
-          String(x.layers),
-          x.tg,
-          x.copperOuter,
-          x.copperInner,
-          x.risk,
-          x.active ? "active" : "inactive",
-          (x.dielectricFamilies || []).join(" "),
-        ]
-          .join(" ")
-          .toLowerCase();
-        return blob.includes(q);
-      });
-    }
-    if (layers !== "All") filtered = filtered.filter((x) => String(x.layers) === String(layers));
-    if (active !== "All") filtered = filtered.filter((x) => String(x.active) === String(active === "true"));
-
-    filtered.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
-
-    const total = filtered.length;
-    const start = (Number(page) - 1) * Number(pageSize);
-    const items = filtered.slice(start, start + Number(pageSize));
-
-    return { items, total, page: Number(page), pageSize: Number(pageSize) };
-  },
-
-  async create(payload) {
-    await new Promise((r) => setTimeout(r, 250));
-    return { ok: true, id: `mr_${Math.floor(Math.random() * 9000) + 1000}`, ...payload };
-  },
-
-  async update(id, payload) {
-    await new Promise((r) => setTimeout(r, 250));
-    return { ok: true, id, ...payload };
-  },
-
-  async remove(id) {
-    await new Promise((r) => setTimeout(r, 250));
-    return { ok: true, id };
-  },
-};
+function normalizeListPayload(payload) {
+  const itemsRaw = payload?.items ?? payload?.data?.items ?? payload?.data ?? payload ?? [];
+  const items = Array.isArray(itemsRaw) ? itemsRaw.map(normalizeRule) : [];
+  return {
+    items,
+    total: payload?.total ?? payload?.data?.total ?? items.length,
+    page: payload?.page ?? payload?.data?.page ?? 1,
+    pageSize: payload?.pageSize ?? payload?.data?.pageSize ?? items.length || 10,
+  };
+}
 
 const DEFAULT_FORM = {
   id: null,
@@ -295,9 +192,15 @@ export default function MaterialRules() {
   const fetchList = async () => {
     setLoading(true);
     try {
-      const res = await materialRulesService.list(query);
-      setRows(res.items || []);
-      setMeta((m) => ({ ...m, total: res.total || 0, page: res.page || m.page, pageSize: res.pageSize || m.pageSize }));
+      const res = await stackupService.listMaterialRules(query);
+      const normalized = normalizeListPayload(res);
+      setRows(normalized.items);
+      setMeta((m) => ({
+        ...m,
+        total: normalized.total || 0,
+        page: normalized.page || m.page,
+        pageSize: normalized.pageSize || m.pageSize,
+      }));
     } catch {
       toast({ title: "Load failed", description: "Could not load material rules.", variant: "destructive" });
     } finally {
@@ -397,10 +300,10 @@ export default function MaterialRules() {
       };
 
       if (form.id) {
-        await materialRulesService.update(form.id, payload);
+        await stackupService.updateMaterialRule(form.id, payload);
         toast({ title: "Updated", description: "Material rule updated successfully." });
       } else {
-        await materialRulesService.create(payload);
+        await stackupService.createMaterialRule(payload);
         toast({ title: "Created", description: "Material rule created successfully." });
       }
 
@@ -449,7 +352,7 @@ export default function MaterialRules() {
     if (!deleteTarget?.id) return;
     setDeleting(true);
     try {
-      await materialRulesService.remove(deleteTarget.id);
+      await stackupService.deleteMaterialRule(deleteTarget.id);
       toast({ title: "Deleted", description: "Material rule deleted." });
       setDeleteOpen(false);
       setDeleteTarget(null);

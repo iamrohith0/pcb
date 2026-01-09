@@ -13,7 +13,7 @@ const panelizationApi = {
   async listTemplates() {
     try {
       const response = await axios.get("/api/engineering/panelization/templates");
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error fetching panel templates:", error);
       throw error;
@@ -28,7 +28,7 @@ const panelizationApi = {
   async getTemplate(templateId) {
     try {
       const response = await axios.get(`/api/engineering/panelization/templates/${templateId}`);
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error fetching panel template:", error);
       throw error;
@@ -43,7 +43,7 @@ const panelizationApi = {
   async createTemplate(data) {
     try {
       const response = await axios.post("/api/engineering/panelization/templates", data);
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error creating panel template:", error);
       throw error;
@@ -59,7 +59,7 @@ const panelizationApi = {
   async updateTemplate(templateId, data) {
     try {
       const response = await axios.put(`/api/engineering/panelization/templates/${templateId}`, data);
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error updating panel template:", error);
       throw error;
@@ -74,7 +74,7 @@ const panelizationApi = {
   async duplicateTemplate(data) {
     try {
       const response = await axios.post("/api/engineering/panelization/templates/duplicate", data);
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error duplicating panel template:", error);
       throw error;
@@ -89,7 +89,7 @@ const panelizationApi = {
   async deleteTemplate(templateId) {
     try {
       const response = await axios.delete(`/api/engineering/panelization/templates/${templateId}`);
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error deleting panel template:", error);
       throw error;
@@ -103,7 +103,7 @@ const panelizationApi = {
   async listPanels() {
     try {
       const response = await axios.get("/api/engineering/panelization/panels");
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error fetching panels:", error);
       throw error;
@@ -118,7 +118,7 @@ const panelizationApi = {
   async getPanel(panelId) {
     try {
       const response = await axios.get(`/api/engineering/panelization/panels/${panelId}`);
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error fetching panel:", error);
       throw error;
@@ -133,7 +133,7 @@ const panelizationApi = {
   async createPanel(data) {
     try {
       const response = await axios.post("/api/engineering/panelization/panels", data);
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error creating panel:", error);
       throw error;
@@ -149,7 +149,7 @@ const panelizationApi = {
   async updatePanel(panelId, data) {
     try {
       const response = await axios.put(`/api/engineering/panelization/panels/${panelId}`, data);
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error updating panel:", error);
       throw error;
@@ -164,7 +164,7 @@ const panelizationApi = {
   async deletePanel(panelId) {
     try {
       const response = await axios.delete(`/api/engineering/panelization/panels/${panelId}`);
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error deleting panel:", error);
       throw error;
@@ -180,7 +180,7 @@ const panelizationApi = {
   async generateLayout(templateId, options) {
     try {
       const response = await axios.post(`/api/engineering/panelization/templates/${templateId}/generate`, options);
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error generating panel layout:", error);
       throw error;
@@ -195,9 +195,31 @@ const panelizationApi = {
   async getReports(filters = {}) {
     try {
       const response = await axios.get("/api/engineering/panelization/reports", { params: filters });
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error fetching panelization reports:", error);
+      throw error;
+    }
+  },
+
+  async getJobSnapshot(jobId) {
+    try {
+      const response = await axios.get(`/api/engineering/panelization/jobs/${jobId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching panelization job snapshot:", error);
+      throw error;
+    }
+  },
+
+  async downloadPanelReport(panelId) {
+    try {
+      const response = await axios.get(`/api/engineering/panelization/panels/${panelId}/report`, {
+        responseType: "blob",
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error downloading panel report:", error);
       throw error;
     }
   }

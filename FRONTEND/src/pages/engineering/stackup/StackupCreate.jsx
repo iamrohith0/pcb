@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
+import stackupService from "@/services/engineering/stackup.service";
 
 import {
   AlertDialog,
@@ -72,73 +73,39 @@ function round2(n) {
   return Math.round(n * 100) / 100;
 }
 
-/** Mock service — replace with axios in /src/services/stackup.service.js */
-const stackupService = {
-  async listMaterialRules() {
-    await new Promise((r) => setTimeout(r, 250));
-    return [
-      {
-        id: "mr_1001",
-        name: "Standard FR4 — 2 Layer (Cost Optimized)",
-        layers: 2,
-        dielectricFamilies: ["FR4"],
-        tg: "TG150",
-        thicknessMin: 0.8,
-        thicknessMax: 2.0,
-        copperOuter: "1 oz",
-        copperInner: "-",
-        impedance: false,
-        minTrace: 4,
-        minSpace: 4,
-        minDrill: 0.30,
-        annularRing: 0.10,
-        risk: "Low",
-        active: true,
-      },
-      {
-        id: "mr_1002",
-        name: "Standard FR4 — 4 Layer (General)",
-        layers: 4,
-        dielectricFamilies: ["FR4", "High-Tg FR4"],
-        tg: "TG170",
-        thicknessMin: 1.2,
-        thicknessMax: 2.0,
-        copperOuter: "1 oz",
-        copperInner: "0.5 oz",
-        impedance: true,
-        minTrace: 4,
-        minSpace: 4,
-        minDrill: 0.25,
-        annularRing: 0.10,
-        risk: "Low",
-        active: true,
-      },
-      {
-        id: "mr_1003",
-        name: "HDI-ish — 6 Layer (Tighter rules)",
-        layers: 6,
-        dielectricFamilies: ["High-Tg FR4"],
-        tg: "TG180",
-        thicknessMin: 1.0,
-        thicknessMax: 1.8,
-        copperOuter: "1 oz",
-        copperInner: "0.5 oz",
-        impedance: true,
-        minTrace: 3,
-        minSpace: 3,
-        minDrill: 0.20,
-        annularRing: 0.09,
-        risk: "Medium",
-        active: true,
-      },
-    ];
-  },
+function normalizeRule(raw = {}) {
+  const familiesRaw = raw.dielectricFamilies ?? raw.dielectric_families ?? [];
+  const dielectricFamilies = Array.isArray(familiesRaw)
+    ? familiesRaw
+    : String(familiesRaw)
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
 
-  async createTemplate(payload) {
-    await new Promise((r) => setTimeout(r, 350));
-    return { ok: true, id: `st_${Math.floor(Math.random() * 9000) + 1000}`, ...payload };
-  },
-};
+  return {
+    id: raw.id ?? raw.rule_id ?? raw.uuid ?? "",
+    name: raw.name ?? "",
+    layers: raw.layers ?? raw.layer_count ?? null,
+    dielectricFamilies,
+    tg: raw.tg ?? "",
+    thicknessMin: raw.thicknessMin ?? raw.thickness_min_mm ?? raw.thickness_min ?? null,
+    thicknessMax: raw.thicknessMax ?? raw.thickness_max_mm ?? raw.thickness_max ?? null,
+    copperOuter: raw.copperOuter ?? raw.copper_outer ?? "",
+    copperInner: raw.copperInner ?? raw.copper_inner ?? "",
+    impedance: raw.impedance ?? raw.controlled_impedance ?? false,
+    minTrace: raw.minTrace ?? raw.min_trace_mil ?? raw.min_trace ?? null,
+    minSpace: raw.minSpace ?? raw.min_space_mil ?? raw.min_space ?? null,
+    minDrill: raw.minDrill ?? raw.min_drill_mm ?? raw.min_drill ?? null,
+    annularRing: raw.annularRing ?? raw.annular_ring_mm ?? raw.annular_ring ?? null,
+    risk: raw.risk ?? raw.risk_level ?? "",
+    active: typeof raw.active === "boolean" ? raw.active : raw.is_active ?? true,
+  };
+}
+
+function normalizeRuleList(payload) {
+  const itemsRaw = payload?.items ?? payload?.data?.items ?? payload?.data ?? payload ?? [];
+  return Array.isArray(itemsRaw) ? itemsRaw.map(normalizeRule) : [];
+}
 
 const DEFAULT_FORM = {
   name: "",
@@ -257,7 +224,8 @@ export default function StackupCreate() {
     setLoadingRules(true);
     try {
       const rules = await stackupService.listMaterialRules();
-      setMaterialRules((rules || []).filter((r) => r.active));
+      const normalized = normalizeRuleList(rules);
+      setMaterialRules(normalized.filter((r) => r.active));
     } catch {
       toast({ title: "Load failed", description: "Could not load material rules.", variant: "destructive" });
     } finally {

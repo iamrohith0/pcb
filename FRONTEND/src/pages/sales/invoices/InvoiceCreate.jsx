@@ -286,12 +286,23 @@ export default function InvoiceCreate() {
   };
 
   const applyCustomer = (c) => {
+    const baseAddress = {
+      addressLine1: c.addressLine1 || "",
+      addressLine2: c.addressLine2 || "",
+      city: c.city || "",
+      state: c.state || "",
+      pincode: c.pincode || "",
+      country: c.country || "India",
+    };
+
     update("customerId", c.id || c._id || "");
     update("customerSnapshot", c);
+    setCustomerQuery(c.companyName || c.name || "");
+    setCustomerResults([]);
 
     // Prefill billing/shipping from customer
-    const billing = c.billing || c.address?.billing || {};
-    const shipping = c.shipping || c.address?.shipping || {};
+    const billing = { ...baseAddress, ...(c.billing || c.address?.billing || {}) };
+    const shipping = { ...baseAddress, ...(c.shipping || c.address?.shipping || {}) };
 
     update("billing", {
       ...form.billing,
@@ -322,10 +333,19 @@ export default function InvoiceCreate() {
     toast({ title: "Customer selected", description: `${c.companyName || c.name} applied to invoice.` });
   };
 
-  const searchCustomers = async () => {
-    const q = customerQuery.trim();
+  const searchCustomers = async (query) => {
+    const q = (query ?? customerQuery).trim();
     if (!q) {
-      setCustomerResults([]);
+      try {
+        setCustomerLoading(true);
+        const res = await customersService.list({ page: 1, limit: 10 });
+        const data = res?.data?.data ?? res?.data?.items ?? res?.data ?? [];
+        setCustomerResults(Array.isArray(data) ? data : []);
+      } catch {
+        setCustomerResults([]);
+      } finally {
+        setCustomerLoading(false);
+      }
       return;
     }
     setCustomerLoading(true);
@@ -341,6 +361,13 @@ export default function InvoiceCreate() {
       setCustomerLoading(false);
     }
   };
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      searchCustomers(customerQuery);
+    }, 350);
+    return () => clearTimeout(t);
+  }, [customerQuery]);
 
   const searchOrders = async () => {
     const q = orderQuery.trim();
@@ -426,7 +453,7 @@ export default function InvoiceCreate() {
         description: `${created?.invoiceNo ? `Invoice ${created.invoiceNo}` : "Invoice"} saved successfully.`,
       });
 
-      if (id) navigate(`/sales/invoices/${id}`, { replace: true });
+      if (id) navigate(`/dashboard/sales/invoices/${id}`, { replace: true });
       else navigate(from, { replace: true });
     } catch (err) {
       const msg =

@@ -3,6 +3,17 @@ import axios from "@/lib/axios";
 const API_BASE = "/api/engineering/dfm";
 
 export const dfmApi = {
+  // DFM queue
+  getQueue: async (params = {}) => {
+    try {
+      const response = await axios.get(`${API_BASE}/queue`, { params });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching DFM queue:", error);
+      throw error;
+    }
+  },
+
   // Save a DFM checklist
   saveChecklist: async (payload) => {
     try {
@@ -89,6 +100,71 @@ export const dfmApi = {
       return response.data;
     } catch (error) {
       console.error("Error fetching DFM statistics:", error);
+      throw error;
+    }
+  },
+
+  // DFM review
+  getReview: async ({ jobId }) => {
+    try {
+      const response = await axios.get(`${API_BASE}/review`, { params: { jobId } });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching DFM review:", error);
+      throw error;
+    }
+  },
+
+  updateReview: async ({ jobId, payload }) => {
+    try {
+      const response = await axios.put(`${API_BASE}/review/${jobId}`, payload);
+      return response.data;
+    } catch (error) {
+      console.error("Error updating DFM review:", error);
+      throw error;
+    }
+  },
+
+  submitForApproval: async ({ jobId }) => {
+    try {
+      const response = await axios.post(`${API_BASE}/review/${jobId}/submit`);
+      return response.data;
+    } catch (error) {
+      console.error("Error submitting DFM review for approval:", error);
+      throw error;
+    }
+  },
+
+  approveStep: async ({ jobId, step }) => {
+    try {
+      const response = await axios.post(`${API_BASE}/review/${jobId}/approve`, { step });
+      return response.data;
+    } catch (error) {
+      console.error("Error approving DFM step:", error);
+      throw error;
+    }
+  },
+
+  // DFM report
+  getReport: async ({ jobId }) => {
+    try {
+      const response = await axios.get(`${API_BASE}/report`, { params: { jobId } });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching DFM report:", error);
+      throw error;
+    }
+  },
+
+  exportReport: async ({ jobId, format }) => {
+    try {
+      const response = await axios.get(`${API_BASE}/report/export`, {
+        params: { jobId, format },
+        responseType: "blob",
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error exporting DFM report:", error);
       throw error;
     }
   }

@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
+import stackupService from "@/services/engineering/stackup.service";
 
 import {
   AlertDialog,
@@ -69,78 +70,40 @@ function mm2mil(mm) {
   return mm / 0.0254;
 }
 
-/** Mock DB */
-const MOCK_DB = {
-  st_1201: {
-    id: "st_1201",
-    name: "FR4 4L 1.6mm TG170 — Impedance Ready",
-    code: "STK-4L-170-16",
-    layers: 4,
-    materialFamily: "FR4",
-    tg: "TG170",
-    finish: "ENIG",
-    soldermask: "Green",
-    silkscreen: "White",
-    impedance: true,
-    targetThickness: 1.6,
-    thicknessTolPlus: 0.15,
-    thicknessTolMinus: 0.15,
-    copperOuter: "1 oz",
-    copperInnerDefault: "0.5 oz",
-    dielectrics: [
-      { name: "Prepreg", thickness: 0.20 },
-      { name: "Core", thickness: 0.80 },
-      { name: "Prepreg", thickness: 0.20 },
-    ],
-    notes: "Include impedance coupons for 50Ω single-ended and 100Ω diff. ENIG for fine-pitch.",
-    active: true,
-    defaultRuleId: "mr_1002",
-    createdAt: "2026-01-02T10:20:00.000Z",
-    updatedAt: "2026-01-04T08:10:00.000Z",
-  },
-};
+function normalizeDielectric(raw = {}) {
+  return {
+    name: raw.name ?? raw.material ?? "",
+    thickness: raw.thickness ?? raw.thickness_mm ?? null,
+  };
+}
 
-const stackupService = {
-  async getById(id) {
-    await new Promise((r) => setTimeout(r, 280));
-    const item = MOCK_DB[id];
-    if (!item) {
-      const err = new Error("Not found");
-      err.status = 404;
-      throw err;
-    }
-    return { data: { ...item } };
-  },
-  async update(id, payload) {
-    await new Promise((r) => setTimeout(r, 350));
-    MOCK_DB[id] = { ...(MOCK_DB[id] || {}), ...payload, updatedAt: new Date().toISOString() };
-    return { data: { ...MOCK_DB[id] } };
-  },
-  async remove(id) {
-    await new Promise((r) => setTimeout(r, 300));
-    delete MOCK_DB[id];
-    return { ok: true };
-  },
-  async duplicate(id) {
-    await new Promise((r) => setTimeout(r, 360));
-    const base = MOCK_DB[id];
-    if (!base) {
-      const err = new Error("Not found");
-      err.status = 404;
-      throw err;
-    }
-    const newId = `st_${Math.floor(Math.random() * 9000) + 1000}`;
-    MOCK_DB[newId] = {
-      ...base,
-      id: newId,
-      name: `${base.name} (Copy)`,
-      code: `${base.code}-COPY`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    return { data: { ...MOCK_DB[newId] } };
-  },
-};
+function normalizeTemplate(raw = {}) {
+  return {
+    id: raw.id ?? raw.template_id ?? raw.uuid ?? "",
+    name: raw.name ?? "",
+    code: raw.code ?? "",
+    layers: raw.layers ?? raw.layer_count ?? null,
+    materialFamily: raw.materialFamily ?? raw.material_family ?? "",
+    tg: raw.tg ?? "",
+    finish: raw.finish ?? "",
+    soldermask: raw.soldermask ?? raw.solder_mask ?? "",
+    silkscreen: raw.silkscreen ?? raw.silk_screen ?? "",
+    impedance: raw.impedance ?? raw.controlled_impedance ?? false,
+    targetThickness: raw.targetThickness ?? raw.target_thickness_mm ?? raw.target_thickness ?? null,
+    thicknessTolPlus: raw.thicknessTolPlus ?? raw.thickness_tol_plus_mm ?? raw.thickness_tol_plus ?? null,
+    thicknessTolMinus: raw.thicknessTolMinus ?? raw.thickness_tol_minus_mm ?? raw.thickness_tol_minus ?? null,
+    copperOuter: raw.copperOuter ?? raw.copper_outer ?? "",
+    copperInnerDefault: raw.copperInnerDefault ?? raw.copper_inner_default ?? "",
+    dielectrics: Array.isArray(raw.dielectrics || raw.stackup_dielectrics)
+      ? (raw.dielectrics || raw.stackup_dielectrics).map(normalizeDielectric)
+      : [],
+    notes: raw.notes ?? "",
+    active: typeof raw.active === "boolean" ? raw.active : raw.is_active ?? true,
+    defaultRuleId: raw.defaultRuleId ?? raw.default_rule_id ?? null,
+    createdAt: raw.createdAt ?? raw.created_at ?? "",
+    updatedAt: raw.updatedAt ?? raw.updated_at ?? "",
+  };
+}
 
 function formatDate(iso) {
   if (!iso) return "—";
@@ -225,9 +188,10 @@ export default function StackupDetails() {
   const load = async () => {
     setLoading(true);
     try {
-      const res = await stackupService.getById(id);
-      setData(res.data);
-      setDraft(JSON.parse(JSON.stringify(res.data)));
+      const res = await stackupService.getTemplate(id);
+      const normalized = normalizeTemplate(res?.data ?? res ?? {});
+      setData(normalized);
+      setDraft(JSON.parse(JSON.stringify(normalized)));
     } catch (e) {
       toast({
         title: "Not found",
@@ -307,9 +271,10 @@ export default function StackupDetails() {
         updatedAt: new Date().toISOString(),
       };
 
-      const res = await stackupService.update(id, payload);
-      setData(res.data);
-      setDraft(JSON.parse(JSON.stringify(res.data)));
+      const res = await stackupService.updateTemplate(id, payload);
+      const normalized = normalizeTemplate(res?.data ?? res ?? payload);
+      setData(normalized);
+      setDraft(JSON.parse(JSON.stringify(normalized)));
       setEditMode(false);
 
       toast({ title: "Saved", description: "Stackup template updated successfully." });
@@ -323,7 +288,7 @@ export default function StackupDetails() {
   const handleDelete = async () => {
     setSaving(true);
     try {
-      await stackupService.remove(id);
+      await stackupService.deleteTemplate(id);
       toast({ title: "Deleted", description: "Stackup template deleted." });
       navigate("/dashboard/engineering/stackup", { replace: true });
     } catch {
@@ -337,9 +302,10 @@ export default function StackupDetails() {
   const handleDuplicate = async () => {
     setDupLoading(true);
     try {
-      const res = await stackupService.duplicate(id);
+      const res = await stackupService.duplicateTemplate(id);
+      const normalized = normalizeTemplate(res?.data ?? res ?? {});
       toast({ title: "Duplicated", description: "Created a copy of this stackup template." });
-      navigate(`/dashboard/engineering/stackup/${res.data.id}`, { replace: true });
+      if (normalized?.id) navigate(`/dashboard/engineering/stackup/${normalized.id}`, { replace: true });
     } catch {
       toast({ title: "Duplicate failed", description: "Could not duplicate template.", variant: "destructive" });
     } finally {

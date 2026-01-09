@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
+import stackupService from "@/services/engineering/stackup.service";
 
 import {
   AlertDialog,
@@ -59,87 +60,28 @@ function safeNum(v, fb = 0) {
   return Number.isFinite(n) ? n : fb;
 }
 
-/** Mock dataset */
-const MOCK = [
-  {
-    id: "st_1201",
-    name: "FR4 4L 1.6mm TG170 — Impedance Ready",
-    code: "STK-4L-170-16",
-    layers: 4,
-    materialFamily: "FR4",
-    tg: "TG170",
-    finish: "ENIG",
-    soldermask: "Green",
-    silkscreen: "White",
-    impedance: true,
-    targetThickness: 1.6,
-    active: true,
-    updatedAt: "2026-01-04T08:10:00.000Z",
-  },
-  {
-    id: "st_1202",
-    name: "FR4 2L 1.0mm — Economy HASL",
-    code: "STK-2L-ECON-10",
-    layers: 2,
-    materialFamily: "FR4",
-    tg: "TG150",
-    finish: "Lead-Free HASL",
-    soldermask: "Green",
-    silkscreen: "White",
-    impedance: false,
-    targetThickness: 1.0,
-    active: true,
-    updatedAt: "2026-01-03T13:05:00.000Z",
-  },
-  {
-    id: "st_1203",
-    name: "Rogers 4L 0.8mm — RF Prototype",
-    code: "STK-RG-4L-08",
-    layers: 4,
-    materialFamily: "Rogers",
-    tg: "TG200",
-    finish: "ENIG",
-    soldermask: "Green",
-    silkscreen: "White",
-    impedance: true,
-    targetThickness: 0.8,
-    active: false,
-    updatedAt: "2026-01-02T09:44:00.000Z",
-  },
-];
+function normalizeTemplate(raw = {}) {
+  return {
+    id: raw.id ?? raw.template_id ?? raw.uuid ?? "",
+    name: raw.name ?? "",
+    code: raw.code ?? "",
+    layers: raw.layers ?? raw.layer_count ?? null,
+    materialFamily: raw.materialFamily ?? raw.material_family ?? "",
+    tg: raw.tg ?? "",
+    finish: raw.finish ?? "",
+    soldermask: raw.soldermask ?? raw.solder_mask ?? "",
+    silkscreen: raw.silkscreen ?? raw.silk_screen ?? "",
+    impedance: raw.impedance ?? raw.controlled_impedance ?? false,
+    targetThickness: raw.targetThickness ?? raw.target_thickness_mm ?? raw.target_thickness ?? null,
+    active: typeof raw.active === "boolean" ? raw.active : raw.is_active ?? true,
+    updatedAt: raw.updatedAt ?? raw.updated_at ?? raw.modified_at ?? "",
+  };
+}
 
-const stackupService = {
-  async list() {
-    await new Promise((r) => setTimeout(r, 250));
-    return { data: [...MOCK] };
-  },
-  async remove(id) {
-    await new Promise((r) => setTimeout(r, 300));
-    const idx = MOCK.findIndex((x) => x.id === id);
-    if (idx >= 0) MOCK.splice(idx, 1);
-    return { ok: true };
-  },
-  async duplicate(id) {
-    await new Promise((r) => setTimeout(r, 320));
-    const src = MOCK.find((x) => x.id === id);
-    if (!src) {
-      const err = new Error("Not found");
-      err.status = 404;
-      throw err;
-    }
-    const newId = `st_${Math.floor(Math.random() * 9000) + 1000}`;
-    const copy = {
-      ...src,
-      id: newId,
-      name: `${src.name} (Copy)`,
-      code: `${src.code}-COPY`,
-      updatedAt: new Date().toISOString(),
-      active: false,
-    };
-    MOCK.unshift(copy);
-    return { data: copy };
-  },
-};
+function normalizeListPayload(payload) {
+  const itemsRaw = payload?.items ?? payload?.data?.items ?? payload?.data ?? payload ?? [];
+  return Array.isArray(itemsRaw) ? itemsRaw.map(normalizeTemplate) : [];
+}
 
 function fmtDate(iso) {
   if (!iso) return "—";
@@ -192,8 +134,8 @@ export default function StackupLibrary() {
   const load = async () => {
     setLoading(true);
     try {
-      const res = await stackupService.list();
-      setRows(res.data || []);
+      const res = await stackupService.listTemplates();
+      setRows(normalizeListPayload(res));
     } catch {
       toast({ title: "Load failed", description: "Could not load stackup templates.", variant: "destructive" });
     } finally {
@@ -271,7 +213,7 @@ export default function StackupLibrary() {
     if (!deleteTarget?.id) return;
     setDeleteLoading(true);
     try {
-      await stackupService.remove(deleteTarget.id);
+      await stackupService.deleteTemplate(deleteTarget.id);
       setRows((prev) => prev.filter((x) => x.id !== deleteTarget.id));
       toast({ title: "Deleted", description: "Stackup template deleted." });
     } catch {
@@ -286,8 +228,9 @@ export default function StackupLibrary() {
   const handleDuplicate = async (row) => {
     setDupLoadingId(row.id);
     try {
-      const res = await stackupService.duplicate(row.id);
-      setRows((prev) => [res.data, ...prev]);
+      const res = await stackupService.duplicateTemplate(row.id);
+      const normalized = normalizeTemplate(res?.data ?? res ?? {});
+      if (normalized?.id) setRows((prev) => [normalized, ...prev]);
       toast({ title: "Duplicated", description: "Created a copy. Open it to review and activate." });
     } catch {
       toast({ title: "Duplicate failed", description: "Could not duplicate template.", variant: "destructive" });
