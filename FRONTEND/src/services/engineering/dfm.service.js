@@ -209,7 +209,6 @@ export const dfmApi = {
     }
   },
 
-
   // Get capability rules
   getCapabilityRules: async () => {
     try {
@@ -221,7 +220,6 @@ export const dfmApi = {
     }
   },
 
-
   // Update capability rules
   updateCapabilityRules: async (rules) => {
     try {
@@ -232,7 +230,6 @@ export const dfmApi = {
       throw error;
     }
   },
-
 
   // Get DFM recommendations based on analysis
   getRecommendations: async (analysisResult) => {
