@@ -46,60 +46,6 @@ function StatusBadge({ status }) {
   return <Badge className={cx("rounded-full", s.className)}>{s.label}</Badge>;
 }
 
-// --- mock data (fallback UI) ---
-const MOCK = [
-  {
-    id: "DFM-00031",
-    priority: "High",
-    status: "in_review",
-    customer: "Aquila Robotics",
-    boardName: "MotorCtrl_Main",
-    revision: "C",
-    layers: 6,
-    rfqNo: "RFQ-00192",
-    soNo: "SO-00077",
-    camNo: "CAM-00041",
-    assignedTo: "Nikhil",
-    dueDate: "2026-01-07",
-    updatedAt: "2026-01-05T00:32:00Z",
-    notes: "Impedance nets need confirmation.",
-    health: 74,
-  },
-  {
-    id: "DFM-00032",
-    priority: "Medium",
-    status: "pending",
-    customer: "Nova Instruments",
-    boardName: "SensorHub",
-    revision: "A",
-    layers: 4,
-    rfqNo: "RFQ-00195",
-    soNo: "SO-00079",
-    camNo: "CAM-00042",
-    assignedTo: null,
-    dueDate: "2026-01-08",
-    updatedAt: "2026-01-05T00:05:00Z",
-    notes: "Waiting for drill tool list.",
-    health: null,
-  },
-  {
-    id: "DFM-00033",
-    priority: "Low",
-    status: "issues_found",
-    customer: "Orbit Labs",
-    boardName: "RF_Module",
-    revision: "B",
-    layers: 8,
-    rfqNo: "RFQ-00188",
-    soNo: "SO-00073",
-    camNo: "CAM-00039",
-    assignedTo: "Sona",
-    dueDate: "2026-01-09",
-    updatedAt: "2026-01-04T19:35:00Z",
-    notes: "Min trace/space 3/3 mil flagged.",
-    health: 52,
-  },
-];
 
 function PriorityPill({ priority }) {
   const map = {
@@ -153,20 +99,16 @@ export default function DFMQueue() {
         unassigned: onlyUnassigned ? true : undefined,
       });
 
-      // If backend not ready, fallback to mock.
-      const data = resp?.data?.items || resp?.data || null;
-
-      if (Array.isArray(data)) setRows(data);
-      else setRows(MOCK);
+      const data = resp?.data?.items || resp?.data || [];
+      setRows(data);
 
       toast({ title: "Queue loaded", description: "DFM queue updated." });
     } catch (err) {
-      setRows(MOCK);
+      setRows([]);
       toast({
-        title: "Using demo data",
-        description:
-          err?.response?.data?.message ||
-          "Backend route not available yet. Showing mock DFM queue UI.",
+        title: "Error loading queue",
+        description: err?.response?.data?.message || "Unable to load DFM queue at this time.",
+        variant: "destructive"
       });
     } finally {
       setLoading(false);

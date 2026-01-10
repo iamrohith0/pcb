@@ -167,7 +167,84 @@ export const dfmApi = {
       console.error("Error exporting DFM report:", error);
       throw error;
     }
+  },
+
+  // Gerber file upload and analysis
+  uploadGerberFiles: async (files) => {
+    try {
+      const formData = new FormData();
+      files.forEach(file => {
+        formData.append('files', file);
+      });
+
+      const response = await axios.post(`${API_BASE}/gerber/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error uploading Gerber files:", error);
+      throw error;
+    }
+  },
+
+  // Analyze Gerber files for DFM validation
+  analyzeGerber: async (files) => {
+    try {
+      const formData = new FormData();
+      files.forEach(file => {
+        formData.append('files', file);
+      });
+
+      const response = await axios.post(`${API_BASE}/gerber/analyze`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error analyzing Gerber files:", error);
+      throw error;
+    }
+  },
+
+
+  // Get capability rules
+  getCapabilityRules: async () => {
+    try {
+      const response = await axios.get(`${API_BASE}/capability-rules`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching capability rules:", error);
+      throw error;
+    }
+  },
+
+
+  // Update capability rules
+  updateCapabilityRules: async (rules) => {
+    try {
+      const response = await axios.put(`${API_BASE}/capability-rules`, rules);
+      return response.data;
+    } catch (error) {
+      console.error("Error updating capability rules:", error);
+      throw error;
+    }
+  },
+
+
+  // Get DFM recommendations based on analysis
+  getRecommendations: async (analysisResult) => {
+    try {
+      const response = await axios.post(`${API_BASE}/recommendations`, analysisResult);
+      return response.data;
+    } catch (error) {
+      console.error("Error getting DFM recommendations:", error);
+      throw error;
+    }
   }
 };
+
 
 export default dfmApi;

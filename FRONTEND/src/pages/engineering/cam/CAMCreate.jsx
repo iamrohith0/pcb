@@ -5,17 +5,21 @@ import {
     Loader2,
     Save
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
 import camJobsApi from "@/services/camJobs.service";
+import customersApi from "@/services/sales/customers.service";
+import rfqApi from "@/services/sales/rfq.service";
+import salesOrdersApi from "@/services/sales/salesOrders.service";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -27,6 +31,14 @@ export default function CAMCreate() {
   const [searchParams] = useSearchParams();
 
   const [loading, setLoading] = useState(false);
+  const [customersLoading, setCustomersLoading] = useState(false);
+  const [rfqLoading, setRfqLoading] = useState(false);
+  const [salesOrderLoading, setSalesOrderLoading] = useState(false);
+  
+  const [customers, setCustomers] = useState([]);
+  const [rfqs, setRfqs] = useState([]);
+  const [salesOrders, setSalesOrders] = useState([]);
+  
   const [formData, setFormData] = useState({
     board_name: "",
     revision: "A",
@@ -41,6 +53,133 @@ export default function CAMCreate() {
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  // Fetch customers on component mount
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
+
+  // Fetch RFQs and Sales Orders when customer changes
+  useEffect(() => {
+    if (formData.customer_name) {
+      fetchRfqsByCustomer(formData.customer_name);
+      fetchSalesOrdersByCustomer(formData.customer_name);
+    } else {
+      setRfqs([]);
+      setSalesOrders([]);
+      setFormData((prev) => ({
+        ...prev,
+        rfq_no: "",
+        sales_order_no: ""
+      }));
+    }
+  }, [formData.customer_name]);
+
+  const fetchCustomers = async () => {
+    setCustomersLoading(true);
+    try {
+      const response = await customersApi.list({ page: 1, size: 1000 });
+      const customerList = response?.data?.items || response?.data || [];
+      setCustomers(customerList);
+    } catch (err) {
+      console.error("Failed to fetch customers:", err);
+      toast({
+        title: "Error",
+        description: "Failed to load customers. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setCustomersLoading(false);
+    }
+  };
+
+  const fetchRfqsByCustomer = async (customerId) => {
+    setRfqLoading(true);
+    try {
+      const response = await rfqApi.list({
+        customerId: customerId,
+        status: "approved" // Only fetch approved RFQs
+      });
+      const rfqList = response?.data?.items || response?.data || [];
+      setRfqs(rfqList);
+      
+      // Auto-select the first RFQ if available
+      if (rfqList.length > 0) {
+        setFormData((prev) => ({
+          ...prev,
+          rfq_no: rfqList[0].rfqNo
+        }));
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          rfq_no: ""
+        }));
+      }
+    } catch (err) {
+      console.error("Failed to fetch RFQs:", err);
+      setRfqs([]);
+      setFormData((prev) => ({
+        ...prev,
+        rfq_no: ""
+      }));
+    } finally {
+      setRfqLoading(false);
+    }
+  };
+
+  const fetchSalesOrdersByCustomer = async (customerId) => {
+    setSalesOrderLoading(true);
+    try {
+      const response = await salesOrdersApi.list({
+        customerId: customerId,
+        status: "active" // Only fetch active sales orders
+      });
+      const salesOrderList = response?.data?.items || response?.data || [];
+      setSalesOrders(salesOrderList);
+      
+      // Auto-select the first sales order if available
+      if (salesOrderList.length > 0) {
+        setFormData((prev) => ({
+          ...prev,
+          sales_order_no: salesOrderList[0].orderNo
+        }));
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          sales_order_no: ""
+        }));
+      }
+    } catch (err) {
+      console.error("Failed to fetch sales orders:", err);
+      setSalesOrders([]);
+      setFormData((prev) => ({
+        ...prev,
+        sales_order_no: ""
+      }));
+    } finally {
+      setSalesOrderLoading(false);
+    }
+  };
+
+  const handleCustomerChange = (customerId) => {
+    setFormData((prev) => ({
+      ...prev,
+      customer_name: customerId,
+      rfq_no: "", // Reset RFQ when customer changes
+      sales_order_no: "" // Reset Sales Order when customer changes
+    }));
+    // Clear the dropdown selections
+    setRfqs([]);
+    setSalesOrders([]);
+  };
+
+  const handleRfqChange = (rfqNo) => {
+    setFormData((prev) => ({ ...prev, rfq_no: rfqNo }));
+  };
+
+  const handleSalesOrderChange = (salesOrderNo) => {
+    setFormData((prev) => ({ ...prev, sales_order_no: salesOrderNo }));
   };
 
   const handleSubmit = async (e) => {
@@ -156,13 +295,22 @@ export default function CAMCreate() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="customer_name">Customer Name</Label>
-                  <Input
-                    id="customer_name"
+                  <Label htmlFor="customer_name">Customer Name *</Label>
+                  <Select
                     value={formData.customer_name}
-                    onChange={(e) => handleInputChange("customer_name", e.target.value)}
-                    placeholder="Customer Company Name"
-                  />
+                    onValueChange={handleCustomerChange}
+                    disabled={customersLoading || customers.length === 0}
+                    placeholder={customersLoading ? "Loading customers..." : customers.length === 0 ? "No customers available" : "Select customer"}
+                  >
+                    {customers.map((customer) => (
+                      <SelectItem key={customer.id} value={customer.id}>
+                        {customer.name} {customer.customerCode ? `(${customer.customerCode})` : ""}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                  {customers.length === 0 && !customersLoading && (
+                    <p className="text-xs text-gray-500">No customers found. Please create customers first.</p>
+                  )}
                 </div>
               </div>
 
@@ -170,22 +318,34 @@ export default function CAMCreate() {
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="rfq_no">RFQ Number</Label>
-                  <Input
-                    id="rfq_no"
+                  <Select
                     value={formData.rfq_no}
-                    onChange={(e) => handleInputChange("rfq_no", e.target.value)}
-                    placeholder="RFQ-00001"
-                  />
+                    onValueChange={handleRfqChange}
+                    disabled={!formData.customer_name || rfqLoading}
+                    placeholder={rfqLoading ? "Loading RFQs..." : "Select RFQ"}
+                  >
+                    {rfqs.map((rfq) => (
+                      <SelectItem key={rfq.id} value={rfq.rfqNo}>
+                        {rfq.rfqNo} - {rfq.specialInstructions || "Project"}
+                      </SelectItem>
+                    ))}
+                  </Select>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="sales_order_no">Sales Order Number</Label>
-                  <Input
-                    id="sales_order_no"
+                  <Select
                     value={formData.sales_order_no}
-                    onChange={(e) => handleInputChange("sales_order_no", e.target.value)}
-                    placeholder="SO-00001"
-                  />
+                    onValueChange={handleSalesOrderChange}
+                    disabled={!formData.customer_name || salesOrderLoading}
+                    placeholder={salesOrderLoading ? "Loading sales orders..." : "Select sales order"}
+                  >
+                    {salesOrders.map((order) => (
+                      <SelectItem key={order.id} value={order.orderNo}>
+                        {order.orderNo} - {order.notes || "Project"}
+                      </SelectItem>
+                    ))}
+                  </Select>
                 </div>
 
                 <div className="space-y-2">
@@ -230,7 +390,11 @@ export default function CAMCreate() {
               <Button type="button" variant="outline" onClick={goBack}>
                 Cancel
               </Button>
-              <Button type="submit" className="gap-2 bg-cyan-600 hover:bg-cyan-500" disabled={loading}>
+              <Button
+                type="submit"
+                className="gap-2 bg-cyan-600 hover:bg-cyan-500"
+                disabled={loading || !formData.customer_name}
+              >
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                 Create CAM Job
               </Button>

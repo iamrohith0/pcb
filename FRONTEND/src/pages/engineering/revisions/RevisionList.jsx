@@ -85,123 +85,7 @@ function statusBadgeClass(status) {
   }
 }
 
-/** Mock API (replace with axios service) */
-const revisionService = {
-  async list(params) {
-    await new Promise((r) => setTimeout(r, 350));
-
-    // Mock dataset
-    const all = [
-      {
-        id: "rev_1001",
-        jobCode: "PCBXP-ALPHA-12",
-        baseRevision: "R1",
-        newRevision: "R2",
-        title: "Update solder mask clearance & tooling holes",
-        layers: 4,
-        thickness: "1.6mm",
-        finish: "ENIG",
-        status: "Released",
-        createdBy: "CAM Team",
-        createdAt: "2026-01-02T08:12:00.000Z",
-        checklist: { gerber: true, drill: true, stackup: true, fabDrawing: true, bom: true, panelDrawing: true },
-      },
-      {
-        id: "rev_1002",
-        jobCode: "PCBXP-ALPHA-12",
-        baseRevision: "R2",
-        newRevision: "R3",
-        title: "Drill size normalization for yield improvement",
-        layers: 4,
-        thickness: "1.6mm",
-        finish: "ENIG",
-        status: "Pending ECO",
-        createdBy: "Engineering",
-        createdAt: "2026-01-04T15:40:00.000Z",
-        checklist: { gerber: true, drill: true, stackup: true, fabDrawing: true, bom: false, panelDrawing: false },
-      },
-      {
-        id: "rev_2001",
-        jobCode: "PCBXP-BETA-77",
-        baseRevision: "R0",
-        newRevision: "R1",
-        title: "Initial release package for customer prototype",
-        layers: 2,
-        thickness: "1.0mm",
-        finish: "LF-HASL",
-        status: "Pending QA",
-        createdBy: "Sales CAM",
-        createdAt: "2026-01-01T10:05:00.000Z",
-        checklist: { gerber: true, drill: true, stackup: true, fabDrawing: true, bom: false, panelDrawing: false },
-      },
-      {
-        id: "rev_3001",
-        jobCode: "PCBXP-GAMMA-05",
-        baseRevision: "R3",
-        newRevision: "R4",
-        title: "Silk cleanup and solder mask tenting update",
-        layers: 6,
-        thickness: "1.6mm",
-        finish: "OSP",
-        status: "Draft",
-        createdBy: "CAM",
-        createdAt: "2026-01-03T19:21:00.000Z",
-        checklist: { gerber: true, drill: true, stackup: true, fabDrawing: true, bom: true, panelDrawing: true },
-      },
-    ];
-
-    const {
-      search = "",
-      status = "All",
-      finish = "All",
-      layers = "All",
-      job = "",
-      page = 1,
-      pageSize = 10,
-    } = params || {};
-
-    let filtered = [...all];
-
-    const q = (search || "").trim().toLowerCase();
-    if (q) {
-      filtered = filtered.filter((x) => {
-        const blob = [
-          x.jobCode,
-          x.baseRevision,
-          x.newRevision,
-          x.title,
-          x.finish,
-          x.status,
-          String(x.layers),
-        ]
-          .join(" ")
-          .toLowerCase();
-        return blob.includes(q);
-      });
-    }
-
-    const jobQ = (job || "").trim().toLowerCase();
-    if (jobQ) filtered = filtered.filter((x) => x.jobCode.toLowerCase().includes(jobQ));
-
-    if (status && status !== "All") filtered = filtered.filter((x) => x.status === status);
-    if (finish && finish !== "All") filtered = filtered.filter((x) => x.finish === finish);
-    if (layers && layers !== "All") filtered = filtered.filter((x) => String(x.layers) === String(layers));
-
-    // newest first
-    filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
-    const total = filtered.length;
-    const start = (Number(page) - 1) * Number(pageSize);
-    const items = filtered.slice(start, start + Number(pageSize));
-
-    return { items, total, page: Number(page), pageSize: Number(pageSize) };
-  },
-
-  async remove(id) {
-    await new Promise((r) => setTimeout(r, 250));
-    return { ok: true, id };
-  },
-};
+import revisionService from "@/services/engineering/revisions.service";
 
 export default function RevisionList() {
   const { toast } = useToast();
@@ -251,7 +135,7 @@ export default function RevisionList() {
   const fetchList = async () => {
     setLoading(true);
     try {
-      const res = await revisionService.list(query);
+      const res = await revisionService.getAll(query);
       setRows(res.items || []);
       setMeta({ total: res.total || 0, page: res.page || 1, pageSize: res.pageSize || 10 });
     } catch (e) {
@@ -301,7 +185,7 @@ export default function RevisionList() {
     if (!deleteTarget?.id) return;
     setDeleting(true);
     try {
-      await revisionService.remove(deleteTarget.id);
+      await revisionService.delete(deleteTarget.id);
       toast({ title: "Deleted", description: `${deleteTarget.jobCode} ${deleteTarget.newRevision} removed.` });
       setDeleteOpen(false);
       setDeleteTarget(null);

@@ -10,7 +10,9 @@ import {
     Loader2,
     Save,
     Search,
+    Settings,
     ShieldCheck,
+    Upload,
     XCircle,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -23,6 +25,9 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 import dfmApi from "@/services/engineering/dfm.service";
+import GerberUpload from "@/components/engineering/GerberUpload";
+import CapabilityRulesConfig from "@/components/engineering/CapabilityRulesConfig";
+import { dfmAnalyzer } from "@/lib/gerberParser";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -233,10 +238,116 @@ export default function DFMChecklist() {
   // DFM rows
   const [rows, setRows] = useState(() => createInitialRows(BASE_CHECKS));
 
+  // Gerber analysis state
+  const [gerberAnalysis, setGerberAnalysis] = useState(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+
+  // Capability rules state
+  const [capabilityRules, setCapabilityRules] = useState({
+    minTraceWidth: 0.1,
+    minSpace: 0.1,
+    minAnnularRing: 0.15,
+    maxDrillAspectRatio: 10,
+    minDrillSize: 0.2,
+    maxBoardSize: { width: 600, height: 600 },
+    minBoardSize: { width: 10, height: 10 },
+  });
+
   // optional: load existing from backend when you add route param (?id= or ?rfq= etc.)
   useEffect(() => {
     // You can implement: dfmApi.getLatest({rfq_no, sales_order_no, cam_no}) etc.
   }, []);
+
+  // Handle Gerber analysis completion
+  const handleGerberAnalysisComplete = (analysisResult) => {
+    setGerberAnalysis(analysisResult);
+    setUploadedFiles(analysisResult?.files || []);
+    
+    // Update DFM checklist based on analysis results
+    if (analysisResult) {
+      updateChecklistFromAnalysis(analysisResult);
+    }
+  };
+
+  // Update checklist based on Gerber analysis
+  const updateChecklistFromAnalysis = (analysisResult) => {
+    setRows(prevRows => prevRows.map(row => {
+      let updatedRow = { ...row };
+      
+      // Update based on analysis results
+      if (analysisResult.summary.totalViolations > 0) {
+        // Set relevant checks to fail based on violations
+        if (row.category === 'outline' && analysisResult.summary.criticalIssues.some(issue => issue.includes('outline'))) {
+          updatedRow.status = 'fail';
+          updatedRow.comment = 'Board outline issues detected in Gerber analysis';
+        }
+        if (row.category === 'drill' && analysisResult.summary.criticalIssues.some(issue => issue.includes('drill'))) {
+          updatedRow.status = 'fail';
+          updatedRow.comment = 'Drill file issues detected in Gerber analysis';
+        }
+        if (row.category === 'copper' && analysisResult.summary.criticalIssues.some(issue => issue.includes('copper'))) {
+          updatedRow.status = 'fail';
+          updatedRow.comment = 'Copper layer issues detected in Gerber analysis';
+        }
+      }
+
+      // Update based on layer detection
+      if (row.id === 'stk-1' && analysisResult.board) {
+        // Board dimensions check
+        const { width, height } = analysisResult.board.dimensions;
+        if (width < 10 || height < 10) {
+          updatedRow.status = 'fail';
+          updatedRow.comment = `Board dimensions too small: ${width.toFixed(2)} x ${height.toFixed(2)}mm`;
+        } else if (width > 600 || height > 600) {
+          updatedRow.status = 'fail';
+          updatedRow.comment = `Board dimensions too large: ${width.toFixed(2)} x ${height.toFixed(2)}mm`;
+        } else {
+          updatedRow.status = 'pass';
+          updatedRow.comment = `Board dimensions: ${width.toFixed(2)} x ${height.toFixed(2)}mm`;
+        }
+      }
+
+      if (row.id === 'dr-1') {
+        // Drill file check
+        const hasDrill = analysisResult.board.hasDrill;
+        if (!hasDrill) {
+          updatedRow.status = 'warn';
+          updatedRow.comment = 'No drill file detected - assuming no through-hole components';
+        } else {
+          updatedRow.status = 'pass';
+          updatedRow.comment = 'Drill file detected and parsed successfully';
+        }
+      }
+
+      if (row.id === 'ol-1') {
+        // Outline check
+        const hasOutline = analysisResult.board.hasOutline;
+        if (!hasOutline) {
+          updatedRow.status = 'fail';
+          updatedRow.comment = 'No board outline detected in Gerber files';
+        } else {
+          updatedRow.status = 'pass';
+          updatedRow.comment = 'Board outline detected and validated';
+        }
+      }
+
+      return updatedRow;
+    }));
+  };
+
+  // Reset Gerber analysis
+  const resetGerberAnalysis = () => {
+    setGerberAnalysis(null);
+    setUploadedFiles([]);
+    // Reset checklist items affected by Gerber analysis
+    setRows(prevRows => prevRows.map(row => {
+      if (['stk-1', 'dr-1', 'ol-1'].includes(row.id)) {
+        return { ...row, status: 'na', comment: '' };
+      }
+      return row;
+    }));
+  };
 
   const filteredRows = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -486,6 +597,48 @@ export default function DFMChecklist() {
                 </p>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Gerber Upload */}
+        <Card className="lg:col-span-3">
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Upload className="h-4 w-4 text-[#dc2551]" />
+              Gerber File Analysis
+            </CardTitle>
+            <CardDescription>
+              Upload Gerber files for automated DFM validation and capability rule checking
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <GerberUpload
+              onAnalysisComplete={handleGerberAnalysisComplete}
+              disabled={isAnalyzing}
+            />
+          </CardContent>
+        </Card>
+
+        {/* Capability Rules Configuration */}
+        <Card className="lg:col-span-3">
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Settings className="h-4 w-4 text-[#dc2551]" />
+              Capability Rules
+            </CardTitle>
+            <CardDescription>
+              Configure manufacturing capability limits for DFM validation
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <CapabilityRulesConfig
+              initialRules={capabilityRules}
+              onUpdate={(newRules) => {
+                setCapabilityRules(newRules);
+                // Update the analyzer with new rules
+                dfmAnalyzer.rulesEngine.rules = { ...dfmAnalyzer.rulesEngine.rules, ...newRules };
+              }}
+            />
           </CardContent>
         </Card>
       </div>

@@ -66,41 +66,7 @@ function cx(...parts) {
   return parts.filter(Boolean).join(" ");
 }
 
-/** Mock services (replace with axios services) */
-const revisionService = {
-  async getPrefill({ jobCode }) {
-    await new Promise((r) => setTimeout(r, 250));
-    if (!jobCode) return null;
-    return {
-      latestRevision: "R2",
-      defaults: {
-        layerCount: 4,
-        boardThickness: "1.6mm",
-        surfaceFinish: "ENIG",
-        solderMask: "Green",
-        silkscreen: "White",
-      },
-    };
-  },
-
-  async create(payload) {
-    await new Promise((r) => setTimeout(r, 450));
-
-    // Simulate server validation
-    if (!payload?.jobCode || !payload?.newRevision) {
-      const err = new Error("Validation error");
-      err.response = { status: 422, data: { message: "Job Code and New Revision are required." } };
-      throw err;
-    }
-
-    return {
-      id: "rev_" + Math.random().toString(16).slice(2),
-      ...payload,
-      createdAt: new Date().toISOString(),
-      status: payload?.approvals?.requiresECO ? "Pending ECO" : "Draft",
-    };
-  },
-};
+import revisionService from "@/services/engineering/revisions.service";
 
 const SURFACE_FINISH = ["HASL", "LF-HASL", "ENIG", "OSP", "Immersion Silver", "Immersion Tin"];
 const MASKS = ["Green", "Black", "Blue", "Red", "White", "Yellow", "Matte Black"];
@@ -166,7 +132,7 @@ export default function RevisionCreate() {
 
     setLoadingPrefill(true);
     try {
-      const res = await revisionService.getPrefill({ jobCode: job });
+      const res = await revisionService.getPrefill(job);
 
       if (res?.latestRevision && !baseRevision) setBaseRevision(res.latestRevision);
       if (res?.defaults) {

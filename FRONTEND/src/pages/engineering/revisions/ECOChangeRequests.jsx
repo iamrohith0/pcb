@@ -86,100 +86,7 @@ function shortId(id) {
   return `${id.slice(0, 6)}…${id.slice(-4)}`;
 }
 
-/** Mock API – replace with real service */
-const ecoService = {
-  async list(params) {
-    // Simulate network delay
-    await new Promise((r) => setTimeout(r, 250));
-
-    // Mock data
-    const rows = [
-      {
-        id: "ECO-2026-00041",
-        title: "Update solder mask expansion for fine-pitch BGA",
-        projectCode: "PCBXP-ALPHA-12",
-        customer: "Aster Devices",
-        reason: "Assembly bridging observed in pilot run",
-        status: "in_review",
-        priority: "high",
-        createdAt: "2026-01-03T10:15:00.000Z",
-        owner: "CAM",
-        affected: ["Gerber", "DFM", "Stackup"],
-        revisionFrom: "R1",
-        revisionTo: "R2",
-      },
-      {
-        id: "ECO-2026-00037",
-        title: "Change via tenting rule for outdoor controller",
-        projectCode: "PCBXP-PLANT-07",
-        customer: "Kite Controls",
-        reason: "Ingress risk improvement",
-        status: "submitted",
-        priority: "medium",
-        createdAt: "2026-01-01T08:02:00.000Z",
-        owner: "Engineering",
-        affected: ["DFM", "Routing"],
-        revisionFrom: "R3",
-        revisionTo: "R4",
-      },
-      {
-        id: "ECO-2025-00992",
-        title: "Swap laminate from FR4 TG150 to TG170 (lead time)",
-        projectCode: "PCBXP-OMEGA-21",
-        customer: "NeoGrid",
-        reason: "Supply constraint & thermal margin",
-        status: "approved",
-        priority: "critical",
-        createdAt: "2025-12-22T13:41:00.000Z",
-        owner: "Procurement",
-        affected: ["Stackup", "Procurement"],
-        revisionFrom: "R5",
-        revisionTo: "R6",
-      },
-    ];
-
-    // Basic filtering for mock
-    const { query, status, priority, from, to } = params || {};
-    const q = (query || "").toLowerCase();
-
-    let filtered = rows.filter((r) => {
-      const matchesQ =
-        !q ||
-        r.id.toLowerCase().includes(q) ||
-        r.title.toLowerCase().includes(q) ||
-        r.projectCode.toLowerCase().includes(q) ||
-        r.customer.toLowerCase().includes(q);
-
-      const matchesStatus = !status || status === "all" || r.status === status;
-      const matchesPriority = !priority || priority === "all" || r.priority === priority;
-
-      const created = new Date(r.createdAt).getTime();
-      const fromOk = !from || created >= new Date(from).getTime();
-      const toOk = !to || created <= new Date(to).getTime();
-
-      return matchesQ && matchesStatus && matchesPriority && fromOk && toOk;
-    });
-
-    // Newest first
-    filtered = filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    return { data: filtered };
-  },
-
-  async approve(id) {
-    await new Promise((r) => setTimeout(r, 250));
-    return { ok: true, id };
-  },
-
-  async reject(id) {
-    await new Promise((r) => setTimeout(r, 250));
-    return { ok: true, id };
-  },
-
-  async remove(id) {
-    await new Promise((r) => setTimeout(r, 250));
-    return { ok: true, id };
-  },
-};
+import revisionService from "@/services/engineering/revisions.service";
 
 function StatusBadge({ status }) {
   const s = STATUS[status] || { label: status || "Unknown", className: "bg-gray-100 text-gray-800" };
@@ -236,7 +143,7 @@ export default function ECOChangeRequests() {
   const load = async () => {
     setLoading(true);
     try {
-      const res = await ecoService.list({ query, status, priority, from, to });
+      const res = await revisionService.listEco({ query, status, priority, from, to });
       setRows(res.data || []);
     } catch (e) {
       toast({
@@ -286,13 +193,13 @@ export default function ECOChangeRequests() {
       setLoading(true);
 
       if (mode === "approve") {
-        await ecoService.approve(id);
+        await revisionService.approveEco(id);
         toast({ title: "ECO Approved", description: `${id} has been approved.` });
       } else if (mode === "reject") {
-        await ecoService.reject(id);
+        await revisionService.rejectEco(id);
         toast({ title: "ECO Rejected", description: `${id} has been rejected.` });
       } else if (mode === "delete") {
-        await ecoService.remove(id);
+        await revisionService.deleteEco(id);
         toast({ title: "ECO Deleted", description: `${id} has been deleted.` });
       }
 

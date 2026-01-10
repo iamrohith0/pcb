@@ -121,7 +121,7 @@ function normalizeListPayload(payload) {
     items,
     total: payload?.total ?? payload?.data?.total ?? items.length,
     page: payload?.page ?? payload?.data?.page ?? 1,
-    pageSize: payload?.pageSize ?? payload?.data?.pageSize ?? items.length || 10,
+    pageSize: payload?.pageSize ?? payload?.data?.pageSize ?? (items.length || 10),
   };
 }
 

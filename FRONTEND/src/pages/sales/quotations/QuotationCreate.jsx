@@ -23,6 +23,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 import customersService from "@/services/sales/customers.service";
 import quotationsService from "@/services/sales/quotations.service";
+import rfqService from "@/services/sales/rfq.service";
 
 function cx(...parts) {
   return parts.filter(Boolean).join(" ");
@@ -87,10 +88,12 @@ export default function QuotationCreate() {
 
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [rfqLoading, setRfqLoading] = useState(false);
 
   // Customers
   const [customers, setCustomers] = useState([]);
   const [customerId, setCustomerId] = useState("");
+  const [customerRfqs, setCustomerRfqs] = useState([]);
   const selectedCustomer = useMemo(
     () => customers.find((c) => pickId(c) === customerId) || null,
     [customers, customerId]
@@ -156,6 +159,49 @@ export default function QuotationCreate() {
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Function to automatically set RFQ reference when customer is selected
+  const autoSetRfqReference = async (customerId) => {
+    if (!customerId) {
+      setCustomerRfqs([]);
+      setRfqRef("");
+      return;
+    }
+
+    setRfqLoading(true);
+    try {
+      // Fetch RFQs for the selected customer
+      const res = await rfqService.list({ customerId, status: "Open", sort: "date_desc" });
+      const rfqs = res?.data?.data ?? res?.data?.items ?? res?.data ?? [];
+      
+      setCustomerRfqs(Array.isArray(rfqs) ? rfqs : []);
+
+      // Auto-select the most recent open RFQ
+      if (Array.isArray(rfqs) && rfqs.length > 0) {
+        const latestRfq = rfqs[0]; // Already sorted by date_desc
+        setRfqRef(latestRfq.rfqNo || latestRfq.rfq_no || latestRfq.number || "");
+        
+        toast({
+          title: "RFQ Auto-Selected",
+          description: `Auto-selected latest RFQ: ${latestRfq.rfqNo || latestRfq.rfq_no || latestRfq.number || ""}`,
+        });
+      } else {
+        setRfqRef("");
+      }
+    } catch (err) {
+      console.warn("Failed to fetch customer RFQs:", err);
+      setCustomerRfqs([]);
+      setRfqRef("");
+    } finally {
+      setRfqLoading(false);
+    }
+  };
+
+  // Effect to fetch RFQs when customer is selected
+  useEffect(() => {
+    autoSetRfqReference(customerId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customerId]);
 
   const totals = useMemo(() => {
     let subTotal = 0;
@@ -365,8 +411,28 @@ export default function QuotationCreate() {
             </div>
 
             <div className="space-y-2">
-              <Label>RFQ Reference (optional)</Label>
-              <Input value={rfqRef} onChange={(e) => setRfqRef(e.target.value)} placeholder="RFQ / Enquiry reference" />
+              <Label className="inline-flex items-center gap-2">
+                RFQ Reference (optional)
+                {rfqLoading && <Loader2 className="h-4 w-4 animate-spin text-gray-500" />}
+              </Label>
+              <div className="relative">
+                <Input
+                  value={rfqRef}
+                  onChange={(e) => setRfqRef(e.target.value)}
+                  placeholder="RFQ / Enquiry reference"
+                  disabled={rfqLoading}
+                />
+                {customerRfqs.length > 0 && (
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-500">
+                    {customerRfqs.length} RFQs available
+                  </div>
+                )}
+              </div>
+              {customerRfqs.length > 0 && (
+                <div className="text-xs text-gray-600">
+                  Auto-selected latest open RFQ. You can change this manually if needed.
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">
