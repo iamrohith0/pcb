@@ -1,4 +1,5 @@
 psql -U postgres -d pcbxpress
+\dt -list tables
 
 
 
