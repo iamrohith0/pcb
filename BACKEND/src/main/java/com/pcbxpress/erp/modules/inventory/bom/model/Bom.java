@@ -85,6 +85,7 @@ public class Bom {
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
     
+    
     @PrePersist
     protected void onCreate() {
         OffsetDateTime now = OffsetDateTime.now();

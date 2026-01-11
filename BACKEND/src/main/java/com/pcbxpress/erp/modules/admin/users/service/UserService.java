@@ -3,7 +3,7 @@ package com.pcbxpress.erp.modules.admin.users.service;
 import com.pcbxpress.erp.modules.admin.users.dto.UserDto;
 import com.pcbxpress.erp.modules.admin.users.dto.UserPayload;
 import com.pcbxpress.erp.modules.admin.users.model.User;
-import com.pcbxpress.erp.modules.admin.users.repository.UserRepository;
+import com.pcbxpress.erp.modules.admin.users.repository.AdminUserRepository;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Locale;
@@ -21,9 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserService {
     
-    private final UserRepository userRepository;
+    private final AdminUserRepository userRepository;
     
-    public UserService(UserRepository userRepository) {
+    public UserService(AdminUserRepository userRepository) {
         this.userRepository = userRepository;
     }
     

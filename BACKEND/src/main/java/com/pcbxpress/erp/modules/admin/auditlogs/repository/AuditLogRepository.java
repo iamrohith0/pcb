@@ -3,7 +3,7 @@ package com.pcbxpress.erp.modules.admin.auditlogs.repository;
 import com.pcbxpress.erp.modules.admin.auditlogs.model.AuditLog;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
  * Repository for Admin Audit Logs
  */
 @Repository
-public interface AuditLogRepository extends JpaRepository<AuditLog, UUID> {
+public interface AuditLogRepository extends JpaRepository<AuditLog, Long> {
     
     /**
      * Find audit log by log ID
@@ -25,7 +25,7 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, UUID> {
     /**
      * Find audit logs by actor
      */
-    List<AuditLog> findByActor(String actor);
+    List<AuditLog> findByUserId(Long userId);
     
     /**
      * Find audit logs by module
@@ -70,7 +70,7 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, UUID> {
     /**
      * Find audit logs by actor and timestamp range
      */
-    List<AuditLog> findByActorAndTimestampBetween(String actor, OffsetDateTime from, OffsetDateTime to);
+    List<AuditLog> findByUserIdAndTimestampBetween(Long userId, OffsetDateTime from, OffsetDateTime to);
     
     /**
      * Find audit logs by module and timestamp range
@@ -88,7 +88,7 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, UUID> {
     @Query("SELECT al FROM AuditLog al WHERE " +
            "(:from IS NULL OR al.timestamp >= :from) " +
            "AND (:to IS NULL OR al.timestamp <= :to) " +
-           "AND (:actor IS NULL OR LOWER(al.actor) LIKE LOWER(CONCAT('%', :actor, '%'))) " +
+           "AND (:actor IS NULL OR al.userId = :actor) " +
            "AND (:module IS NULL OR LOWER(al.module) LIKE LOWER(CONCAT('%', :module, '%'))) " +
            "AND (:action IS NULL OR LOWER(al.action) LIKE LOWER(CONCAT('%', :action, '%'))) " +
            "AND (:entity IS NULL OR LOWER(al.entity) LIKE LOWER(CONCAT('%', :entity, '%'))) " +
@@ -114,7 +114,7 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, UUID> {
     @Query("SELECT al FROM AuditLog al WHERE " +
            "(:from IS NULL OR al.timestamp >= :from) " +
            "AND (:to IS NULL OR al.timestamp <= :to) " +
-           "AND (:actor IS NULL OR LOWER(al.actor) LIKE LOWER(CONCAT('%', :actor, '%'))) " +
+           "AND (:actor IS NULL OR al.userId = :actor) " +
            "AND (:module IS NULL OR LOWER(al.module) LIKE LOWER(CONCAT('%', :module, '%'))) " +
            "AND (:action IS NULL OR LOWER(al.action) LIKE LOWER(CONCAT('%', :action, '%'))) " +
            "AND (:entity IS NULL OR LOWER(al.entity) LIKE LOWER(CONCAT('%', :entity, '%'))) " +
@@ -126,7 +126,7 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, UUID> {
            "LOWER(al.entityId) LIKE LOWER(CONCAT('%', :searchText, '%')))")
     Page<AuditLog> findByCriteriaWithPagination(@Param("from") OffsetDateTime from,
                                                @Param("to") OffsetDateTime to,
-                                               @Param("actor") String actor,
+                                               @Param("actor") Long userId,
                                                @Param("module") String module,
                                                @Param("action") String action,
                                                @Param("entity") String entity,
@@ -153,7 +153,7 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, UUID> {
     /**
      * Count audit logs by actor
      */
-    long countByActor(String actor);
+    long countByUserId(Long userId);
     
     /**
      * Count audit logs by timestamp range
@@ -163,8 +163,7 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, UUID> {
     /**
      * Find recent audit logs by actor
      */
-    @Query("SELECT al FROM AuditLog al WHERE al.actor = :actor ORDER BY al.timestamp DESC")
-    List<AuditLog> findRecentByActor(@Param("actor") String actor);
+    List<AuditLog> findByUserIdOrderByTimestampDesc(Long userId);
     
     /**
      * Find recent audit logs by module

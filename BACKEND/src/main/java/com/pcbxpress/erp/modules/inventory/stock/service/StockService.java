@@ -237,7 +237,7 @@ public class StockService {
     
     private StockSummaryDto mapToStockSummaryDto(Object[] row) {
         return new StockSummaryDto(
-            ((UUID) row[0]).toString(),
+            (UUID) row[0],
             (String) row[1],
             (String) row[2],
             (BigDecimal) row[3],

@@ -16,7 +16,7 @@ import java.util.UUID;
  * User Entity for Admin Module
  * Represents a user in the PCBXpress ERP system
  */
-@Entity
+@Entity(name = "AdminUser")
 @Table(name = "admin_users", indexes = {
     @Index(name = "idx_users_email", columnList = "email"),
     @Index(name = "idx_users_username", columnList = "username"),

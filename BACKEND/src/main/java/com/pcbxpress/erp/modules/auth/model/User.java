@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
-@Entity
+@Entity(name = "AuthUser")
 @Table(name = "users", indexes = {
     @Index(name = "idx_users_username", columnList = "username"),
     @Index(name = "idx_users_email", columnList = "email"),

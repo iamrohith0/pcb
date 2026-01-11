@@ -16,20 +16,18 @@ import java.util.UUID;
  * Represents an audit trail entry for system activities
  */
 @Entity
-@Table(name = "admin_audit_logs", indexes = {
-    @Index(name = "idx_audit_logs_actor", columnList = "actor"),
-    @Index(name = "idx_audit_logs_module", columnList = "module"),
+@Table(name = "user_audit_log", indexes = {
+    @Index(name = "idx_audit_logs_actor", columnList = "user_id"),
     @Index(name = "idx_audit_logs_action", columnList = "action"),
-    @Index(name = "idx_audit_logs_entity", columnList = "entity"),
-    @Index(name = "idx_audit_logs_severity", columnList = "severity"),
+    @Index(name = "idx_audit_logs_entity", columnList = "resource_type"),
     @Index(name = "idx_audit_logs_created_at", columnList = "created_at"),
     @Index(name = "idx_audit_logs_ip", columnList = "ip_address")
 })
 public class AuditLog {
     
     @Id
-    @Column(nullable = false, columnDefinition = "uuid")
-    private UUID id;
+    @Column(name = "id", nullable = false, columnDefinition = "bigint")
+    private Long id;
     
     @Column(name = "log_id", nullable = false, unique = true, length = 50)
     private String logId;
@@ -47,14 +45,14 @@ public class AuditLog {
     @Column(name = "action", nullable = false, length = 50)
     private String action;
     
-    @Column(name = "entity", nullable = false, length = 100)
+    @Column(name = "resource_type", nullable = false, length = 100)
     private String entity;
     
-    @Column(name = "entity_id", length = 100)
+    @Column(name = "resource_id", length = 100)
     private String entityId;
     
-    @Column(name = "actor", nullable = false, length = 200)
-    private String actor;
+    @Column(name = "user_id", columnDefinition = "bigint")
+    private Long userId;
     
     @Column(name = "ip_address", length = 50)
     private String ipAddress;
@@ -64,6 +62,12 @@ public class AuditLog {
     
     @Column(name = "message", nullable = false, columnDefinition = "text")
     private String message;
+    
+    @Column(name = "request_data", columnDefinition = "jsonb")
+    private String requestData;
+    
+    @Column(name = "response_data", columnDefinition = "jsonb")
+    private String responseData;
     
     @Column(name = "before_data", columnDefinition = "jsonb")
     private String beforeData;
@@ -100,11 +104,11 @@ public class AuditLog {
     
     // Getters and Setters
     
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
     
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
     
@@ -164,12 +168,28 @@ public class AuditLog {
         this.entityId = entityId;
     }
     
-    public String getActor() {
-        return actor;
+    public Long getUserId() {
+        return userId;
     }
     
-    public void setActor(String actor) {
-        this.actor = actor;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+    
+    public String getRequestData() {
+        return requestData;
+    }
+    
+    public void setRequestData(String requestData) {
+        this.requestData = requestData;
+    }
+    
+    public String getResponseData() {
+        return responseData;
+    }
+    
+    public void setResponseData(String responseData) {
+        this.responseData = responseData;
     }
     
     public String getIpAddress() {

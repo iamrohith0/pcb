@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * Repository for Admin Users
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, UUID> {
+public interface AdminUserRepository extends JpaRepository<User, UUID> {
     
     /**
      * Find user by username (case insensitive)
@@ -97,7 +97,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     /**
      * Find users by multiple criteria
      */
-    @Query("SELECT u FROM User u WHERE " +
+    @Query("SELECT u FROM AdminUser u WHERE " +
            "(:role IS NULL OR u.role = :role) " +
            "AND (:status IS NULL OR " +
            "(:status = 'active' AND u.isActive = true) OR " +
@@ -111,11 +111,11 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     List<User> findByCriteria(@Param("role") User.Role role,
                              @Param("status") String status,
                              @Param("searchText") String searchText);
-    
+
     /**
      * Find users with recent login activity
      */
-    @Query("SELECT u FROM User u WHERE u.lastLoginAt IS NOT NULL " +
+    @Query("SELECT u FROM AdminUser u WHERE u.lastLoginAt IS NOT NULL " +
            "AND u.lastLoginAt > :since")
     List<User> findUsersWithRecentLogin(@Param("since") java.time.OffsetDateTime since);
     

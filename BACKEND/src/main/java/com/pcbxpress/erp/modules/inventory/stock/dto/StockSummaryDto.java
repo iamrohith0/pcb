@@ -1,12 +1,13 @@
 package com.pcbxpress.erp.modules.inventory.stock.dto;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
  * Summary DTO for Stock Dashboard
  */
 public record StockSummaryDto(
-    String itemId,
+    UUID itemId,
     String itemName,
     String itemCode,
     BigDecimal totalQuantity,

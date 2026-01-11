@@ -375,4 +375,17 @@ public interface BreakdownRepository extends JpaRepository<Breakdown, UUID> {
                                                                                                                                            @Param("rootCause") String rootCause,
                                                                                                                                            @Param("startDate") LocalDateTime startDate,
                                                                                                                                            @Param("endDate") LocalDateTime endDate);
-}
+                                                                   
+                                                                   // Count methods for statistics
+                                                                   long countByStatus(String status);
+                                                                   long countByBreakdownType(String breakdownType);
+                                                                   long countBySeverity(String severity);
+                                                                   long countByAssignedTo(String assignedTo);
+                                                                   long countByReportedBy(String reportedBy);
+                                                                   long countByEquipmentId(UUID equipmentId);
+                                                                   long countByEquipmentIdAndStatus(UUID equipmentId, String status);
+                                                                   long countByEquipmentIdAndBreakdownType(UUID equipmentId, String breakdownType);
+                                                                   long countByEquipmentIdAndSeverity(UUID equipmentId, String severity);
+                                                                   long countByEquipmentIdAndAssignedTo(UUID equipmentId, String assignedTo);
+                                                                   long countByEquipmentIdAndReportedBy(UUID equipmentId, String reportedBy);
+                                                               }
