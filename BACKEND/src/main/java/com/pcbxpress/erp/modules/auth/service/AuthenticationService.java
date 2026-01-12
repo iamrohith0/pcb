@@ -3,6 +3,7 @@ package com.pcbxpress.erp.modules.auth.service;
 import com.pcbxpress.erp.modules.auth.dto.AuthUserDto;
 import com.pcbxpress.erp.modules.auth.dto.LoginRequest;
 import com.pcbxpress.erp.modules.auth.dto.LoginResponse;
+import com.pcbxpress.erp.modules.auth.jwt.JwtService;
 import com.pcbxpress.erp.modules.auth.model.User;
 import com.pcbxpress.erp.modules.auth.model.UserRole;
 import com.pcbxpress.erp.modules.auth.model.UserStatus;
@@ -23,11 +24,13 @@ public class AuthenticationService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     @Autowired
-    public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public LoginResponse login(LoginRequest loginRequest) {
@@ -83,9 +86,9 @@ public class AuthenticationService {
             user.getRole().name()
         );
 
-        // Generate tokens (in a real implementation, you would use JWT)
-        String accessToken = generateAccessToken(user);
-        String refreshToken = generateRefreshToken(user);
+        // Generate JWT access and refresh tokens
+        String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
         
         // Set token expiration (2 hours for access token)
         ZonedDateTime expiresAt = ZonedDateTime.now().plus(Duration.ofHours(2));
@@ -131,23 +134,7 @@ public class AuthenticationService {
         userRepository.save(user);
     }
 
-    private String generateAccessToken(User user) {
-        // In a real implementation, you would generate a JWT token
-        // For now, returning a simple token
-        return "access_token_" + user.getId() + "_" + System.currentTimeMillis();
-    }
-
-    private String generateRefreshToken(User user) {
-        // In a real implementation, you would generate a JWT refresh token
-        // For now, returning a simple token
-        return "refresh_token_" + user.getId() + "_" + System.currentTimeMillis();
-    }
-
-    public boolean validateToken(String token) {
-        // In a real implementation, you would validate the JWT token
-        // For now, just check if it's not null and has the expected format
-        return token != null && token.startsWith("access_token_");
-    }
+    // Token generation and validation are delegated to JwtService
 
     private static String resolveIdentifier(LoginRequest loginRequest) {
         String id = trimOrNull(loginRequest.getIdentifier());
