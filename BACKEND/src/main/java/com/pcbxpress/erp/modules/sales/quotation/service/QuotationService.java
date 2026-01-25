@@ -7,131 +7,153 @@ import com.pcbxpress.erp.modules.sales.quotation.dto.QuotationDto;
 import com.pcbxpress.erp.modules.sales.quotation.dto.QuotationLineDto;
 import com.pcbxpress.erp.modules.sales.quotation.dto.QuotationPayload;
 import com.pcbxpress.erp.modules.sales.quotation.dto.QuotationTotals;
+import com.pcbxpress.erp.modules.sales.quotation.model.Quotation;
+import com.pcbxpress.erp.modules.sales.quotation.model.QuotationLine;
+import com.pcbxpress.erp.modules.sales.quotation.repository.QuotationRepository;
 import com.pcbxpress.erp.modules.sales.salesorder.service.SalesOrderService;
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class QuotationService {
 
-    private final Map<String, QuotationDto> quotations = new ConcurrentHashMap<>();
-    private final AtomicInteger sequence = new AtomicInteger(3);
+    private final QuotationRepository quotationRepository;
     private final CustomerService customerService;
     private final SalesOrderService salesOrderService;
 
-    public QuotationService(CustomerService customerService, SalesOrderService salesOrderService) {
+    public QuotationService(
+        QuotationRepository quotationRepository,
+        CustomerService customerService,
+        SalesOrderService salesOrderService
+    ) {
+        this.quotationRepository = quotationRepository;
         this.customerService = customerService;
         this.salesOrderService = salesOrderService;
     }
 
     public List<QuotationDto> list(String query, String status) {
-        return quotations.values().stream()
+        return quotationRepository.findAll().stream()
             .filter(q -> query == null || matchesQuery(q, query))
             .filter(q -> status == null || status.isBlank() || status.equalsIgnoreCase("all")
-                || q.status().equalsIgnoreCase(status))
-            .sorted(Comparator.comparing(QuotationDto::createdAt).reversed())
+                || safe(q.getStatus()).equalsIgnoreCase(status))
+            .sorted(Comparator.comparing(Quotation::getUpdatedAt, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
+            .map(this::toDto)
             .toList();
     }
 
     public QuotationDto get(String id) {
-        QuotationDto dto = quotations.get(id);
-        if (dto == null) {
-            throw new NoSuchElementException("Quotation not found: " + id);
-        }
-        return dto;
+        Quotation q = quotationRepository.findById(parseId(id))
+            .orElseThrow(() -> new NoSuchElementException("Quotation not found: " + id));
+        return toDto(q);
     }
 
     public QuotationDto create(QuotationPayload payload) {
-        String id = UUID.randomUUID().toString();
+        Quotation q = new Quotation();
+
+        // quote no
         String quoteNo = payload.quoteNo() != null && !payload.quoteNo().isBlank()
             ? payload.quoteNo()
             : nextNumber();
-        LocalDate quoteDate = payload.quoteDate() != null ? payload.quoteDate() : LocalDate.now();
-        LocalDate validUntil = payload.validUntil() != null ? payload.validUntil() : quoteDate.plusDays(14);
+
+        q.setQuoteNo(quoteNo);
+        q.setQuoteDate(payload.quoteDate() != null ? payload.quoteDate() : LocalDate.now());
+        q.setValidUntil(payload.validUntil() != null ? payload.validUntil() : q.getQuoteDate().plusDays(14));
+
+        q.setStatus(payload.status() != null && !payload.status().isBlank() ? payload.status() : "Draft");
+        q.setCurrency(payload.currency() != null && !payload.currency().isBlank() ? payload.currency() : "INR");
+        q.setIncoterms(payload.incoterms());
+        q.setLeadTime(payload.leadTime());
+        q.setPaymentTerms(payload.paymentTerms());
+        q.setRemarks(payload.remarks());
+        q.setInternalNote(payload.internalNote());
+
+        // rfq link
+        if (payload.rfqRef() != null && !payload.rfqRef().isBlank()) {
+            q.setRfqRef(payload.rfqRef());
+        }
+        // If your frontend sends rfqId later, you can add it; your payload currently doesn't include rfqId.
+        // q.setRfqId(...)
+
+        // customer
+        if (payload.customerId() != null && !payload.customerId().isBlank()) {
+            q.setCustomerId(UUID.fromString(payload.customerId()));
+        }
+
+        // PCB spec (flatten)
+        applyPcb(q, payload.pcb());
+
+        // Lines
+        q.setLines(toLineEntities(payload.lines()));
+
+        // Totals
         QuotationTotals totals = payload.totals() != null ? payload.totals() : calculateTotals(payload.lines());
-        OffsetDateTime now = OffsetDateTime.now();
-        QuotationDto dto = toDto(id, quoteNo, quoteDate, validUntil, totals, payload, now, now);
-        quotations.put(id, dto);
-        return dto;
+        applyTotals(q, totals);
+
+        Quotation saved = quotationRepository.save(q);
+        return toDto(saved);
     }
 
     public QuotationDto update(String id, QuotationPayload payload) {
-        QuotationDto existing = get(id);
-        String quoteNo = payload.quoteNo() != null ? payload.quoteNo() : existing.quoteNo();
-        LocalDate quoteDate = payload.quoteDate() != null ? payload.quoteDate() : existing.quoteDate();
-        LocalDate validUntil = payload.validUntil() != null ? payload.validUntil() : existing.validUntil();
-        QuotationTotals totals = payload.totals() != null ? payload.totals() : existing.totals();
-        QuotationDto updated = toDto(
-            id,
-            quoteNo,
-            quoteDate,
-            validUntil,
-            totals,
-            merge(existing, payload),
-            existing.createdAt(),
-            OffsetDateTime.now()
-        );
-        quotations.put(id, updated);
-        return updated;
+        Quotation q = quotationRepository.findById(parseId(id))
+            .orElseThrow(() -> new NoSuchElementException("Quotation not found: " + id));
+
+        if (payload.quoteNo() != null && !payload.quoteNo().isBlank()) q.setQuoteNo(payload.quoteNo());
+        if (payload.quoteDate() != null) q.setQuoteDate(payload.quoteDate());
+        if (payload.validUntil() != null) q.setValidUntil(payload.validUntil());
+
+        if (payload.status() != null) q.setStatus(payload.status());
+        if (payload.currency() != null) q.setCurrency(payload.currency());
+
+        if (payload.incoterms() != null) q.setIncoterms(payload.incoterms());
+        if (payload.leadTime() != null) q.setLeadTime(payload.leadTime());
+        if (payload.paymentTerms() != null) q.setPaymentTerms(payload.paymentTerms());
+        if (payload.remarks() != null) q.setRemarks(payload.remarks());
+        if (payload.internalNote() != null) q.setInternalNote(payload.internalNote());
+
+        if (payload.rfqRef() != null) q.setRfqRef(payload.rfqRef());
+        if (payload.customerId() != null && !payload.customerId().isBlank()) {
+            q.setCustomerId(UUID.fromString(payload.customerId()));
+        }
+
+        if (payload.pcb() != null) applyPcb(q, payload.pcb());
+
+        if (payload.lines() != null) {
+            q.setLines(toLineEntities(payload.lines()));
+        }
+
+        QuotationTotals totals = payload.totals() != null ? payload.totals() : calculateTotals(payload.lines());
+        if (totals != null) applyTotals(q, totals);
+
+        Quotation saved = quotationRepository.save(q);
+        return toDto(saved);
     }
 
     public void delete(String id) {
-        quotations.remove(id);
+        quotationRepository.deleteById(parseId(id));
     }
 
     public QuotationDto updateNote(String id, String note) {
-        QuotationDto existing = get(id);
-        QuotationPayload payload = new QuotationPayload(
-            existing.quoteNo(),
-            existing.quoteDate(),
-            existing.validUntil(),
-            existing.customerId(),
-            existing.rfqRef(),
-            existing.currency(),
-            existing.incoterms(),
-            existing.leadTime(),
-            existing.paymentTerms(),
-            existing.remarks(),
-            existing.pcb(),
-            existing.lines(),
-            existing.totals(),
-            existing.status(),
-            note
-        );
-        return update(id, payload);
+        Quotation q = quotationRepository.findById(parseId(id))
+            .orElseThrow(() -> new NoSuchElementException("Quotation not found: " + id));
+        q.setInternalNote(note);
+        return toDto(quotationRepository.save(q));
     }
 
     public QuotationDto markSent(String id) {
-        QuotationDto existing = get(id);
-        QuotationPayload payload = new QuotationPayload(
-            existing.quoteNo(),
-            existing.quoteDate(),
-            existing.validUntil(),
-            existing.customerId(),
-            existing.rfqRef(),
-            existing.currency(),
-            existing.incoterms(),
-            existing.leadTime(),
-            existing.paymentTerms(),
-            existing.remarks(),
-            existing.pcb(),
-            existing.lines(),
-            existing.totals(),
-            "Sent",
-            existing.internalNote()
-        );
-        return update(id, payload);
+        Quotation q = quotationRepository.findById(parseId(id))
+            .orElseThrow(() -> new NoSuchElementException("Quotation not found: " + id));
+        q.setStatus("Sent");
+        return toDto(quotationRepository.save(q));
     }
 
     public Map<String, Object> convertToSalesOrder(String id) {
@@ -154,63 +176,135 @@ public class QuotationService {
                 safe(q.status()),
                 String.valueOf(q.totals() != null && q.totals().grandTotal() != null ? q.totals().grandTotal() : 0)
             ))
-            .collect(Collectors.joining("\n"));
+            .reduce((a, b) -> a + "\n" + b)
+            .orElse("");
         return header + "\n" + rows;
     }
 
     public String nextNumber() {
-        int num = sequence.getAndIncrement();
+        // Simple approach: use year + random 3 digits if DB sequence isn't implemented.
+        // Better: parse last quoteNo from DB and increment (optional improvement).
         int year = Year.now().getValue();
-        return String.format("QT-%d-%03d", year, num);
+        int n = (int) (Math.random() * 900) + 100;
+        String candidate = String.format("QT-%d-%03d", year, n);
+        while (quotationRepository.existsByQuoteNoIgnoreCase(candidate)) {
+            n = (int) (Math.random() * 900) + 100;
+            candidate = String.format("QT-%d-%03d", year, n);
+        }
+        return candidate;
     }
 
-    private QuotationDto toDto(String id, String quoteNo, LocalDate quoteDate, LocalDate validUntil,
-                               QuotationTotals totals, QuotationPayload payload,
-                               OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+    // ----------------- Mapping helpers -----------------
+
+    private QuotationDto toDto(Quotation q) {
         CustomerSummary customer = null;
-        if (payload.customerId() != null) {
+        if (q.getCustomerId() != null) {
             try {
-                customer = customerService.summary(payload.customerId());
-            } catch (NoSuchElementException e) {
-                // Customer not found, set customer to null and continue gracefully
-                customer = null;
-            }
+                customer = customerService.summary(q.getCustomerId().toString());
+            } catch (Exception ignored) {}
         }
-        String status = payload.status() != null ? payload.status() : "Draft";
-        List<QuotationLineDto> lines = payload.lines() != null ? payload.lines() : List.of();
-        QuotationTotals computed = totals != null ? totals : calculateTotals(lines);
+
+        PcbSpecDto pcb = new PcbSpecDto(
+            q.getPcbJobName(),
+            q.getPcbBoardType(),
+            q.getPcbLayerCount(),
+            q.getPcbThickness(),
+            q.getPcbCopperWeight(),
+            q.getPcbSurfaceFinish(),
+            q.getPcbSolderMask(),
+            q.getPcbSilkscreen(),
+            q.getPcbImpedanceControl(),
+            q.getPcbViaType(),
+            q.getPcbPanelization()
+        );
+
+        List<QuotationLineDto> lines = q.getLines() != null
+            ? q.getLines().stream().map(this::toLineDto).toList()
+            : List.of();
+
+        QuotationTotals totals = new QuotationTotals(
+            toDouble(q.getSubTotal()),
+            toDouble(q.getDiscountTotal()),
+            toDouble(q.getTaxTotal()),
+            toDouble(q.getGrandTotal())
+        );
+
         return new QuotationDto(
-            id,
-            quoteNo,
-            quoteDate,
-            validUntil,
-            status,
-            payload.currency() != null ? payload.currency() : "INR",
-            payload.incoterms() != null ? payload.incoterms() : "Ex-Works",
-            payload.leadTime() != null ? payload.leadTime() : "7-10 working days",
-            payload.paymentTerms() != null ? payload.paymentTerms() : "Advance / Net 15",
-            payload.remarks(),
-            payload.rfqRef(),
-            payload.customerId(),
+            q.getId().toString(),
+            q.getQuoteNo(),
+            q.getQuoteDate(),
+            q.getValidUntil(),
+            q.getStatus(),
+            q.getCurrency(),
+            q.getIncoterms(),
+            q.getLeadTime(),
+            q.getPaymentTerms(),
+            q.getRemarks(),
+            q.getRfqRef(),
+            q.getCustomerId() != null ? q.getCustomerId().toString() : null,
             customer,
-            payload.pcb(),
+            pcb,
             lines,
-            computed,
-            payload.internalNote(),
-            createdAt,
-            updatedAt
+            totals,
+            q.getInternalNote(),
+            q.getCreatedAt(),
+            q.getUpdatedAt()
         );
     }
 
-    private static boolean matchesQuery(QuotationDto dto, String query) {
-        String q = query.toLowerCase();
-        return contains(dto.quoteNo(), q)
-            || contains(dto.customer() != null ? dto.customer().name() : null, q)
-            || contains(dto.status(), q);
+    private QuotationLineDto toLineDto(QuotationLine l) {
+        return new QuotationLineDto(
+            l.getId() != null ? l.getId().toString() : null,
+            l.getDescription(),
+            l.getHsn(),
+            l.getQty(),
+            toDouble(l.getUnitPrice()),
+            toDouble(l.getDiscountPct()),
+            toDouble(l.getCgst()),
+            toDouble(l.getSgst()),
+            toDouble(l.getIgst()),
+            l.getSpec()
+        );
     }
 
-    private static boolean contains(String value, String q) {
-        return value != null && value.toLowerCase().contains(q);
+    private static List<QuotationLine> toLineEntities(List<QuotationLineDto> lines) {
+        if (lines == null) return List.of();
+        return lines.stream().map(dto -> {
+            QuotationLine l = new QuotationLine();
+            l.setDescription(dto.description());
+            l.setHsn(dto.hsn());
+            l.setQty(dto.qty());
+            l.setUnitPrice(toBig(dto.unitPrice()));
+            l.setDiscountPct(toBig(dto.discountPct()));
+            l.setCgst(toBig(dto.cgst()));
+            l.setSgst(toBig(dto.sgst()));
+            l.setIgst(toBig(dto.igst()));
+            l.setSpec(dto.spec());
+            return l;
+        }).toList();
+    }
+
+    private static void applyPcb(Quotation q, PcbSpecDto pcb) {
+        if (pcb == null) return;
+        q.setPcbJobName(pcb.jobName());
+        q.setPcbBoardType(pcb.boardType());
+        q.setPcbLayerCount(pcb.layerCount());
+        q.setPcbThickness(pcb.thickness());
+        q.setPcbCopperWeight(pcb.copperWeight());
+        q.setPcbSurfaceFinish(pcb.surfaceFinish());
+        q.setPcbSolderMask(pcb.solderMask());
+        q.setPcbSilkscreen(pcb.silkscreen());
+        q.setPcbImpedanceControl(pcb.impedanceControl());
+        q.setPcbViaType(pcb.viaType());
+        q.setPcbPanelization(pcb.panelization());
+    }
+
+    private static void applyTotals(Quotation q, QuotationTotals totals) {
+        if (totals == null) return;
+        q.setSubTotal(toBig(totals.subTotal()));
+        q.setDiscountTotal(toBig(totals.discountTotal()));
+        q.setTaxTotal(toBig(totals.taxTotal()));
+        q.setGrandTotal(toBig(totals.grandTotal()));
     }
 
     private static QuotationTotals calculateTotals(List<QuotationLineDto> lines) {
@@ -239,32 +333,34 @@ public class QuotationService {
         return new QuotationTotals(subTotal, discountTotal, taxTotal, grandTotal);
     }
 
-    private static QuotationPayload merge(QuotationDto existing, QuotationPayload payload) {
-        return new QuotationPayload(
-            first(payload.quoteNo(), existing.quoteNo()),
-            first(payload.quoteDate(), existing.quoteDate()),
-            first(payload.validUntil(), existing.validUntil()),
-            first(payload.customerId(), existing.customerId()),
-            first(payload.rfqRef(), existing.rfqRef()),
-            first(payload.currency(), existing.currency()),
-            first(payload.incoterms(), existing.incoterms()),
-            first(payload.leadTime(), existing.leadTime()),
-            first(payload.paymentTerms(), existing.paymentTerms()),
-            first(payload.remarks(), existing.remarks()),
-            payload.pcb() != null ? payload.pcb() : existing.pcb(),
-            payload.lines() != null ? payload.lines() : existing.lines(),
-            payload.totals() != null ? payload.totals() : existing.totals(),
-            first(payload.status(), existing.status()),
-            first(payload.internalNote(), existing.internalNote())
-        );
+    private static UUID parseId(String id) {
+        try {
+            return UUID.fromString(id);
+        } catch (Exception ex) {
+            throw new NoSuchElementException("Quotation not found: " + id);
+        }
     }
 
+    private static boolean matchesQuery(Quotation q, String query) {
+        String s = query.toLowerCase(Locale.ROOT);
+        return contains(q.getQuoteNo(), s)
+            || contains(q.getStatus(), s);
+    }
+
+    private static boolean contains(String value, String q) {
+        return value != null && value.toLowerCase(Locale.ROOT).contains(q);
+    }
 
     private static String safe(String value) {
         return value == null ? "" : value.replace(",", " ");
     }
 
-    private static <T> T first(T candidate, T fallback) {
-        return candidate != null ? candidate : fallback;
+    private static BigDecimal toBig(Double d) {
+        if (d == null) return null;
+        return BigDecimal.valueOf(d).setScale(2, java.math.RoundingMode.HALF_UP);
+    }
+
+    private static Double toDouble(BigDecimal b) {
+        return b != null ? b.doubleValue() : null;
     }
 }

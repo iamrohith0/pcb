@@ -6,7 +6,7 @@ psql -U postgres -d pcbxpress
 
 to run backend - mvn spring-boot:run
 to migrate - mvn flyway:migrate
-
+.\mvnw clean compile
 
 
 Username: admin

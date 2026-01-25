@@ -5,184 +5,249 @@ import com.pcbxpress.erp.modules.sales.common.CustomerSummary;
 import com.pcbxpress.erp.modules.sales.customer.service.CustomerService;
 import com.pcbxpress.erp.modules.sales.quotation.dto.QuotationDto;
 import com.pcbxpress.erp.modules.sales.quotation.dto.QuotationLineDto;
-import com.pcbxpress.erp.modules.sales.salesorder.dto.ContactDto;
-import com.pcbxpress.erp.modules.sales.salesorder.dto.JobInfo;
-import com.pcbxpress.erp.modules.sales.salesorder.dto.PoInfo;
-import com.pcbxpress.erp.modules.sales.salesorder.dto.SalesOrderAddresses;
-import com.pcbxpress.erp.modules.sales.salesorder.dto.SalesOrderDto;
-import com.pcbxpress.erp.modules.sales.salesorder.dto.SalesOrderItemDto;
-import com.pcbxpress.erp.modules.sales.salesorder.dto.SalesOrderPayload;
-import com.pcbxpress.erp.modules.sales.salesorder.dto.SalesOrderTotalsDto;
+import com.pcbxpress.erp.modules.sales.salesorder.dto.*;
+import com.pcbxpress.erp.modules.sales.salesorder.model.SalesOrder;
+import com.pcbxpress.erp.modules.sales.salesorder.model.SalesOrderItem;
+import com.pcbxpress.erp.modules.sales.salesorder.repository.SalesOrderRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.*;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
 
 @Service
 public class SalesOrderService {
 
-    private final Map<String, SalesOrderDto> orders = new ConcurrentHashMap<>();
-    private final AtomicInteger sequence = new AtomicInteger(3);
+    private final SalesOrderRepository orderRepo;
     private final CustomerService customerService;
 
-    public SalesOrderService(CustomerService customerService) {
+    public SalesOrderService(SalesOrderRepository orderRepo, CustomerService customerService) {
+        this.orderRepo = orderRepo;
         this.customerService = customerService;
     }
 
     public List<SalesOrderDto> list(String query, String status, LocalDate from, LocalDate to) {
-        return orders.values().stream()
+        // Simple approach: load all & filter in memory (OK for now).
+        // Later: replace with Specification / QueryDSL.
+        return orderRepo.findAll().stream()
+            .map(this::toDto)
             .filter(o -> query == null || matchesQuery(o, query))
             .filter(o -> status == null || status.isBlank() || "all".equalsIgnoreCase(status)
-                || o.status().equalsIgnoreCase(status))
+                || (o.status() != null && o.status().equalsIgnoreCase(status)))
             .filter(o -> from == null || (o.orderDate() != null && !o.orderDate().isBefore(from)))
             .filter(o -> to == null || (o.orderDate() != null && !o.orderDate().isAfter(to)))
-            .sorted(Comparator.comparing(SalesOrderDto::createdAt).reversed())
+            .sorted(Comparator.comparing(SalesOrderDto::createdAt, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
             .toList();
     }
 
     public SalesOrderDto get(String id) {
-        SalesOrderDto dto = orders.get(id);
-        if (dto == null) {
-            throw new NoSuchElementException("Sales Order not found: " + id);
-        }
-        return dto;
+        UUID uuid = UUID.fromString(id);
+        SalesOrder entity = orderRepo.findById(uuid)
+            .orElseThrow(() -> new NoSuchElementException("Sales Order not found: " + id));
+        return toDto(entity);
     }
 
+    @Transactional
     public SalesOrderDto create(SalesOrderPayload payload) {
-        String id = UUID.randomUUID().toString();
-        String orderNo = payload.orderNo() != null && !payload.orderNo().isBlank()
+        SalesOrder entity = new SalesOrder();
+
+        String orderNo = (payload.orderNo() != null && !payload.orderNo().isBlank())
             ? payload.orderNo()
             : nextNumber();
-        LocalDate orderDate = payload.orderDate() != null ? payload.orderDate() : LocalDate.now();
-        SalesOrderTotalsDto totals = payload.totals() != null ? payload.totals() : calculateTotals(payload.items());
-        OffsetDateTime now = OffsetDateTime.now();
-        SalesOrderDto dto = toDto(id, orderNo, orderDate, totals, payload, now, now);
-        orders.put(id, dto);
-        return dto;
+
+        entity.setOrderNo(orderNo);
+        entity.setOrderDate(payload.orderDate() != null ? payload.orderDate() : LocalDate.now());
+        entity.setStatus(payload.status() != null ? payload.status() : "Draft");
+        entity.setCurrency(payload.currency() != null ? payload.currency() : "INR");
+
+        // customer id
+        if (payload.customerId() != null && !payload.customerId().isBlank()) {
+            entity.setCustomerId(UUID.fromString(payload.customerId()));
+        }
+
+        // contact
+        if (payload.contact() != null) {
+            entity.setContactName(payload.contact().name());
+            entity.setContactPhone(payload.contact().phone());
+            entity.setContactEmail(payload.contact().email());
+        }
+
+        // PO
+        if (payload.po() != null) {
+            entity.setPoNumber(payload.po().number());
+            entity.setPoDate(payload.po().date());
+        }
+
+        // job
+        if (payload.job() != null) {
+            entity.setJobName(payload.job().name());
+            entity.setJobPriority(payload.job().priority());
+            entity.setRequestedDelivery(payload.job().requestedDelivery());
+        }
+
+        // addresses (shipping & billing)
+        if (payload.addresses() != null) {
+            applyShipping(entity, payload.addresses().shipping());
+            applyBilling(entity, payload.addresses().billing());
+        }
+
+        entity.setNotes(payload.notes());
+
+        // attachments (you can extend payload later if needed)
+        entity.setAttachments(List.of()); // keep empty for now
+
+        // items
+        List<SalesOrderItem> items = toItems(payload.items());
+        entity.setItemsWithBackRef(items);
+
+        // totals (compute if missing)
+        SalesOrderTotalsDto totals = payload.totals() != null ? payload.totals() : calculateTotals(toItemDtos(entity.getItems()));
+        applyTotals(entity, totals);
+
+        SalesOrder saved = orderRepo.save(entity);
+        return toDto(saved);
     }
 
+    @Transactional
     public SalesOrderDto update(String id, SalesOrderPayload payload) {
-        SalesOrderDto existing = get(id);
-        String orderNo = payload.orderNo() != null ? payload.orderNo() : existing.orderNo();
-        LocalDate orderDate = payload.orderDate() != null ? payload.orderDate() : existing.orderDate();
-        SalesOrderTotalsDto totals = payload.totals() != null ? payload.totals() : existing.totals();
+        UUID uuid = UUID.fromString(id);
+        SalesOrder entity = orderRepo.findById(uuid)
+            .orElseThrow(() -> new NoSuchElementException("Sales Order not found: " + id));
 
-        SalesOrderDto updated = toDto(
-            id,
-            orderNo,
-            orderDate,
-            totals,
-            merge(existing, payload),
-            existing.createdAt(),
-            OffsetDateTime.now()
-        );
-        orders.put(id, updated);
-        return updated;
+        if (payload.orderNo() != null && !payload.orderNo().isBlank()) entity.setOrderNo(payload.orderNo());
+        if (payload.orderDate() != null) entity.setOrderDate(payload.orderDate());
+        if (payload.status() != null) entity.setStatus(payload.status());
+        if (payload.currency() != null) entity.setCurrency(payload.currency());
+
+        if (payload.customerId() != null && !payload.customerId().isBlank()) {
+            entity.setCustomerId(UUID.fromString(payload.customerId()));
+        }
+
+        if (payload.contact() != null) {
+            entity.setContactName(payload.contact().name());
+            entity.setContactPhone(payload.contact().phone());
+            entity.setContactEmail(payload.contact().email());
+        }
+
+        if (payload.po() != null) {
+            entity.setPoNumber(payload.po().number());
+            entity.setPoDate(payload.po().date());
+        }
+
+        if (payload.job() != null) {
+            entity.setJobName(payload.job().name());
+            entity.setJobPriority(payload.job().priority());
+            entity.setRequestedDelivery(payload.job().requestedDelivery());
+        }
+
+        if (payload.addresses() != null) {
+            applyShipping(entity, payload.addresses().shipping());
+            applyBilling(entity, payload.addresses().billing());
+        }
+
+        if (payload.notes() != null) entity.setNotes(payload.notes());
+
+        if (payload.items() != null) {
+            entity.setItemsWithBackRef(toItems(payload.items()));
+        }
+
+        SalesOrderTotalsDto totals = payload.totals() != null ? payload.totals() : calculateTotals(toItemDtos(entity.getItems()));
+        applyTotals(entity, totals);
+
+        SalesOrder saved = orderRepo.save(entity);
+        return toDto(saved);
     }
 
+    @Transactional
     public void delete(String id) {
-        orders.remove(id);
+        orderRepo.deleteById(UUID.fromString(id));
     }
 
+    @Transactional
     public SalesOrderDto updateStatus(String id, String status) {
-        SalesOrderDto existing = get(id);
-        SalesOrderPayload payload = new SalesOrderPayload(
-            existing.orderNo(),
-            existing.orderDate(),
-            existing.customerId(),
-            existing.contact(),
-            existing.po(),
-            existing.job(),
-            existing.addresses(),
-            existing.notes(),
-            existing.items(),
-            existing.totals(),
-            status,
-            existing.currency()
-        );
-        return update(id, payload);
+        UUID uuid = UUID.fromString(id);
+        SalesOrder entity = orderRepo.findById(uuid)
+            .orElseThrow(() -> new NoSuchElementException("Sales Order not found: " + id));
+        entity.setStatus(status != null ? status : "Draft");
+        return toDto(orderRepo.save(entity));
     }
 
     public List<SalesOrderItemDto> items(String id) {
         return get(id).items();
     }
 
+    @Transactional
     public SalesOrderDto addItem(String id, SalesOrderItemDto item) {
-        SalesOrderDto existing = get(id);
-        List<SalesOrderItemDto> next = new ArrayList<>(existing.items());
-        next.add(item);
-        SalesOrderTotalsDto totals = calculateTotals(next);
-        SalesOrderPayload payload = new SalesOrderPayload(
-            existing.orderNo(),
-            existing.orderDate(),
-            existing.customerId(),
-            existing.contact(),
-            existing.po(),
-            existing.job(),
-            existing.addresses(),
-            existing.notes(),
-            next,
-            totals,
-            existing.status(),
-            existing.currency()
-        );
-        return update(id, payload);
+        UUID uuid = UUID.fromString(id);
+        SalesOrder entity = orderRepo.findById(uuid)
+            .orElseThrow(() -> new NoSuchElementException("Sales Order not found: " + id));
+
+        SalesOrderItem it = new SalesOrderItem();
+        it.setSku(item.sku());
+        it.setDescription(item.description());
+        it.setQty(item.qty());
+        it.setUom(item.uom());
+        it.setUnitPrice(toBig(item.unitPrice()));
+        it.setTaxPct(toBig(item.taxPct()));
+        it.setLeadTimeDays(item.leadTimeDays());
+        it.setOrder(entity);
+
+        entity.getItems().add(it);
+
+        SalesOrderTotalsDto totals = calculateTotals(toItemDtos(entity.getItems()));
+        applyTotals(entity, totals);
+
+        SalesOrder saved = orderRepo.save(entity);
+        return toDto(saved);
     }
 
+    @Transactional
     public SalesOrderDto updateItem(String orderId, String itemId, SalesOrderItemDto item) {
-        SalesOrderDto existing = get(orderId);
-        List<SalesOrderItemDto> next = existing.items().stream()
-            .map(it -> it.id().equals(itemId) ? item : it)
-            .toList();
-        SalesOrderTotalsDto totals = calculateTotals(next);
-        SalesOrderPayload payload = new SalesOrderPayload(
-            existing.orderNo(),
-            existing.orderDate(),
-            existing.customerId(),
-            existing.contact(),
-            existing.po(),
-            existing.job(),
-            existing.addresses(),
-            existing.notes(),
-            next,
-            totals,
-            existing.status(),
-            existing.currency()
-        );
-        return update(orderId, payload);
+        UUID oid = UUID.fromString(orderId);
+        UUID iid = UUID.fromString(itemId);
+
+        SalesOrder entity = orderRepo.findById(oid)
+            .orElseThrow(() -> new NoSuchElementException("Sales Order not found: " + orderId));
+
+        SalesOrderItem target = entity.getItems().stream()
+            .filter(x -> x.getId() != null && x.getId().equals(iid))
+            .findFirst()
+            .orElseThrow(() -> new NoSuchElementException("Sales Order item not found: " + itemId));
+
+        target.setSku(item.sku());
+        target.setDescription(item.description());
+        target.setQty(item.qty());
+        target.setUom(item.uom());
+        target.setUnitPrice(toBig(item.unitPrice()));
+        target.setTaxPct(toBig(item.taxPct()));
+        target.setLeadTimeDays(item.leadTimeDays());
+
+        SalesOrderTotalsDto totals = calculateTotals(toItemDtos(entity.getItems()));
+        applyTotals(entity, totals);
+
+        SalesOrder saved = orderRepo.save(entity);
+        return toDto(saved);
     }
 
+    @Transactional
     public SalesOrderDto removeItem(String orderId, String itemId) {
-        SalesOrderDto existing = get(orderId);
-        List<SalesOrderItemDto> next = existing.items().stream()
-            .filter(it -> !it.id().equals(itemId))
-            .toList();
-        SalesOrderTotalsDto totals = calculateTotals(next);
-        SalesOrderPayload payload = new SalesOrderPayload(
-            existing.orderNo(),
-            existing.orderDate(),
-            existing.customerId(),
-            existing.contact(),
-            existing.po(),
-            existing.job(),
-            existing.addresses(),
-            existing.notes(),
-            next,
-            totals,
-            existing.status(),
-            existing.currency()
-        );
-        return update(orderId, payload);
+        UUID oid = UUID.fromString(orderId);
+        UUID iid = UUID.fromString(itemId);
+
+        SalesOrder entity = orderRepo.findById(oid)
+            .orElseThrow(() -> new NoSuchElementException("Sales Order not found: " + orderId));
+
+        entity.getItems().removeIf(x -> x.getId() != null && x.getId().equals(iid));
+
+        SalesOrderTotalsDto totals = calculateTotals(toItemDtos(entity.getItems()));
+        applyTotals(entity, totals);
+
+        SalesOrder saved = orderRepo.save(entity);
+        return toDto(saved);
     }
 
     public List<Map<String, Object>> history(String id) {
@@ -207,10 +272,11 @@ public class SalesOrderService {
     }
 
     public Map<String, Object> stats() {
-        long total = orders.size();
-        long draft = orders.values().stream().filter(o -> o.status().toLowerCase(Locale.ROOT).contains("draft")).count();
-        long confirmed = orders.values().stream().filter(o -> o.status().toLowerCase(Locale.ROOT).contains("confirm")).count();
-        long production = orders.values().stream().filter(o -> o.status().toLowerCase(Locale.ROOT).contains("production")).count();
+        List<SalesOrderDto> all = orderRepo.findAll().stream().map(this::toDto).toList();
+        long total = all.size();
+        long draft = all.stream().filter(o -> o.status() != null && o.status().toLowerCase(Locale.ROOT).contains("draft")).count();
+        long confirmed = all.stream().filter(o -> o.status() != null && o.status().toLowerCase(Locale.ROOT).contains("confirm")).count();
+        long production = all.stream().filter(o -> o.status() != null && o.status().toLowerCase(Locale.ROOT).contains("production")).count();
         return Map.of(
             "total", total,
             "draft", draft,
@@ -233,11 +299,12 @@ public class SalesOrderService {
         return header + "\n" + rows;
     }
 
+    @Transactional
     public SalesOrderDto createFromQuotation(QuotationDto quotation) {
         List<QuotationLineDto> quoteLines = quotation.lines() != null ? quotation.lines() : List.of();
         List<SalesOrderItemDto> items = quoteLines.stream()
             .map(line -> new SalesOrderItemDto(
-                UUID.randomUUID().toString(),
+                null, // let DB generate UUID
                 null,
                 line.description(),
                 line.qty(),
@@ -249,57 +316,171 @@ public class SalesOrderService {
                 null
             ))
             .toList();
+
         SalesOrderTotalsDto totals = calculateTotals(items);
+
         SalesOrderPayload payload = new SalesOrderPayload(
             null,
             LocalDate.now(),
             quotation.customerId(),
-            new ContactDto(quotation.customer() != null ? quotation.customer().contactName() : null,
+            new ContactDto(
+                quotation.customer() != null ? quotation.customer().contactName() : null,
                 quotation.customer() != null ? quotation.customer().phone() : null,
-                quotation.customer() != null ? quotation.customer().email() : null),
+                quotation.customer() != null ? quotation.customer().email() : null
+            ),
             new PoInfo(null, null),
             new JobInfo(quotation.pcb() != null ? quotation.pcb().jobName() : "Converted from quotation", "Normal", null),
-            new SalesOrderAddresses(new AddressDto(null, null, null, null, null, null, "India", null),
-                new AddressDto(null, null, null, null, null, null, "India", null)),
+            new SalesOrderAddresses(
+                new AddressDto(null, null, null, null, null, null, "India", null),
+                new AddressDto(null, null, null, null, null, null, "India", null)
+            ),
             quotation.remarks(),
             items,
             totals,
             "Confirmed",
             quotation.currency()
         );
+
         return create(payload);
     }
 
     public String nextNumber() {
-        int num = sequence.getAndIncrement();
+        // Quick safe method: SO-YYYY-###
+        // NOTE: In real multi-user scenarios use DB sequence / unique retry.
         int year = Year.now().getValue();
-        return String.format("SO-%d-%03d", year, num);
+        long countThisYear = orderRepo.findAll().stream()
+            .filter(o -> o.getOrderNo() != null && o.getOrderNo().startsWith("SO-" + year + "-"))
+            .count();
+        return String.format("SO-%d-%03d", year, countThisYear + 1);
     }
 
-    private SalesOrderDto toDto(String id, String orderNo, LocalDate orderDate, SalesOrderTotalsDto totals,
-                                SalesOrderPayload payload, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
-        CustomerSummary customer = payload.customerId() != null ? customerService.summary(payload.customerId()) : null;
-        List<SalesOrderItemDto> items = payload.items() != null ? payload.items() : List.of();
-        SalesOrderTotalsDto computedTotals = totals != null ? totals : calculateTotals(items);
-        return new SalesOrderDto(
-            id,
-            orderNo,
-            orderDate,
-            payload.status() != null ? payload.status() : "Draft",
-            payload.currency() != null ? payload.currency() : "INR",
-            payload.customerId(),
-            customer,
-            payload.contact(),
-            payload.po(),
-            payload.job(),
-            payload.addresses(),
-            items,
-            computedTotals,
-            payload.notes(),
-            List.of(),
-            createdAt,
-            updatedAt
+    // ---------- Mapping helpers ----------
+
+    private SalesOrderDto toDto(SalesOrder e) {
+        CustomerSummary customer = null;
+        if (e.getCustomerId() != null) {
+            try {
+                customer = customerService.summary(e.getCustomerId().toString());
+            } catch (Exception ignored) {}
+        }
+
+        ContactDto contact = new ContactDto(e.getContactName(), e.getContactPhone(), e.getContactEmail());
+        PoInfo po = new PoInfo(e.getPoNumber(), e.getPoDate());
+        JobInfo job = new JobInfo(e.getJobName(), e.getJobPriority(), e.getRequestedDelivery());
+
+        SalesOrderAddresses addresses = new SalesOrderAddresses(
+            new AddressDto(
+                e.getShippingName(),
+                e.getShippingAddressLine1(),
+                e.getShippingAddressLine2(),
+                e.getShippingCity(),
+                e.getShippingState(),
+                e.getShippingPincode(),
+                e.getShippingCountry(),
+                e.getShippingGstin()
+            ),
+            new AddressDto(
+                e.getBillingName(),
+                e.getBillingAddressLine1(),
+                e.getBillingAddressLine2(),
+                e.getBillingCity(),
+                e.getBillingState(),
+                e.getBillingPincode(),
+                e.getBillingCountry(),
+                e.getBillingGstin()
+            )
         );
+
+        List<SalesOrderItemDto> items = toItemDtos(e.getItems());
+
+        SalesOrderTotalsDto totals = new SalesOrderTotalsDto(
+            e.getSubTotal() != null ? e.getSubTotal().doubleValue() : 0d,
+            e.getTaxTotal() != null ? e.getTaxTotal().doubleValue() : 0d,
+            e.getGrandTotal() != null ? e.getGrandTotal().doubleValue() : 0d
+        );
+
+        return new SalesOrderDto(
+            e.getId() != null ? e.getId().toString() : null,
+            e.getOrderNo(),
+            e.getOrderDate(),
+            e.getStatus(),
+            e.getCurrency(),
+            e.getCustomerId() != null ? e.getCustomerId().toString() : null,
+            customer,
+            contact,
+            po,
+            job,
+            addresses,
+            items,
+            totals,
+            e.getNotes(),
+            e.getAttachments() != null ? e.getAttachments() : List.of(),
+            e.getCreatedAt(),
+            e.getUpdatedAt()
+        );
+    }
+
+    private static List<SalesOrderItem> toItems(List<SalesOrderItemDto> dtos) {
+        if (dtos == null) return List.of();
+        List<SalesOrderItem> list = new ArrayList<>();
+        for (SalesOrderItemDto d : dtos) {
+            SalesOrderItem it = new SalesOrderItem();
+            // id is DB generated; ignore dto.id()
+            it.setSku(d.sku());
+            it.setDescription(d.description());
+            it.setQty(d.qty());
+            it.setUom(d.uom());
+            it.setUnitPrice(toBig(d.unitPrice()));
+            it.setTaxPct(toBig(d.taxPct()));
+            it.setLeadTimeDays(d.leadTimeDays());
+            list.add(it);
+        }
+        return list;
+    }
+
+    private static List<SalesOrderItemDto> toItemDtos(List<SalesOrderItem> items) {
+        if (items == null) return List.of();
+        return items.stream().map(it -> new SalesOrderItemDto(
+            it.getId() != null ? it.getId().toString() : null,
+            it.getSku(),
+            it.getDescription(),
+            it.getQty(),
+            it.getUom(),
+            it.getUnitPrice() != null ? it.getUnitPrice().doubleValue() : null,
+            it.getTaxPct() != null ? it.getTaxPct().doubleValue() : null,
+            it.getLeadTimeDays()
+        )).toList();
+    }
+
+    private static void applyTotals(SalesOrder e, SalesOrderTotalsDto t) {
+        if (t == null) return;
+        e.setSubTotal(toBig(t.subTotal()));
+        e.setTaxTotal(toBig(t.taxTotal()));
+        e.setGrandTotal(toBig(t.grandTotal()));
+    }
+
+    private static void applyShipping(SalesOrder e, AddressDto a) {
+        if (a == null) return;
+        e.setShippingName(a.name());
+        e.setShippingAddressLine1(a.addressLine1());
+        e.setShippingAddressLine2(a.addressLine2());
+        e.setShippingCity(a.city());
+        e.setShippingState(a.state());
+        e.setShippingPincode(a.pincode());
+        e.setShippingCountry(a.country() != null ? a.country() : "India");
+        e.setShippingGstin(a.gstin());
+    }
+
+    private static void applyBilling(SalesOrder e, AddressDto a) {
+        if (a == null) return;
+        e.setBillingName(a.name());
+        e.setBillingAddressLine1(a.addressLine1());
+        e.setBillingAddressLine2(a.addressLine2());
+        e.setBillingCity(a.city());
+        e.setBillingState(a.state());
+        e.setBillingPincode(a.pincode());
+        e.setBillingCountry(a.country() != null ? a.country() : "India");
+        e.setBillingGstin(a.gstin());
     }
 
     private static SalesOrderTotalsDto calculateTotals(List<SalesOrderItemDto> items) {
@@ -334,24 +515,7 @@ public class SalesOrderService {
         return value == null ? "" : value.replace(",", " ");
     }
 
-    private static SalesOrderPayload merge(SalesOrderDto existing, SalesOrderPayload payload) {
-        return new SalesOrderPayload(
-            first(payload.orderNo(), existing.orderNo()),
-            first(payload.orderDate(), existing.orderDate()),
-            first(payload.customerId(), existing.customerId()),
-            payload.contact() != null ? payload.contact() : existing.contact(),
-            payload.po() != null ? payload.po() : existing.po(),
-            payload.job() != null ? payload.job() : existing.job(),
-            payload.addresses() != null ? payload.addresses() : existing.addresses(),
-            first(payload.notes(), existing.notes()),
-            payload.items() != null ? payload.items() : existing.items(),
-            payload.totals() != null ? payload.totals() : existing.totals(),
-            first(payload.status(), existing.status()),
-            first(payload.currency(), existing.currency())
-        );
-    }
-
-    private static <T> T first(T candidate, T fallback) {
-        return candidate != null ? candidate : fallback;
+    private static BigDecimal toBig(Double v) {
+        return v == null ? null : BigDecimal.valueOf(v);
     }
 }

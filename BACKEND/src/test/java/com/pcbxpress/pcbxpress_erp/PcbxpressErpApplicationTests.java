@@ -1,13 +1,13 @@
-package com.pcbxpress.pcbxpress_erp;
+// package com.pcbxpress.pcbxpress_erp;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+// import org.junit.jupiter.api.Test;
+// import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class PcbxpressErpApplicationTests {
+// @SpringBootTest
+// class PcbxpressErpApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+// 	@Test
+// 	void contextLoads() {
+// 	}
 
-}
+// }

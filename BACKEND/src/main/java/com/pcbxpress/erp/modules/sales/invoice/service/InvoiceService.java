@@ -300,7 +300,7 @@ public class InvoiceService {
 
     private InvoiceDto toDto(Invoice invoice) {
         CustomerSummary customer = invoice.getCustomerId() != null ? customerService.summary(invoice.getCustomerId().toString()) : null;
-        List<InvoiceItemDto> items = invoice.getItems().stream()
+        List<InvoiceItemDto> items = invoiceItemRepository.findByInvoiceId(invoice.getId()).stream()
             .map(item -> new InvoiceItemDto(
                 item.getId().toString(),
                 item.getDescription(),

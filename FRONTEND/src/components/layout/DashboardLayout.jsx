@@ -362,7 +362,7 @@ export default function DashboardLayout() {
   const handleRequestLogout = () => setLogoutOpen(true);
   const handleConfirmLogout = () => {
     logout?.();
-    navigate("/login", { replace: true });
+    navigate("/", { replace: true });
   };
 
   // Fetch company name

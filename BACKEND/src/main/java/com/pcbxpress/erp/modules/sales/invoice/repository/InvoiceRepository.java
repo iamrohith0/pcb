@@ -41,12 +41,12 @@ public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
 
     // Custom query for searching invoices
     @Query("SELECT i FROM Invoice i WHERE " +
-           "(:query IS NULL OR LOWER(i.invoiceNo) LIKE LOWER(CONCAT('%', :query, '%')) " +
-           "OR LOWER(i.billingName) LIKE LOWER(CONCAT('%', :query, '%')) " +
-           "OR LOWER(i.status) LIKE LOWER(CONCAT('%', :query, '%'))) " +
-           "AND (:status IS NULL OR i.status = :status) " +
-           "AND (:from IS NULL OR i.invoiceDate >= :from) " +
-           "AND (:to IS NULL OR i.invoiceDate <= :to)")
+    "(:query IS NULL OR :query = '' OR i.invoiceNo LIKE CONCAT('%', :query, '%') " +
+    "OR i.billingName LIKE CONCAT('%', :query, '%') " +
+    "OR i.status LIKE CONCAT('%', :query, '%')) " +
+    "AND (:status IS NULL OR i.status = :status) " +
+    "AND (:from IS NULL OR i.invoiceDate >= :from) " +
+    "AND (:to IS NULL OR i.invoiceDate <= :to)")
     Page<Invoice> searchInvoices(@Param("query") String query,
                                 @Param("status") String status,
                                 @Param("from") LocalDate from,
