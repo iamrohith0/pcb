@@ -10,21 +10,22 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
+import dispatchService from "@/services/logistics/dispatch.service";
 
 import {
-    ArrowLeft,
-    Box,
-    CheckCircle2,
-    ClipboardCheck,
-    Copy,
-    FileText,
-    MapPin,
-    Package,
-    Printer,
-    QrCode,
-    ShieldCheck,
-    Truck,
-    XCircle,
+  ArrowLeft,
+  Box,
+  CheckCircle2,
+  ClipboardCheck,
+  Copy,
+  FileText,
+  MapPin,
+  Package,
+  Printer,
+  QrCode,
+  ShieldCheck,
+  Truck,
+  XCircle,
 } from "lucide-react";
 
 /**
@@ -49,6 +50,51 @@ function formatDateTime(value) {
   } catch {
     return value ?? "-";
   }
+}
+
+/**
+ * Sanitize payload before API call:
+ * - Remove keys with null, undefined, or empty string values
+ * - Recursively clean nested objects
+ * This prevents sending placeholder data to the backend.
+ */
+function sanitizePayload(obj) {
+  if (obj === null || obj === undefined) return undefined;
+  if (typeof obj !== "object") return obj;
+  if (Array.isArray(obj)) {
+    return obj.map(sanitizePayload).filter((v) => v !== undefined);
+  }
+  const cleaned = {};
+  for (const [key, value] of Object.entries(obj)) {
+    if (value === null || value === undefined || value === "") continue;
+    if (typeof value === "object" && !Array.isArray(value)) {
+      const nested = sanitizePayload(value);
+      if (nested && Object.keys(nested).length > 0) {
+        cleaned[key] = nested;
+      }
+    } else if (Array.isArray(value)) {
+      const arr = sanitizePayload(value);
+      if (arr && arr.length > 0) {
+        cleaned[key] = arr;
+      }
+    } else {
+      cleaned[key] = value;
+    }
+  }
+  return cleaned;
+}
+
+/** Convert empty string to null for optional fields */
+function emptyToNull(value) {
+  if (value === undefined || value === null || value === "") return null;
+  return value;
+}
+
+/** Convert string to number, returning null if empty/invalid */
+function toNumberOrNull(value) {
+  if (value === undefined || value === null || value === "") return null;
+  const num = Number(value);
+  return isNaN(num) ? null : num;
 }
 
 function StatusPill({ status }) {
@@ -88,105 +134,77 @@ function Timeline({ items = [] }) {
   );
 }
 
-// ------- Mock data / API stubs (replace with real services) -------
-async function mockFetchDispatch(dispatchId) {
-  await new Promise((r) => setTimeout(r, 250));
-
+// API functions using dispatch service
+async function fetchDispatchFromBackend(dispatchId) {
+  if (!dispatchId) {
+    throw new Error("Dispatch ID is required");
+  }
+  const response = await dispatchService.getById(dispatchId);
+  // Map backend response to frontend format
   return {
-    id: dispatchId || "DSP-000124",
-    status: "Packed",
-    updatedAt: new Date().toISOString(),
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 36).toISOString(),
+    id: response.id,
+    status: response.status || "Draft",
+    updatedAt: response.updatedAt || new Date().toISOString(),
+    createdAt: response.createdAt || new Date().toISOString(),
 
-    customer: { name: "Acme Electronics", code: "ACME" },
+    customer: { name: response.customerName || "", code: response.customerId || "" },
     order: {
-      soNo: "SO-1042",
-      woNo: "WO-7781",
-      poNo: "PO-ACME-221",
-      incoterm: "DAP",
+      soNo: response.orderCode || "",
+      woNo: response.code || "",
+      poNo: "",
+      incoterm: "",
       shipTo: {
-        name: "Acme Electronics - Receiving",
-        address1: "Plot 21, Industrial Area",
-        address2: "Whitefield",
-        city: "Bengaluru",
-        state: "Karnataka",
-        pincode: "560066",
-        country: "India",
-        phone: "+91 98xxxxxx12",
-        email: "stores@acme.com",
-        gstin: "29ABCDE1234F1Z5",
+        name: response.warehouseName || "",
+        address1: "",
+        address2: "",
+        city: "",
+        state: "",
+        pincode: "",
+        country: "",
+        phone: "",
+        email: "",
+        gstin: "",
       },
     },
 
     shipment: {
-      carrier: "BlueDart",
-      service: "Air Express",
-      trackingNo: "",
-      pickupAt: new Date(Date.now() + 1000 * 60 * 60 * 6).toISOString(),
-      boxes: 2,
-      weightKg: 8.4,
-      dimensions: "40x30x25 cm (each)",
-      insured: true,
-      fragile: true,
+      carrier: response.carrierName || "",
+      service: "",
+      trackingNo: response.trackingNumber || "",
+      pickupAt: response.dispatchDate || new Date().toISOString(),
+      boxes: 0,
+      weightKg: response.weight || 0,
+      dimensions: response.dimensionsLength ? `${response.dimensionsLength}x${response.dimensionsWidth}x${response.dimensionsHeight} ${response.dimensionsUnit || 'cm'}` : "",
+      insured: false,
+      fragile: false,
     },
 
     packing: {
-      esd: true,
-      desiccant: true,
-      humidityCard: true,
-      edgeProtectors: true,
-      cartonSealed: true,
-      labelCustomer: true,
-      labelInternal: true,
+      esd: false,
+      desiccant: false,
+      humidityCard: false,
+      edgeProtectors: false,
+      cartonSealed: false,
+      labelCustomer: false,
+      labelInternal: false,
     },
 
     documents: {
-      invoiceNo: "INV-2026-00142",
-      packingListNo: "PL-2026-00101",
-      coc: true,
-      testReport: true,
+      invoiceNo: "",
+      packingListNo: "",
+      coc: false,
+      testReport: false,
       msds: false,
     },
 
-    items: [
-      {
-        line: 1,
-        partNo: "PCB-ACME-4L-001",
-        rev: "B",
-        finish: "ENIG",
-        qty: 120,
-        uom: "pcs",
-        panelCount: 12,
-        lotNo: "L-102",
-        serialRange: "S0001201 - S0001320",
-      },
-      {
-        line: 2,
-        partNo: "PCB-ACME-2L-009",
-        rev: "A",
-        finish: "HASL LF",
-        qty: 60,
-        uom: "pcs",
-        panelCount: 6,
-        lotNo: "L-103",
-        serialRange: "S0001321 - S0001380",
-      },
-    ],
+    items: [],
 
     timeline: [
-      { title: "Dispatch created", ok: true, when: new Date(Date.now() - 1000 * 60 * 60 * 36).toISOString(), note: "SO linked and shipment initiated" },
-      { title: "QC released", ok: true, when: new Date(Date.now() - 1000 * 60 * 60 * 18).toISOString(), note: "Final inspection approved" },
-      { title: "Packed", ok: true, when: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(), note: "ESD + desiccant + labels applied" },
-      { title: "Dispatched", ok: false, when: null, note: "Waiting for tracking / handover" },
+      { title: "Dispatch created", ok: true, when: response.createdAt, note: "" },
     ],
 
-    notes: "",
+    notes: response.notes || "",
   };
-}
-
-async function mockSaveDispatch(dispatchId, payload) {
-  await new Promise((r) => setTimeout(r, 250));
-  return { ok: true, id: dispatchId, ...payload };
 }
 // ------------------------------------------------------------------
 
@@ -216,7 +234,7 @@ export default function DispatchDetails() {
     (async () => {
       setLoading(true);
       try {
-        const data = await mockFetchDispatch(dispatchId);
+        const data = await fetchDispatchFromBackend(dispatchId);
         if (!alive) return;
         setDispatch(data);
 
@@ -265,29 +283,45 @@ export default function DispatchDetails() {
     if (!meta?.id) return;
     setSaving(true);
     try {
-      await mockSaveDispatch(meta.id, {
-        shipment: {
-          carrier,
-          service,
-          trackingNo,
-          boxes: Number(boxes || 0),
-          weightKg: Number(weightKg || 0),
-          fragile,
-          insured,
-        },
-        notes,
-        updatedAt: new Date().toISOString(),
-      });
+      // Build payload with null for missing values - NO PLACEHOLDER DATA
+      const rawPayload = {
+        // Carrier and shipment info - send only if provided
+        carrierName: emptyToNull(carrier),
+        trackingNumber: emptyToNull(trackingNo),
+
+        // Weight info - send only if user entered a value (null if empty)
+        weight: toNumberOrNull(weightKg),
+        weightUnit: weightKg ? "kg" : null, // Only set unit if weight is provided
+
+        // Dispatch date - only set explicitly
+        dispatchDate: new Date().toISOString(),
+
+        // Status: DRAFT when saving updates
+        status: "DRAFT",
+
+        // Priority and type - always provide valid enums
+        priority: "NORMAL",
+        dispatchType: "STANDARD",
+
+        // Notes - send only if provided
+        notes: emptyToNull(notes),
+      };
+
+      // Sanitize to remove null/undefined/empty values
+      const payload = sanitizePayload(rawPayload);
+
+      // UPDATE existing dispatch via PUT /api/logistics/dispatch/{id}
+      await dispatchService.update(meta.id, payload);
 
       toast({ title: "Saved", description: "Dispatch details updated." });
       setDispatch((d) =>
         d
           ? {
-              ...d,
-              shipment: { ...(d.shipment || {}), carrier, service, trackingNo, boxes: Number(boxes || 0), weightKg: Number(weightKg || 0), fragile, insured },
-              notes,
-              updatedAt: new Date().toISOString(),
-            }
+            ...d,
+            shipment: { ...(d.shipment || {}), carrier, service, trackingNo, boxes: Number(boxes || 0), weightKg: Number(weightKg || 0), fragile, insured },
+            notes,
+            updatedAt: new Date().toISOString(),
+          }
           : d
       );
     } catch (e) {
@@ -310,31 +344,45 @@ export default function DispatchDetails() {
     }
     setSaving(true);
     try {
-      await mockSaveDispatch(meta.id, {
-        status: "Dispatched",
-        shipment: {
-          carrier,
-          service,
-          trackingNo,
-          boxes: Number(boxes || 0),
-          weightKg: Number(weightKg || 0),
-          fragile,
-          insured,
-        },
-        updatedAt: new Date().toISOString(),
-      });
+      // Build payload with null for missing values - NO PLACEHOLDER DATA
+      const rawPayload = {
+        // Carrier and shipment info - required for dispatch
+        carrierName: emptyToNull(carrier),
+        trackingNumber: emptyToNull(trackingNo),
+
+        // Weight info - must be provided for dispatch
+        weight: toNumberOrNull(weightKg),
+        weightUnit: weightKg ? "kg" : null,
+
+        // Dispatch date (actual dispatch time)
+        dispatchDate: new Date().toISOString(),
+
+        // Status: DISPATCHED when marking as dispatched
+        status: "DISPATCHED",
+
+        // Priority and type - always provide valid enums
+        priority: "NORMAL",
+        dispatchType: "STANDARD",
+      };
+
+      const payload = sanitizePayload(rawPayload);
+      await dispatchService.update(meta.id, payload);
+
+      // Then update status to DISPATCHED via PATCH /api/logistics/dispatch/{id}/status
+      await dispatchService.updateStatus(meta.id, "DISPATCHED");
+
       toast({ title: "Dispatched", description: "Shipment marked as dispatched." });
       setDispatch((d) =>
         d
           ? {
-              ...d,
-              status: "Dispatched",
-              updatedAt: new Date().toISOString(),
-              timeline: [
-                ...(d.timeline || []),
-                { title: "Dispatched", ok: true, when: new Date().toISOString(), note: `Tracking: ${trackingNo}` },
-              ],
-            }
+            ...d,
+            status: "Dispatched",
+            updatedAt: new Date().toISOString(),
+            timeline: [
+              ...(d.timeline || []),
+              { title: "Dispatched", ok: true, when: new Date().toISOString(), note: `Tracking: ${trackingNo}` },
+            ],
+          }
           : d
       );
     } catch (e) {

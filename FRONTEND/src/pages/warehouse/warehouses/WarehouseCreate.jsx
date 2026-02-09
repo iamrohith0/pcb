@@ -10,26 +10,26 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-    Building2,
-    CheckCircle2,
-    ClipboardList,
-    MapPin,
-    Plus,
-    Save,
-    ShieldCheck,
-    Warehouse as WarehouseIcon,
-    XCircle,
+  Building2,
+  CheckCircle2,
+  ClipboardList,
+  MapPin,
+  Plus,
+  Save,
+  ShieldCheck,
+  Warehouse as WarehouseIcon,
+  XCircle,
 } from "lucide-react";
 
 import api from "@/lib/axios";
@@ -197,7 +197,7 @@ export default function WarehouseCreate() {
 
     setSaving(true);
     try {
-      const res = await api.post("/warehouse/warehouses", payload);
+      const res = await api.post("/api/warehouse/warehouses", payload);
       const created = res.data?.data || res.data;
 
       toast({

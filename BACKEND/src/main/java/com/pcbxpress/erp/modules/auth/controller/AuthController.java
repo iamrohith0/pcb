@@ -46,7 +46,7 @@ public class AuthController {
         if (principal == null) {
             return ResponseEntity.notFound().build();
         }
-        
+
         AuthUserDto user = authenticationService.getAuthenticatedUser(principal.getName());
         return ResponseEntity.ok(user);
     }
@@ -65,13 +65,12 @@ public class AuthController {
             if (userOpt.isPresent()) {
                 User user = userOpt.get();
                 return ResponseEntity.ok(Map.of(
-                    "found", true,
-                    "username", user.getUsername(),
-                    "email", user.getEmail(),
-                    "role", user.getRole(),
-                    "status", user.getStatus(),
-                    "passwordHash", user.getPasswordHash()
-                ));
+                        "found", true,
+                        "username", user.getUsername(),
+                        "email", user.getEmail(),
+                        "role", user.getRole(),
+                        "status", user.getStatus(),
+                        "passwordHash", user.getPasswordHash()));
             } else {
                 return ResponseEntity.ok(Map.of("found", false, "message", "User not found"));
             }

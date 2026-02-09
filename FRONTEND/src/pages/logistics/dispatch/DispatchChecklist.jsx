@@ -10,20 +10,21 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
+import dispatchService from "@/services/logistics/dispatch.service";
 
 import {
-    ArrowLeft,
-    CheckCircle2,
-    ClipboardCheck,
-    Download,
-    FileText,
-    PackageCheck,
-    Printer,
-    QrCode,
-    Search,
-    ShieldCheck,
-    Truck,
-    XCircle,
+  ArrowLeft,
+  CheckCircle2,
+  ClipboardCheck,
+  Download,
+  FileText,
+  PackageCheck,
+  Printer,
+  QrCode,
+  Search,
+  ShieldCheck,
+  Truck,
+  XCircle,
 } from "lucide-react";
 
 /**
@@ -209,49 +210,48 @@ function computeProgress(checks) {
   return Math.round((done / all.length) * 100);
 }
 
-// ------- Mock data / API stubs (replace with real services) -------
-async function mockFetchDispatch(dispatchId) {
-  // simulate latency
-  await new Promise((r) => setTimeout(r, 250));
-
-  // Example payload from backend you might implement later:
+// API functions using dispatch service
+async function fetchDispatchFromBackend(dispatchId) {
+  if (!dispatchId || dispatchId === 'new') {
+    // Return empty template for new dispatch
+    return {
+      id: null,
+      status: "Draft",
+      customer: {},
+      order: {},
+      shipment: {},
+      updatedAt: new Date().toISOString(),
+      checklist: {},
+      notes: "",
+    };
+  }
+  const response = await dispatchService.getById(dispatchId);
+  // Map backend response to frontend format
   return {
-    id: dispatchId || "DSP-000124",
-    status: "In Review",
+    id: response.id,
+    status: response.status || "Draft",
     customer: {
-      name: "Acme Electronics",
-      code: "ACME",
+      name: response.customerName || "",
+      code: response.customerId || "",
     },
     order: {
-      soNo: "SO-1042",
-      woNo: "WO-7781",
-      poNo: "PO-ACME-221",
-      incoterm: "DAP",
-      shipTo: "Bengaluru, KA, India",
+      soNo: response.orderCode || "",
+      woNo: response.code || "",
+      poNo: "",
+      incoterm: "",
+      shipTo: response.warehouseName || "",
     },
     shipment: {
-      carrier: "BlueDart",
-      trackingNo: "",
-      boxes: 2,
-      weightKg: 8.4,
-      pickupAt: new Date().toISOString(),
+      carrier: response.carrierName || "",
+      trackingNo: response.trackingNumber || "",
+      boxes: 0,
+      weightKg: response.weight || 0,
+      pickupAt: response.dispatchDate || new Date().toISOString(),
     },
-    updatedAt: new Date().toISOString(),
-    checklist: {
-      // some pre-checked examples
-      doc_invoice: true,
-      doc_packing_list: true,
-      qc_ncr_clear: true,
-      qc_final_ok: false,
-      log_awb: false,
-    },
-    notes: "",
+    updatedAt: response.updatedAt || new Date().toISOString(),
+    checklist: response.checklist || {},
+    notes: response.notes || "",
   };
-}
-
-async function mockSaveDispatchChecklist(dispatchId, payload) {
-  await new Promise((r) => setTimeout(r, 250));
-  return { ok: true, id: dispatchId, ...payload };
 }
 // ------------------------------------------------------------------
 
@@ -275,7 +275,7 @@ export default function DispatchChecklist() {
     (async () => {
       setLoading(true);
       try {
-        const data = await mockFetchDispatch(dispatchId);
+        const data = await fetchDispatchFromBackend(dispatchId);
         if (!alive) return;
         setDispatch(data);
         setChecks(data.checklist || {});
@@ -336,23 +336,70 @@ export default function DispatchChecklist() {
   };
 
   const handleSave = async () => {
-    if (!dispatch?.id) return;
     setSaving(true);
     try {
-      await mockSaveDispatchChecklist(dispatch.id, {
-        checklist: checks,
-        notes,
-        status: isReadyToDispatch ? "Ready" : "In Review",
-        updatedAt: new Date().toISOString(),
-      });
+      // Build a complete payload matching DispatchPayload structure
+      // Use data from UI context (dispatch state contains order/customer/shipment info)
+      const customer = dispatch?.customer || {};
+      const order = dispatch?.order || {};
+      const shipment = dispatch?.shipment || {};
+
+      // Generate a unique dispatch code if creating new
+      const dispatchCode = dispatch?.id ? undefined : `DSP-${Date.now()}`;
+
+      const payload = {
+        // Dispatch identification
+        code: dispatchCode,
+        description: `Dispatch checklist for ${order.soNo || 'order'}`,
+
+        // Order context - safe defaults if empty
+        orderCode: order.soNo || order.woNo || 'UNLINKED',
+
+        // Customer context - safe default if empty
+        customerName: customer.name || 'UNKNOWN',
+
+        // Warehouse context - safe default if empty
+        warehouseName: order.shipTo || 'DEFAULT',
+
+        // Shipment/carrier info - can be empty
+        carrierName: shipment.carrier || '',
+        trackingNumber: shipment.trackingNo || '',
+
+        // Dispatch date - always set to now
+        dispatchDate: new Date().toISOString(),
+
+        // Valid status: DRAFT when first saving (safest enum value)
+        status: "DRAFT",
+
+        // Priority and type - always provide valid enums
+        priority: "NORMAL",
+        dispatchType: "STANDARD",
+
+        // Weight info - ensure numeric, never null
+        weight: shipment.weightKg ? Number(shipment.weightKg) : 0,
+        weightUnit: "kg",
+
+        // Notes - safe empty string if null
+        notes: notes || '',
+      };
+
+      let savedDispatch;
+      if (dispatch?.id) {
+        // UPDATE existing dispatch via PUT /api/logistics/dispatch/{id}
+        savedDispatch = await dispatchService.update(dispatch.id, payload);
+      } else {
+        // CREATE new dispatch via POST /api/logistics/dispatch
+        savedDispatch = await dispatchService.create(payload);
+      }
+
       toast({
         title: "Saved",
         description: isReadyToDispatch ? "Checklist complete. Ready to dispatch." : "Checklist saved.",
       });
       setDispatch((d) =>
         d
-          ? { ...d, checklist: checks, notes, status: isReadyToDispatch ? "Ready" : "In Review", updatedAt: new Date().toISOString() }
-          : d
+          ? { ...d, id: savedDispatch.id || d.id, checklist: checks, notes, status: isReadyToDispatch ? "Ready" : "Pending", updatedAt: new Date().toISOString() }
+          : { id: savedDispatch.id, checklist: checks, notes, status: isReadyToDispatch ? "Ready" : "Pending", updatedAt: new Date().toISOString() }
       );
     } catch (e) {
       console.error(e);
@@ -379,15 +426,16 @@ export default function DispatchChecklist() {
     }
     setSaving(true);
     try {
-      await mockSaveDispatchChecklist(dispatch.id, {
-        checklist: checks,
-        notes: `${notes ? notes + "\n\n" : ""}[BLOCKED] ${reason}`,
-        status: "Blocked",
-        updatedAt: new Date().toISOString(),
-      });
+      // Update status to CANCELLED (valid enum) via PATCH /api/logistics/dispatch/{id}/status
+      // Note: Backend enum has CANCELLED, not BLOCKED
+      await dispatchService.updateStatus(dispatch.id, "CANCELLED");
+      // Also update notes with block reason via PUT
+      const updatedNotes = `${notes ? notes + "\n\n" : ""}[BLOCKED] ${reason}`;
+      await dispatchService.update(dispatch.id, { notes: updatedNotes });
+
       toast({ title: "Marked as Blocked", description: "Dispatch was blocked with reason." });
-      setDispatch((d) => (d ? { ...d, status: "Blocked", updatedAt: new Date().toISOString() } : d));
-      setNotes((prev) => `${prev ? prev + "\n\n" : ""}[BLOCKED] ${reason}`);
+      setDispatch((d) => (d ? { ...d, status: "Cancelled", updatedAt: new Date().toISOString() } : d));
+      setNotes(updatedNotes);
       setBlockReason("");
     } catch (e) {
       console.error(e);
@@ -398,7 +446,14 @@ export default function DispatchChecklist() {
   };
 
   const handleDispatch = async () => {
-    if (!dispatch?.id) return;
+    if (!dispatch?.id) {
+      toast({
+        title: "Save first",
+        description: "Please save the dispatch before marking as dispatched.",
+        variant: "destructive",
+      });
+      return;
+    }
     if (!isReadyToDispatch) {
       toast({
         title: "Not ready",
@@ -409,12 +464,9 @@ export default function DispatchChecklist() {
     }
     setSaving(true);
     try {
-      await mockSaveDispatchChecklist(dispatch.id, {
-        checklist: checks,
-        notes,
-        status: "Dispatched",
-        updatedAt: new Date().toISOString(),
-      });
+      // Update status to DISPATCHED via PATCH /api/logistics/dispatch/{id}/status
+      await dispatchService.updateStatus(dispatch.id, "DISPATCHED");
+
       toast({ title: "Dispatched", description: "Shipment marked as dispatched." });
       setDispatch((d) => (d ? { ...d, status: "Dispatched", updatedAt: new Date().toISOString() } : d));
       // navigate to dispatch details page (if you have it)

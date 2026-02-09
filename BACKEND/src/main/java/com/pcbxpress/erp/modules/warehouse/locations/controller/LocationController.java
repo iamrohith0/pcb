@@ -20,15 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
  * REST Controller for Location management
  */
 @RestController
-@RequestMapping("/api/warehouse/locations")
+@RequestMapping("/warehouse/locations")
 public class LocationController {
-    
+
     private final LocationService locationService;
-    
+
     public LocationController(LocationService locationService) {
         this.locationService = locationService;
     }
-    
+
     /**
      * GET /api/warehouse/locations - List locations with optional filters
      */
@@ -43,24 +43,27 @@ public class LocationController {
             @RequestParam(required = false) String aisle,
             @RequestParam(required = false) String rack,
             @RequestParam(required = false) String shelf,
-            @RequestParam(required = false) String bin) {
-        
+            @RequestParam(required = false) String bin,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer limit) {
+
         List<LocationDto> locations = locationService.list(
-            q,
-            parseUUID(warehouseId),
-            parseLocationType(locationType),
-            isActive,
-            parseLocationStatus(status),
-            zone,
-            aisle,
-            rack,
-            shelf,
-            bin
-        );
-        
+                q,
+                parseUUID(warehouseId),
+                parseLocationType(locationType),
+                isActive,
+                parseLocationStatus(status),
+                zone,
+                aisle,
+                rack,
+                shelf,
+                bin,
+                page,
+                limit);
+
         return ResponseEntity.ok(locations);
     }
-    
+
     /**
      * GET /api/warehouse/locations/{id} - Get location by ID
      */
@@ -69,7 +72,7 @@ public class LocationController {
         LocationDto location = locationService.get(id);
         return ResponseEntity.ok(location);
     }
-    
+
     /**
      * POST /api/warehouse/locations - Create new location
      */
@@ -78,7 +81,7 @@ public class LocationController {
         LocationDto created = locationService.create(payload);
         return ResponseEntity.ok(created);
     }
-    
+
     /**
      * PUT /api/warehouse/locations/{id} - Update location
      */
@@ -87,7 +90,7 @@ public class LocationController {
         LocationDto updated = locationService.update(id, payload);
         return ResponseEntity.ok(updated);
     }
-    
+
     /**
      * DELETE /api/warehouse/locations/{id} - Delete location
      */
@@ -96,7 +99,7 @@ public class LocationController {
         locationService.delete(id);
         return ResponseEntity.noContent().build();
     }
-    
+
     /**
      * POST /api/warehouse/locations/bulk-delete - Delete multiple locations
      */
@@ -105,7 +108,7 @@ public class LocationController {
         locationService.deleteBulk(ids);
         return ResponseEntity.noContent().build();
     }
-    
+
     /**
      * GET /api/warehouse/locations/search - Search locations
      */
@@ -114,16 +117,17 @@ public class LocationController {
         List<LocationDto> locations = locationService.search(q);
         return ResponseEntity.ok(locations);
     }
-    
+
     /**
-     * GET /api/warehouse/locations/warehouse/{warehouseId} - Get locations by warehouse
+     * GET /api/warehouse/locations/warehouse/{warehouseId} - Get locations by
+     * warehouse
      */
     @GetMapping("/warehouse/{warehouseId}")
     public ResponseEntity<List<LocationDto>> getByWarehouse(@PathVariable String warehouseId) {
         List<LocationDto> locations = locationService.getByWarehouse(parseUUID(warehouseId));
         return ResponseEntity.ok(locations);
     }
-    
+
     /**
      * GET /api/warehouse/locations/type/{locationType} - Get locations by type
      */
@@ -132,7 +136,7 @@ public class LocationController {
         List<LocationDto> locations = locationService.getByType(parseLocationType(locationType));
         return ResponseEntity.ok(locations);
     }
-    
+
     /**
      * GET /api/warehouse/locations/status/{status} - Get locations by status
      */
@@ -141,7 +145,7 @@ public class LocationController {
         List<LocationDto> locations = locationService.getByStatus(parseLocationStatus(status));
         return ResponseEntity.ok(locations);
     }
-    
+
     /**
      * GET /api/warehouse/locations/zone/{zone} - Get locations by zone
      */
@@ -150,7 +154,7 @@ public class LocationController {
         List<LocationDto> locations = locationService.getByZone(zone);
         return ResponseEntity.ok(locations);
     }
-    
+
     /**
      * GET /api/warehouse/locations/aisle/{aisle} - Get locations by aisle
      */
@@ -159,7 +163,7 @@ public class LocationController {
         List<LocationDto> locations = locationService.getByAisle(aisle);
         return ResponseEntity.ok(locations);
     }
-    
+
     /**
      * GET /api/warehouse/locations/rack/{rack} - Get locations by rack
      */
@@ -168,7 +172,7 @@ public class LocationController {
         List<LocationDto> locations = locationService.getByRack(rack);
         return ResponseEntity.ok(locations);
     }
-    
+
     /**
      * GET /api/warehouse/locations/shelf/{shelf} - Get locations by shelf
      */
@@ -177,7 +181,7 @@ public class LocationController {
         List<LocationDto> locations = locationService.getByShelf(shelf);
         return ResponseEntity.ok(locations);
     }
-    
+
     /**
      * GET /api/warehouse/locations/bin/{bin} - Get locations by bin
      */
@@ -186,7 +190,7 @@ public class LocationController {
         List<LocationDto> locations = locationService.getByBin(bin);
         return ResponseEntity.ok(locations);
     }
-    
+
     /**
      * GET /api/warehouse/locations/stats - Get location statistics
      */
@@ -195,7 +199,7 @@ public class LocationController {
         Map<String, Object> stats = locationService.getStats();
         return ResponseEntity.ok(stats);
     }
-    
+
     /**
      * GET /api/warehouse/locations/export/csv - Export locations to CSV
      */
@@ -204,13 +208,13 @@ public class LocationController {
         List<LocationDto> locations = locationService.search(q != null ? q : "");
         String csv = locationService.exportCsv(locations);
         return ResponseEntity.ok()
-            .header("Content-Type", "text/csv")
-            .header("Content-Disposition", "attachment; filename=locations.csv")
-            .body(csv);
+                .header("Content-Type", "text/csv")
+                .header("Content-Disposition", "attachment; filename=locations.csv")
+                .body(csv);
     }
-    
+
     // Helper methods
-    
+
     private java.util.UUID parseUUID(String uuidStr) {
         if (uuidStr == null || uuidStr.trim().isEmpty()) {
             return null;
@@ -221,24 +225,28 @@ public class LocationController {
             return null;
         }
     }
-    
-    private com.pcbxpress.erp.modules.warehouse.locations.model.Location.LocationType parseLocationType(String typeStr) {
+
+    private com.pcbxpress.erp.modules.warehouse.locations.model.Location.LocationType parseLocationType(
+            String typeStr) {
         if (typeStr == null || typeStr.trim().isEmpty()) {
             return null;
         }
         try {
-            return com.pcbxpress.erp.modules.warehouse.locations.model.Location.LocationType.valueOf(typeStr.toUpperCase());
+            return com.pcbxpress.erp.modules.warehouse.locations.model.Location.LocationType
+                    .valueOf(typeStr.toUpperCase());
         } catch (IllegalArgumentException e) {
             return null;
         }
     }
-    
-    private com.pcbxpress.erp.modules.warehouse.locations.model.Location.LocationStatus parseLocationStatus(String statusStr) {
+
+    private com.pcbxpress.erp.modules.warehouse.locations.model.Location.LocationStatus parseLocationStatus(
+            String statusStr) {
         if (statusStr == null || statusStr.trim().isEmpty()) {
             return null;
         }
         try {
-            return com.pcbxpress.erp.modules.warehouse.locations.model.Location.LocationStatus.valueOf(statusStr.toUpperCase());
+            return com.pcbxpress.erp.modules.warehouse.locations.model.Location.LocationStatus
+                    .valueOf(statusStr.toUpperCase());
         } catch (IllegalArgumentException e) {
             return null;
         }

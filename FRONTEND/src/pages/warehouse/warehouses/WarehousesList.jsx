@@ -1,15 +1,15 @@
 // src/pages/warehouse/warehouses/WarehousesList.jsx
 import {
-    Building2,
-    ChevronLeft,
-    ChevronRight,
-    Eye,
-    Pencil,
-    Plus,
-    RefreshCcw,
-    Search,
-    Trash2,
-    Warehouse as WarehouseIcon,
+  Building2,
+  ChevronLeft,
+  ChevronRight,
+  Eye,
+  Pencil,
+  Plus,
+  RefreshCcw,
+  Search,
+  Trash2,
+  Warehouse as WarehouseIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -78,56 +78,32 @@ export default function WarehousesList() {
   async function fetchWarehouses({ page = 1 } = {}) {
     setLoading(true);
     try {
-      // Common patterns supported:
-      // - /warehouses?page=1&pageSize=10&search=&status=
-      // Backend response suggested:
-      // { data: [...], meta: { page, pageSize, total, totalPages } }
-      // Fallback supported:
-      // { data: [...], total: 100, page: 1, pageSize: 10 }
-      const res = await api.get("/warehouses", {
+      // Backend endpoint is /api/warehouse/warehouses (no pagination params)
+      // Backend supports: q, plantId, warehouseType, isActive, isDefault
+      const res = await api.get("/warehouse/warehouses", {
         params: {
-          page,
-          pageSize,
-          search: query.trim() || undefined,
-          status: status !== "all" ? status : undefined,
+          q: query.trim() || undefined,
+          isActive: status === "active" ? true : status === "inactive" ? false : undefined,
         },
       });
 
       const data = res?.data;
 
-      const list = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : [];
-      const m = data?.meta || {};
+      // Backend returns array directly (List<WarehouseDto>)
+      let list = Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : [];
 
-      const total =
-        typeof m.total === "number"
-          ? m.total
-          : typeof data?.total === "number"
-          ? data.total
-          : list.length;
+      // Apply client-side pagination since backend returns all results
+      const total = list.length;
+      const totalPages = Math.max(1, Math.ceil(total / pageSize));
+      const currentPage = Math.min(page, totalPages);
+      const startIdx = (currentPage - 1) * pageSize;
+      const endIdx = startIdx + pageSize;
+      const paginatedList = list.slice(startIdx, endIdx);
 
-      const currentPage =
-        typeof m.page === "number"
-          ? m.page
-          : typeof data?.page === "number"
-          ? data.page
-          : page;
-
-      const size =
-        typeof m.pageSize === "number"
-          ? m.pageSize
-          : typeof data?.pageSize === "number"
-          ? data.pageSize
-          : pageSize;
-
-      const totalPages =
-        typeof m.totalPages === "number"
-          ? m.totalPages
-          : Math.max(1, Math.ceil(total / Math.max(1, size)));
-
-      setRows(list);
+      setRows(paginatedList);
       setMeta({
         page: currentPage,
-        pageSize: size,
+        pageSize,
         total,
         totalPages,
       });
@@ -143,10 +119,11 @@ export default function WarehousesList() {
     }
   }
 
+
   async function deleteWarehouse(id) {
     setDeleting(true);
     try {
-      await api.delete(`/warehouses/${id}`);
+      await api.delete(`/warehouse/warehouses/${id}`);
       toast({
         title: "Warehouse deleted",
         description: "The warehouse was removed successfully.",

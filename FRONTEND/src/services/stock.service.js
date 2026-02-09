@@ -11,7 +11,7 @@ const stockService = {
    * @returns {Promise} API response with stock summary
    */
   getSummary() {
-    return api.get("/inventory/stock/summary");
+    return api.get("inventory/stock/summary");
   },
 
   /**
@@ -20,7 +20,7 @@ const stockService = {
    * @returns {Promise} API response with alerts
    */
   getAlerts(params = {}) {
-    return api.get("/inventory/stock/alerts", { params });
+    return api.get("inventory/stock/alerts", { params });
   },
 
   /**
@@ -29,7 +29,7 @@ const stockService = {
    * @returns {Promise} API response with movements
    */
   getMovements(params = {}) {
-    return api.get("/inventory/stock/movements", { params });
+    return api.get("inventory/stock/movements", { params });
   },
 
   /**
@@ -38,7 +38,7 @@ const stockService = {
    * @returns {Promise} API response with ledger data
    */
   getLedger(params = {}) {
-    return api.get("/inventory/stock/ledger", { params });
+    return api.get("inventory/stock/ledger", { params });
   },
 
   /**
@@ -47,7 +47,7 @@ const stockService = {
    * @returns {Promise} API response with valuation data
    */
   getValuation(params = {}) {
-    return api.get("/inventory/stock/valuation", { params });
+    return api.get("inventory/stock/valuation", { params });
   },
 
   /**
@@ -56,7 +56,7 @@ const stockService = {
    * @returns {Promise} API response with created transfer
    */
   createTransfer(payload) {
-    return api.post("/inventory/stock/transfers", payload);
+    return api.post("inventory/stock/transfers", payload);
   },
 
   /**
@@ -64,7 +64,7 @@ const stockService = {
    * @returns {Promise} API response with default values
    */
   getTransferDefaults() {
-    return api.get("/inventory/stock/transfer/defaults");
+    return api.get("inventory/stock/transfer/defaults");
   },
 
   /**
@@ -73,7 +73,7 @@ const stockService = {
    * @returns {Promise} API response with item details
    */
   lookupItem(params = {}) {
-    return api.get("/inventory/items/lookup", { params });
+    return api.get("inventory/items/lookup", { params });
   },
 
   /**
@@ -82,7 +82,7 @@ const stockService = {
    * @returns {Promise} API response with availability
    */
   getAvailability(params = {}) {
-    return api.get("/inventory/stock/availability", { params });
+    return api.get("inventory/stock/availability", { params });
   },
 
   /**
@@ -91,7 +91,7 @@ const stockService = {
    * @returns {Promise} API response with stock list
    */
   getStockList(params = {}) {
-    return api.get("/inventory/stock", { params });
+    return api.get("inventory/stock", { params });
   },
 
   /**
@@ -101,7 +101,7 @@ const stockService = {
    * @returns {Promise} API response with stock details
    */
   getStockByItem(itemCode, params = {}) {
-    return api.get(`/inventory/stock/item/${encodeURIComponent(itemCode)}`, { params });
+    return api.get(`inventory/stock/item/${encodeURIComponent(itemCode)}`, { params });
   },
 
   /**
@@ -111,7 +111,7 @@ const stockService = {
    * @returns {Promise} API response with warehouse stock
    */
   getStockByWarehouse(warehouse, params = {}) {
-    return api.get(`/inventory/stock/warehouse/${encodeURIComponent(warehouse)}`, { params });
+    return api.get(`inventory/stock/warehouse/${encodeURIComponent(warehouse)}`, { params });
   },
 
   /**
@@ -120,7 +120,7 @@ const stockService = {
    * @returns {Promise} API response with adjustments
    */
   getAdjustments(params = {}) {
-    return api.get("/inventory/stock/adjustments", { params });
+    return api.get("inventory/stock/adjustments", { params });
   },
 
   /**
@@ -129,7 +129,7 @@ const stockService = {
    * @returns {Promise} API response with created adjustment
    */
   createAdjustment(payload) {
-    return api.post("/inventory/stock/adjustments", payload);
+    return api.post("inventory/stock/adjustments", payload);
   },
 
   /**
@@ -138,7 +138,7 @@ const stockService = {
    * @returns {Promise} API response with transfers
    */
   getTransfers(params = {}) {
-    return api.get("/inventory/stock/transfers", { params });
+    return api.get("inventory/stock/transfers", { params });
   },
 
   /**
@@ -147,7 +147,7 @@ const stockService = {
    * @returns {Promise} API response with transfer details
    */
   getTransfer(transferId) {
-    return api.get(`/inventory/stock/transfers/${encodeURIComponent(transferId)}`);
+    return api.get(`inventory/stock/transfers/${encodeURIComponent(transferId)}`);
   },
 
   /**
@@ -157,7 +157,7 @@ const stockService = {
    * @returns {Promise} API response
    */
   updateTransfer(transferId, updates) {
-    return api.put(`/inventory/stock/transfers/${encodeURIComponent(transferId)}`, updates);
+    return api.put(`inventory/stock/transfers/${encodeURIComponent(transferId)}`, updates);
   },
 
   /**
@@ -166,7 +166,7 @@ const stockService = {
    * @returns {Promise} API response
    */
   cancelTransfer(transferId) {
-    return api.post(`/inventory/stock/transfers/${encodeURIComponent(transferId)}/cancel`);
+    return api.post(`inventory/stock/transfers/${encodeURIComponent(transferId)}/cancel`);
   },
 
   /**
@@ -175,7 +175,7 @@ const stockService = {
    * @returns {Promise} API response with PDF
    */
   printTransferPdf(transferId) {
-    return api.get(`/inventory/stock/transfers/${encodeURIComponent(transferId)}/print`, {
+    return api.get(`inventory/stock/transfers/${encodeURIComponent(transferId)}/print`, {
       responseType: "blob"
     });
   },
@@ -186,7 +186,7 @@ const stockService = {
    * @returns {Promise} API response with report data
    */
   getReports(params = {}) {
-    return api.get("/inventory/stock/reports", { params });
+    return api.get("inventory/stock/reports", { params });
   },
 
   /**
@@ -195,7 +195,7 @@ const stockService = {
    * @returns {Promise} API response with exported file
    */
   exportStock(params = {}) {
-    return api.get("/inventory/stock/export", {
+    return api.get("inventory/stock/export", {
       params,
       responseType: "blob"
     });

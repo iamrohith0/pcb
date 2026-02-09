@@ -1,21 +1,27 @@
 package com.pcbxpress.erp.modules.logistics.exception;
 
 import com.pcbxpress.erp.modules.logistics.dto.ApiResponse;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import jakarta.validation.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 /**
- * Global exception handler for logistics operations
+ * Global exception handler for logistics operations.
+ * Converts all validation and database errors to HTTP 400 to prevent 500
+ * errors.
  */
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "com.pcbxpress.erp.modules.logistics")
 public class LogisticsExceptionHandler {
-    
+
     /**
      * Handle LogisticsException
      */
@@ -25,7 +31,7 @@ public class LogisticsExceptionHandler {
         ApiResponse<Object> response = ApiResponse.error(ex.getMessage(), errors);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
-    
+
     /**
      * Handle DispatchException
      */
@@ -35,7 +41,7 @@ public class LogisticsExceptionHandler {
         ApiResponse<Object> response = ApiResponse.error(ex.getMessage(), errors);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
-    
+
     /**
      * Handle ShipmentException
      */
@@ -45,7 +51,7 @@ public class LogisticsExceptionHandler {
         ApiResponse<Object> response = ApiResponse.error(ex.getMessage(), errors);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
-    
+
     /**
      * Handle TrackingException
      */
@@ -55,7 +61,7 @@ public class LogisticsExceptionHandler {
         ApiResponse<Object> response = ApiResponse.error(ex.getMessage(), errors);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
-    
+
     /**
      * Handle NoSuchElementException
      */
@@ -64,7 +70,7 @@ public class LogisticsExceptionHandler {
         ApiResponse<Object> response = ApiResponse.notFound(ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
-    
+
     /**
      * Handle IllegalArgumentException
      */
@@ -73,13 +79,86 @@ public class LogisticsExceptionHandler {
         ApiResponse<Object> response = ApiResponse.error("Invalid argument: " + ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
-    
+
     /**
-     * Handle Exception (fallback)
+     * Handle DataIntegrityViolationException (FK violations, unique constraints,
+     * etc.)
+     * This prevents 500 errors when database constraints fail.
+     */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiResponse<Object>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        String message = "Data integrity error: ";
+
+        // Extract meaningful message from the exception
+        Throwable cause = ex.getMostSpecificCause();
+        if (cause != null && cause.getMessage() != null) {
+            String causeMsg = cause.getMessage().toLowerCase();
+
+            // Check for foreign key violation
+            if (causeMsg.contains("foreign key") || causeMsg.contains("fk_")
+                    || causeMsg.contains("referential integrity")) {
+                message = "Invalid reference: One or more referenced records do not exist. " +
+                        "Please ensure Order, Customer, and Warehouse are valid.";
+            }
+            // Check for unique constraint violation
+            else if (causeMsg.contains("unique") || causeMsg.contains("duplicate")) {
+                message = "Duplicate entry: A record with this value already exists.";
+            }
+            // Check for null constraint violation
+            else if (causeMsg.contains("not-null") || causeMsg.contains("cannot be null")) {
+                message = "Missing required field: A required value was not provided.";
+            } else {
+                message += cause.getMessage();
+            }
+        } else {
+            message += "Database constraint violated. Please check your input.";
+        }
+
+        ApiResponse<Object> response = ApiResponse.error(message);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    /**
+     * Handle ConstraintViolationException (Bean Validation / JSR-380)
+     * This catches @NotNull, @Size, @Valid annotation violations.
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiResponse<Object>> handleConstraintViolation(ConstraintViolationException ex) {
+        List<String> errors = ex.getConstraintViolations().stream()
+                .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+                .collect(Collectors.toList());
+
+        String message = "Validation failed: " + String.join(", ", errors);
+        ApiResponse<Object> response = ApiResponse.error(message, errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    /**
+     * Handle MethodArgumentNotValidException (Spring MVC @Valid on request body)
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Object>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult().getFieldErrors().stream()
+                .map(e -> e.getField() + ": " + e.getDefaultMessage())
+                .collect(Collectors.toList());
+
+        String message = "Validation failed: " + String.join(", ", errors);
+        ApiResponse<Object> response = ApiResponse.error(message, errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    /**
+     * Handle Exception (fallback) - LAST RESORT
+     * This should rarely be reached if all specific handlers are in place.
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> handleGenericException(Exception ex) {
-        ApiResponse<Object> response = ApiResponse.error("An unexpected error occurred: " + ex.getMessage());
+        // Log the full exception for debugging
+        ex.printStackTrace();
+
+        ApiResponse<Object> response = ApiResponse.error(
+                "An unexpected error occurred. Please try again or contact support. " +
+                        "Error: " + ex.getClass().getSimpleName());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }

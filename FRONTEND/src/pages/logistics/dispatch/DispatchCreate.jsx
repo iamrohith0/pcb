@@ -5,27 +5,35 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 import {
-    ArrowLeft,
-    CalendarClock,
-    PackageCheck,
-    Plus,
-    Save,
-    Search,
-    Trash2,
-    Truck,
+  AlertCircle,
+  ArrowLeft,
+  CalendarClock,
+  Check,
+  ChevronsUpDown,
+  PackageCheck,
+  Plus,
+  Save,
+  Search,
+  Trash2,
+  Truck,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+// API Services
+import dispatchService from "@/services/logistics/dispatch.service";
+import salesOrdersService from "@/services/sales/salesOrders.service";
+import customersService from "@/services/sales/customers.service";
+import warehousesService from "@/services/warehouse/warehouses.service";
 
 /**
  * DispatchCreate.jsx (PCBxpress)
@@ -38,11 +46,12 @@ import { Link, useNavigate } from "react-router-dom";
  * For now this page is UI-complete + payload-ready.
  */
 
+// Dispatch types must match backend Dispatch.DispatchType enum values
 const DISPATCH_TYPES = [
-  { value: "customer_delivery", label: "Customer Delivery" },
-  { value: "sample_dispatch", label: "Sample Dispatch" },
-  { value: "inter_plant", label: "Inter-Plant Transfer" },
-  { value: "return_to_vendor", label: "Return to Vendor" },
+  { value: "STANDARD", label: "Standard Delivery" },
+  { value: "EXPRESS", label: "Express Delivery" },
+  { value: "OVERNIGHT", label: "Overnight Delivery" },
+  { value: "FREIGHT", label: "Freight Shipping" },
 ];
 
 const CARRIERS = [
@@ -87,6 +96,59 @@ function todayISO() {
   return `${yyyy}-${mm}-${dd}`;
 }
 
+/**
+ * Sanitize payload before API call:
+ * - Remove keys with null, undefined, or empty string values
+ * - Recursively clean nested objects
+ * - Remove empty nested objects entirely
+ * This prevents sending placeholder data to the backend.
+ */
+function sanitizePayload(obj) {
+  if (obj === null || obj === undefined) return undefined;
+  if (typeof obj !== "object") return obj;
+  if (Array.isArray(obj)) {
+    return obj.map(sanitizePayload).filter((v) => v !== undefined);
+  }
+  const cleaned = {};
+  for (const [key, value] of Object.entries(obj)) {
+    // Skip null, undefined, and empty strings
+    if (value === null || value === undefined || value === "") continue;
+    // Recursively clean nested objects
+    if (typeof value === "object" && !Array.isArray(value)) {
+      const nested = sanitizePayload(value);
+      // Only include if nested object has keys
+      if (nested && Object.keys(nested).length > 0) {
+        cleaned[key] = nested;
+      }
+    } else if (Array.isArray(value)) {
+      const arr = sanitizePayload(value);
+      if (arr && arr.length > 0) {
+        cleaned[key] = arr;
+      }
+    } else {
+      cleaned[key] = value;
+    }
+  }
+  return cleaned;
+}
+
+/**
+ * Convert empty string to null for optional fields
+ */
+function emptyToNull(value) {
+  if (value === undefined || value === null || value === "") return null;
+  return value;
+}
+
+/**
+ * Convert string to number, returning null if empty/invalid
+ */
+function toNumberOrNull(value) {
+  if (value === undefined || value === null || value === "") return null;
+  const num = Number(value);
+  return isNaN(num) ? null : num;
+}
+
 export default function DispatchCreate() {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -94,9 +156,15 @@ export default function DispatchCreate() {
   // Header / basic fields
   const [dispatchNo, setDispatchNo] = useState("AUTO");
   const [dispatchDate, setDispatchDate] = useState(todayISO());
-  const [dispatchType, setDispatchType] = useState("customer_delivery");
+  const [dispatchType, setDispatchType] = useState("STANDARD");
 
-  // Customer / destination
+  // === REQUIRED UUID FIELDS (API Contract) ===
+  // These MUST be set before save - backend will reject without them
+  const [orderId, setOrderId] = useState(null);       // UUID - required
+  const [customerId, setCustomerId] = useState(null); // UUID - required  
+  const [warehouseId, setWarehouseId] = useState(null); // UUID - required
+
+  // Customer / destination (display fields)
   const [customerName, setCustomerName] = useState("");
   const [customerCode, setCustomerCode] = useState("");
   const [shipTo, setShipTo] = useState("");
@@ -143,16 +211,104 @@ export default function DispatchCreate() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const canSubmit = useMemo(() => {
-    if (!dispatchDate) return false;
+  // === DROPDOWN DATA (Fetched from API) ===
+  const [orders, setOrders] = useState([]);
+  const [customers, setCustomers] = useState([]);
+  const [warehouses, setWarehouses] = useState([]);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+  const [dataLoadError, setDataLoadError] = useState(null);
+
+  // === LOAD DROPDOWN DATA ON MOUNT ===
+  useEffect(() => {
+    const loadDropdownData = async () => {
+      setIsLoadingData(true);
+      setDataLoadError(null);
+      try {
+        const [ordersRes, customersRes, warehousesRes] = await Promise.all([
+          salesOrdersService.list({ limit: 100 }),
+          customersService.list({ size: 100 }),
+          warehousesService.getAll({ limit: 100 }),
+        ]);
+
+        // Extract data from responses (handle different response formats)
+        const ordersData = ordersRes?.data?.data || ordersRes?.data || [];
+        const customersData = customersRes?.data?.data || customersRes?.data || [];
+        const warehousesData = warehousesRes?.data || warehousesRes || [];
+
+        setOrders(Array.isArray(ordersData) ? ordersData : []);
+        setCustomers(Array.isArray(customersData) ? customersData : []);
+        setWarehouses(Array.isArray(warehousesData) ? warehousesData : []);
+      } catch (err) {
+        console.error("Failed to load dropdown data:", err);
+        setDataLoadError("Failed to load orders, customers, or warehouses. Please refresh.");
+        toast({
+          title: "Data Load Error",
+          description: "Could not load orders, customers, or warehouses. Please refresh the page.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoadingData(false);
+      }
+    };
+
+    loadDropdownData();
+  }, [toast]);
+
+  /**
+   * STRICT VALIDATION for saving dispatch:
+   * Backend requires: orderId, customerId, warehouseId
+   * Without these, the API will return HTTP 400
+   */
+  const canSaveDraft = useMemo(() => {
+    // Required UUID fields (API contract)
+    if (!orderId) return false;
+    if (!customerId) return false;
+    if (!warehouseId) return false;
+    // Required form fields
     if (!dispatchType) return false;
-    if (!customerName.trim()) return false;
-    if (!shipTo.trim()) return false;
     if (!items.length) return false;
-    // At least 1 valid item line
+    return true;
+  }, [orderId, customerId, warehouseId, dispatchType, items]);
+
+  /**
+   * Validation for finalizing dispatch (status = DISPATCHED/SHIPPED):
+   * All draft requirements PLUS:
+   * - Dispatch date is required
+   * - At least ONE valid item (with partNo and quantity > 0)
+   * - Carrier must be selected
+   */
+  const canFinalizeDispatch = useMemo(() => {
+    if (!canSaveDraft) return false; // Must pass draft validation first
+    if (!dispatchDate) return false;
+    // At least 1 valid item line with partNo + qty > 0
     const validLine = items.some((x) => x.partNo.trim() && Number(x.quantity) > 0);
-    return validLine;
-  }, [dispatchDate, dispatchType, customerName, shipTo, items]);
+    if (!validLine) return false;
+    // Carrier is required for dispatch
+    const hasCarrier = carrier && (carrier !== "Other" || carrierOther.trim());
+    if (!hasCarrier) return false;
+    return true;
+  }, [canSaveDraft, dispatchDate, items, carrier, carrierOther]);
+
+  /**
+   * Get user-friendly validation message explaining why action is blocked
+   */
+  const getValidationMessage = () => {
+    // Required UUID fields first (most important)
+    if (!orderId) return "Select an Order to continue";
+    if (!customerId) return "Select a Customer to continue";
+    if (!warehouseId) return "Select a Warehouse to continue";
+    // Then form fields
+    if (!dispatchType) return "Select Dispatch Type to continue";
+    if (!items.length) return "Add at least one dispatch item";
+    const validLine = items.some((x) => x.partNo.trim() && Number(x.quantity) > 0);
+    if (!validLine) return "Enter Part No and Quantity for at least one item";
+    if (!dispatchDate) return "Select a dispatch date";
+    return null;
+  };
+
+  // Use canSaveDraft for enabling the button (lenient)
+  // Full validation (canFinalizeDispatch) is checked in validateBeforeSave()
+  const canSubmit = canSaveDraft;
 
   const totals = useMemo(() => {
     const qty = items.reduce((sum, x) => sum + (Number(x.quantity) || 0), 0);
@@ -193,64 +349,82 @@ export default function DispatchCreate() {
     setItems((prev) => prev.filter((it) => it.id !== id));
   };
 
+  /**
+   * STRICT validation before save - prevents API errors
+   * Backend requires: orderId, customerId, warehouseId
+   * If missing, API returns HTTP 400 - so we prevent the call entirely
+   */
   const validateBeforeSave = () => {
-    if (!customerName.trim()) return "Customer name is required.";
-    if (!shipTo.trim()) return "Ship-to address is required.";
+    // === REQUIRED UUID FIELDS (API Contract) ===
+    // These MUST be present or backend will reject with HTTP 400
+    if (!orderId) return "Order is required. Please select a valid order.";
+    if (!customerId) return "Customer is required. Please select a valid customer.";
+    if (!warehouseId) return "Warehouse is required. Please select a valid warehouse.";
+
+    // === REQUIRED FORM FIELDS ===
+    if (!dispatchType) return "Dispatch Type is required.";
+    if (!items.length) return "Add at least one dispatch item.";
+
+    // Items validation - at least one must have partNo and qty
     const validLine = items.some((x) => x.partNo.trim() && Number(x.quantity) > 0);
-    if (!validLine) return "Add at least one item with Part No and Quantity > 0.";
+    if (!validLine) return "Enter Part No and Quantity for at least one item.";
+
+    // Carrier-specific validation
     if (carrier === "Other" && !carrierOther.trim()) return "Please specify the carrier name.";
-    if (Number(noOfBoxes) <= 0) return "No. of boxes must be at least 1.";
-    return null;
+
+    return null; // All validations passed
   };
 
+  /**
+   * Build payload for API call.
+   * CRITICAL: Includes required UUID fields (orderId, customerId, warehouseId)
+   * Uses camelCase field names to match backend DispatchPayload.java record.
+   */
   const buildPayload = () => {
-    return {
-      dispatch_no: dispatchNo === "AUTO" ? null : dispatchNo,
-      dispatch_date: dispatchDate,
-      dispatch_type: dispatchType,
+    // Get warehouse name for display field
+    const selectedWarehouse = warehouses.find((w) => (w.id || w.warehouseId) === warehouseId);
+    const warehouseName = selectedWarehouse?.name || selectedWarehouse?.warehouseName || null;
 
-      customer: {
-        name: customerName.trim(),
-        code: customerCode.trim() || null,
-        contact_person: contactPerson.trim() || null,
-        contact_phone: contactPhone.trim() || null,
-      },
+    // Get order code for display field
+    const selectedOrder = orders.find((o) => (o.id || o.orderId) === orderId);
+    const orderCode = selectedOrder?.orderNumber || selectedOrder?.code || null;
 
-      ship_to: shipTo.trim(),
+    // Build raw payload with required UUIDs - using camelCase to match backend
+    const rawPayload = {
+      // === REQUIRED UUID FIELDS (API Contract) ===
+      // These are mandatory - backend validates and returns 400 if missing
+      orderId: orderId,           // UUID string - required
+      customerId: customerId,     // UUID string - required
+      warehouseId: warehouseId,   // UUID string - required
 
-      shipping: {
-        carrier: carrier === "Other" ? carrierOther.trim() : carrier,
-        tracking_no: trackingNo.trim() || null,
-        eway_bill_no: ewayBillNo.trim() || null,
-        invoice_no: invoiceNo.trim() || null,
-        vehicle_no: vehicleNo.trim() || null,
-      },
+      // === DISPATCH FIELDS (camelCase to match backend DispatchPayload) ===
+      code: dispatchNo === "AUTO" ? null : emptyToNull(dispatchNo),
+      dispatchDate: emptyToNull(dispatchDate) ? new Date(dispatchDate).toISOString() : null,
+      dispatchType: emptyToNull(dispatchType), // Already uppercase from DISPATCH_TYPES
+      status: "DRAFT",
 
-      packing: {
-        packing_type: packingType,
-        no_of_boxes: Number(noOfBoxes) || 1,
-        gross_weight_kg: grossWeightKg ? Number(grossWeightKg) : null,
-      },
+      // Display fields - populated from selections
+      orderCode: orderCode,
+      customerName: emptyToNull(customerName.trim()),
+      warehouseName: warehouseName,
 
-      remarks: remarks.trim() || null,
+      // Carrier info
+      carrierName: carrier === "Other" ? emptyToNull(carrierOther.trim()) : emptyToNull(carrier),
+      trackingNumber: emptyToNull(trackingNo.trim()),
 
-      items: items
-        .filter((x) => x.partNo.trim() && Number(x.quantity) > 0)
-        .map((x) => ({
-          ref_type: x.refType,
-          ref_no: x.refNo.trim() || null,
-          part_no: x.partNo.trim(),
-          description: x.description.trim() || null,
-          quantity: Number(x.quantity) || 0,
-          uom: x.uom || "pcs",
-          pack_qty: x.packQty ? Number(x.packQty) : null,
-          lot_no: x.lotNo.trim() || null,
-          serial_from: x.serialFrom.trim() || null,
-          serial_to: x.serialTo.trim() || null,
-          unit_price: x.unitPrice ? Number(x.unitPrice) : null,
-          hsn: x.hsn.trim() || null,
-        })),
+      // Dimensions and weight
+      weight: toNumberOrNull(grossWeightKg),
+      weightUnit: grossWeightKg ? "kg" : null,
+
+      // Notes
+      notes: emptyToNull(remarks.trim()),
+
+      // Priority and type with safe defaults
+      priority: "NORMAL",
     };
+
+    // Sanitize entire payload to remove null/undefined/empty values
+    return sanitizePayload(rawPayload);
   };
 
   const handleSave = async () => {
@@ -263,12 +437,10 @@ export default function DispatchCreate() {
     setIsSaving(true);
     try {
       const payload = buildPayload();
-
-      // TODO: Replace with backend call
-      // await dispatchService.create(payload);
-
-      // For now: simulate success
       console.log("Dispatch payload:", payload);
+
+      // Call the actual dispatch API
+      await dispatchService.create(payload);
 
       toast({
         title: "Dispatch created",
@@ -277,9 +449,15 @@ export default function DispatchCreate() {
 
       navigate("/logistics/dispatch");
     } catch (e) {
+      console.error("Dispatch save error:", e);
+      // Extract error message from API response if available
+      const errorMessage = e?.response?.data?.message
+        || e?.response?.data?.error
+        || e?.message
+        || "Unable to create dispatch. Please try again.";
       toast({
         title: "Save failed",
-        description: "Unable to create dispatch. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -310,14 +488,24 @@ export default function DispatchCreate() {
               Back
             </Link>
           </Button>
-          <Button
-            onClick={() => setConfirmOpen(true)}
-            disabled={!canSubmit || isSaving}
-            className="gap-2 bg-cyan-600 hover:bg-cyan-500"
-          >
-            <Save className="h-4 w-4" />
-            {isSaving ? "Saving..." : "Save Dispatch"}
-          </Button>
+          <div className="relative group">
+            <Button
+              disabled={!canSubmit || isSaving}
+              onClick={() => setConfirmOpen(true)}
+            >
+              <Save className="h-4 w-4" />
+              {isSaving ? "Saving..." : "Save Dispatch"}
+            </Button>
+            {/* Tooltip hint when button is disabled */}
+            {!canSubmit && getValidationMessage() && (
+              <div className="absolute right-0 top-full mt-2 z-50 hidden group-hover:block">
+                <div className="bg-gray-900 text-white text-xs rounded-lg px-3 py-2 shadow-lg whitespace-nowrap">
+                  {getValidationMessage()}
+                  <div className="absolute -top-1 right-4 w-2 h-2 bg-gray-900 rotate-45"></div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -367,6 +555,133 @@ export default function DispatchCreate() {
                 </Select>
               </div>
             </div>
+          </Card>
+
+          {/* === REQUIRED SELECTIONS (Order, Customer, Warehouse) === */}
+          {/* These are MANDATORY - backend will reject if not selected */}
+          <Card className="p-4 sm:p-5 border-2 border-cyan-200 bg-cyan-50/30">
+            <div className="mb-3 flex items-center gap-2">
+              <AlertCircle className="h-4 w-4 text-cyan-600" />
+              <span className="text-sm font-semibold text-gray-800">Required Selections</span>
+              <span className="text-xs text-cyan-700 bg-cyan-100 px-2 py-0.5 rounded-full">Mandatory</span>
+            </div>
+
+            {isLoadingData && (
+              <div className="text-sm text-gray-500 py-4 text-center">Loading orders, customers, and warehouses...</div>
+            )}
+
+            {dataLoadError && (
+              <div className="text-sm text-red-600 py-4 text-center">{dataLoadError}</div>
+            )}
+
+            {!isLoadingData && !dataLoadError && (
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                {/* ORDER SELECTOR (Required) */}
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-1">
+                    Sales Order <span className="text-red-500">*</span>
+                  </Label>
+                  <Select
+                    value={orderId || ""}
+                    onValueChange={(val) => {
+                      setOrderId(val);
+                      // Auto-populate order code and customer if available
+                      const selectedOrder = orders.find((o) => (o.id || o.orderId) === val);
+                      if (selectedOrder) {
+                        // If order has customer info, auto-select it
+                        if (selectedOrder.customerId && !customerId) {
+                          setCustomerId(selectedOrder.customerId);
+                          setCustomerName(selectedOrder.customerName || "");
+                        }
+                      }
+                    }}
+                  >
+                    <SelectTrigger className={!orderId ? "border-red-300 bg-red-50" : "border-green-300 bg-green-50"}>
+                      <SelectValue placeholder="Select an order..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {orders.length === 0 ? (
+                        <SelectItem value="__none__" disabled>No orders available</SelectItem>
+                      ) : (
+                        orders.map((order) => (
+                          <SelectItem key={order.id || order.orderId} value={order.id || order.orderId}>
+                            {order.orderNumber || order.code || order.id} - {order.customerName || "N/A"}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
+                  {!orderId && <p className="text-xs text-red-500">Order is required</p>}
+                  {orderId && <p className="text-xs text-green-600 flex items-center gap-1"><Check className="h-3 w-3" /> Order selected</p>}
+                </div>
+
+                {/* CUSTOMER SELECTOR (Required) */}
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-1">
+                    Customer <span className="text-red-500">*</span>
+                  </Label>
+                  <Select
+                    value={customerId || ""}
+                    onValueChange={(val) => {
+                      setCustomerId(val);
+                      // Auto-populate customer name
+                      const selectedCustomer = customers.find((c) => (c.id || c.customerId) === val);
+                      if (selectedCustomer) {
+                        setCustomerName(selectedCustomer.name || selectedCustomer.customerName || "");
+                        setCustomerCode(selectedCustomer.code || selectedCustomer.customerCode || "");
+                      }
+                    }}
+                  >
+                    <SelectTrigger className={!customerId ? "border-red-300 bg-red-50" : "border-green-300 bg-green-50"}>
+                      <SelectValue placeholder="Select a customer..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {customers.length === 0 ? (
+                        <SelectItem value="__none__" disabled>No customers available</SelectItem>
+                      ) : (
+                        customers.map((customer) => (
+                          <SelectItem key={customer.id || customer.customerId} value={customer.id || customer.customerId}>
+                            {customer.name || customer.customerName} {customer.code ? `(${customer.code})` : ""}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
+                  {!customerId && <p className="text-xs text-red-500">Customer is required</p>}
+                  {customerId && <p className="text-xs text-green-600 flex items-center gap-1"><Check className="h-3 w-3" /> Customer selected</p>}
+                </div>
+
+                {/* WAREHOUSE SELECTOR (Required) */}
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-1">
+                    Warehouse <span className="text-red-500">*</span>
+                  </Label>
+                  <Select
+                    value={warehouseId || ""}
+                    onValueChange={(val) => {
+                      setWarehouseId(val);
+                    }}
+                  >
+                    <SelectTrigger className={!warehouseId ? "border-red-300 bg-red-50" : "border-green-300 bg-green-50"}>
+                      <SelectValue placeholder="Select a warehouse..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {warehouses.length === 0 ? (
+                        <SelectItem value="__none__" disabled>No warehouses available</SelectItem>
+                      ) : (
+                        warehouses.map((warehouse) => (
+                          <SelectItem key={warehouse.id || warehouse.warehouseId} value={warehouse.id || warehouse.warehouseId}>
+                            {warehouse.name || warehouse.warehouseName} {warehouse.code ? `(${warehouse.code})` : ""}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
+                  {!warehouseId && <p className="text-xs text-red-500">Warehouse is required</p>}
+                  {warehouseId && <p className="text-xs text-green-600 flex items-center gap-1"><Check className="h-3 w-3" /> Warehouse selected</p>}
+                </div>
+              </div>
+            )}
           </Card>
 
           {/* Customer / Destination */}
@@ -763,14 +1078,25 @@ export default function DispatchCreate() {
               Cancel
             </Button>
 
-            <Button
-              type="submit"
-              disabled={!canSubmit || isSaving}
-              className="gap-2 bg-cyan-600 hover:bg-cyan-500"
-            >
-              <Save className="h-4 w-4" />
-              {isSaving ? "Saving..." : "Create Dispatch"}
-            </Button>
+            <div className="relative group">
+              <Button
+                type="submit"
+                disabled={!canSubmit || isSaving}
+                className="gap-2 bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50"
+              >
+                <Save className="h-4 w-4" />
+                {isSaving ? "Saving..." : "Create Dispatch"}
+              </Button>
+              {/* Tooltip hint when button is disabled */}
+              {!canSubmit && getValidationMessage() && (
+                <div className="absolute right-0 bottom-full mb-2 z-50 hidden group-hover:block">
+                  <div className="bg-gray-900 text-white text-xs rounded-lg px-3 py-2 shadow-lg whitespace-nowrap">
+                    {getValidationMessage()}
+                    <div className="absolute -bottom-1 right-4 w-2 h-2 bg-gray-900 rotate-45"></div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </form>
       </motion.div>

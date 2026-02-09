@@ -4,12 +4,10 @@ import com.pcbxpress.erp.modules.stub.AbstractStubController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping({
-    "/warehouse",
-    "/warehouse/**",
-    "/api/warehouse",
-    "/api/warehouse/**"
-})
+//@RestController
+//@RequestMapping({
+//        "/warehouse",
+//        "/warehouse/**"
+//})
 public class WarehouseStubController extends AbstractStubController {
 }

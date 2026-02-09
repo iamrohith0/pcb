@@ -3,7 +3,7 @@ import api from "../lib/axios";
 const authService = {
   async login(credentials) {
     try {
-      const response = await api.post("/auth/login", credentials);
+      const response = await api.post("auth/login", credentials);
       const { accessToken, user } = response.data;
 
       localStorage.setItem("token", accessToken);
@@ -17,7 +17,7 @@ const authService = {
 
   async logout() {
     try {
-      await api.post("/auth/logout");
+      await api.post("auth/logout");
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
@@ -29,7 +29,7 @@ const authService = {
 
   async getCurrentUser() {
     try {
-      const response = await api.get("/auth/me");
+      const response = await api.get("auth/me");
       return response.data;
     } catch (error) {
       throw error;
