@@ -1,6 +1,6 @@
 import http from "@/lib/axios";
 
-const API_BASE = "/sales/customers";
+const API_BASE = "/api/sales/customers";
 
 export default {
   /**
@@ -14,7 +14,7 @@ export default {
    */
   async list(params = {}) {
     const response = await http.get(API_BASE, { params });
-    return response;
+    return response.data;
   },
 
   /**
@@ -24,7 +24,7 @@ export default {
    */
   async get(id) {
     const response = await http.get(`${API_BASE}/${id}`);
-    return response;
+    return response.data;
   },
 
   /**
@@ -34,7 +34,7 @@ export default {
    */
   async create(customerData) {
     const response = await http.post(API_BASE, customerData);
-    return response;
+    return response.data;
   },
 
   /**
@@ -45,7 +45,7 @@ export default {
    */
   async update(id, customerData) {
     const response = await http.put(`${API_BASE}/${id}`, customerData);
-    return response;
+    return response.data;
   },
 
   /**
@@ -55,7 +55,7 @@ export default {
    */
   async remove(id) {
     const response = await http.delete(`${API_BASE}/${id}`);
-    return response;
+    return response.data;
   },
 
   /**
@@ -65,7 +65,7 @@ export default {
    */
   async bulkDelete(ids) {
     const response = await http.delete(`${API_BASE}/bulk`, { data: { ids } });
-    return response;
+    return response.data;
   },
 
   /**
@@ -87,6 +87,6 @@ export default {
    */
   async getStats() {
     const response = await http.get(`${API_BASE}/stats`);
-    return response;
+    return response.data;
   }
 };

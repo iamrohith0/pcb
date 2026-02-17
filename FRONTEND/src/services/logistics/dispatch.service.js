@@ -1,8 +1,7 @@
 import axios from "@/lib/axios";
 
-// Note: axios baseURL is http://localhost:8080/api, so don't include /api prefix here
-const API_BASE = "logistics/dispatch";
-
+// Note: axios baseURL is http://localhost:8080, context-path is /api
+const API_BASE = "/api/logistics/dispatch";
 export default {
   async getAll(params = {}) {
     const response = await axios.get(API_BASE, { params });

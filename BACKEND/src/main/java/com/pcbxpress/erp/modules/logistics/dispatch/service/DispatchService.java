@@ -40,7 +40,11 @@ public class DispatchService {
             UUID carrierId, Dispatch.DispatchStatus status, Dispatch.Priority priority,
             Dispatch.DispatchType dispatchType, OffsetDateTime startDate, OffsetDateTime endDate) {
         return dispatchRepository
-                .findByCriteria(orderId, customerId, warehouseId, carrierId, status, priority, dispatchType, query)
+                .findByCriteria(orderId, customerId, warehouseId, carrierId,
+                        status != null ? status.name() : null,
+                        priority != null ? priority.name() : null,
+                        dispatchType != null ? dispatchType.name() : null,
+                        query)
                 .stream()
                 .filter(dispatch -> {
                     if (startDate != null && endDate != null) {
@@ -71,7 +75,11 @@ public class DispatchService {
             // For pagination, we need to filter manually since the custom query doesn't
             // support Pageable
             List<Dispatch> allDispatches = dispatchRepository.findByCriteria(orderId, customerId, warehouseId,
-                    carrierId, status, priority, dispatchType, query);
+                    carrierId,
+                    status != null ? status.name() : null,
+                    priority != null ? priority.name() : null,
+                    dispatchType != null ? dispatchType.name() : null,
+                    query);
             int start = (int) pageable.getOffset();
             int end = Math.min((start + pageable.getPageSize()), allDispatches.size());
             List<Dispatch> pagedDispatches = allDispatches.subList(start, end);
@@ -133,7 +141,14 @@ public class DispatchService {
     }
 
     /**
-     * Update an existing dispatch
+     * Update an existing dispatch.
+     * NOTE: UUID validation (orderId, customerId, warehouseId) is NOT run on
+     * updates because:
+     * 1. These fields are immutable after creation (set once during create)
+     * 2. applyPayload() uses null-safe merge - it preserves existing DB values
+     * 3. Legacy dispatches created before validation was added may have null
+     * UUIDs - blocking ALL updates (even notes) would be too strict
+     * Enum defaults are still applied to prevent null status/priority/type.
      */
     public DispatchDto update(String id, DispatchPayload payload) {
         Dispatch existing = dispatchRepository.findById(parseId(id))
@@ -142,9 +157,8 @@ public class DispatchService {
         validateUniqueConstraints(payload, existing.getId().toString());
         applyPayload(existing, payload);
 
-        // SAFE: Run validation to ensure required fields are present (throws if
-        // missing)
-        validateAndNormalizeBeforeSave(existing);
+        // Apply enum defaults only (no UUID validation on update)
+        normalizeEnumsBeforeSave(existing);
 
         Dispatch saved = dispatchRepository.save(existing);
         return toDto(saved);
@@ -169,7 +183,8 @@ public class DispatchService {
      * Search dispatches by query
      */
     public List<DispatchDto> search(String query) {
-        return dispatchRepository.findByCriteria(null, null, null, null, null, null, null, query).stream()
+        return dispatchRepository.findByCriteria(null, null, null, null, null, null, null, query)
+                .stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
@@ -730,6 +745,23 @@ public class DispatchService {
     }
 
     /**
+     * Apply safe enum defaults only. Used by update() where we do NOT want to
+     * re-validate orderId/customerId/warehouseId (those are immutable after
+     * creation and may be null in legacy records).
+     */
+    private void normalizeEnumsBeforeSave(Dispatch dispatch) {
+        if (dispatch.getStatus() == null) {
+            dispatch.setStatus(Dispatch.DispatchStatus.DRAFT);
+        }
+        if (dispatch.getPriority() == null) {
+            dispatch.setPriority(Dispatch.Priority.NORMAL);
+        }
+        if (dispatch.getDispatchType() == null) {
+            dispatch.setDispatchType(Dispatch.DispatchType.STANDARD);
+        }
+    }
+
+    /**
      * @deprecated Use validateAndNormalizeBeforeSave() instead.
      *             This method is kept for reference but should NOT be used.
      *             It was causing silent data corruption by overwriting user values
@@ -796,6 +828,6 @@ public class DispatchService {
     }
 
     private static OffsetDateTime safeOffset(OffsetDateTime value) {
-        return value != null ? value : OffsetDateTime.now();
+        return value;
     }
 }

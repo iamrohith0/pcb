@@ -10,15 +10,15 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-    ArrowLeft,
-    Calendar,
-    Eye,
-    Filter,
-    Package,
-    Plus,
-    RefreshCw,
-    Search,
-    Truck,
+  ArrowLeft,
+  Calendar,
+  Eye,
+  Filter,
+  Package,
+  Plus,
+  RefreshCw,
+  Search,
+  Truck,
 } from "lucide-react";
 
 /**
@@ -194,7 +194,7 @@ export default function ShipmentsList() {
             Refresh
           </Button>
           <Button asChild className="gap-2 bg-cyan-600 hover:bg-cyan-500">
-            <Link to="/logistics/shipments/create">
+            <Link to="/dashboard/logistics/shipments/create">
               <Plus className="h-4 w-4" />
               New Shipment
             </Link>
@@ -271,7 +271,7 @@ export default function ShipmentsList() {
               <p className="text-sm font-semibold text-gray-900">No shipments found</p>
               <p className="mt-1 text-sm text-gray-500">Try clearing filters or create a new shipment.</p>
               <Button asChild className="mt-4 gap-2 bg-cyan-600 hover:bg-cyan-500">
-                <Link to="/logistics/shipments/create">
+                <Link to="/dashboard/logistics/shipments/create">
                   <Plus className="h-4 w-4" />
                   New Shipment
                 </Link>

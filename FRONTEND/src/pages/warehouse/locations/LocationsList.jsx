@@ -9,27 +9,27 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import {
-    Building2,
-    Filter,
-    Hash,
-    MapPin,
-    Plus,
-    RefreshCw,
-    Search,
-    SlidersHorizontal,
-    Trash2,
-    Warehouse,
+  Building2,
+  Filter,
+  Hash,
+  MapPin,
+  Plus,
+  RefreshCw,
+  Search,
+  SlidersHorizontal,
+  Trash2,
+  Warehouse,
 } from "lucide-react";
 
 import api from "@/lib/axios";
@@ -126,7 +126,7 @@ export default function LocationsList() {
 
   const fetchWarehouses = async () => {
     try {
-      const res = await api.get("/warehouse/warehouses");
+      const res = await api.get("/api/warehouse/warehouses");
       const list = Array.isArray(res.data) ? res.data : res.data?.data;
       if (Array.isArray(list)) setWarehouses(list);
     } catch (e) {
@@ -151,7 +151,7 @@ export default function LocationsList() {
         limit,
       };
 
-      const res = await api.get("/warehouse/locations", { params });
+      const res = await api.get("/api/warehouse/locations", { params });
 
       const data = res.data?.data ?? res.data;
       const meta = res.data?.meta;
@@ -260,7 +260,7 @@ export default function LocationsList() {
     if (!row) return;
 
     try {
-      await api.delete(`/warehouse/locations/${row.id}`);
+      await api.delete(`/api/warehouse/locations/${row.id}`);
       toast({ title: "Deleted", description: `${row.code} removed.` });
 
       // refresh list

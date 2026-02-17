@@ -1,32 +1,33 @@
 // src/pages/logistics/dispatch/DispatchQueue.jsx
 import { ConfirmationDialog } from "@/components/ConfirmationDialog";
+import dispatchService from "@/services/logistics/dispatch.service";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 import {
-    Calendar,
-    CheckCircle2,
-    Clock3,
-    Eye,
-    FileDown,
-    PackageCheck,
-    Plus,
-    RefreshCcw,
-    Search,
-    Truck,
-    XCircle,
+  Calendar,
+  CheckCircle2,
+  Clock3,
+  Eye,
+  FileDown,
+  PackageCheck,
+  Plus,
+  RefreshCcw,
+  Search,
+  Truck,
+  XCircle,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 /**
@@ -64,18 +65,21 @@ function daysAgoISO(n) {
 
 const STATUS = [
   { value: "all", label: "All" },
-  { value: "pending_pack", label: "Pending Packing" },
-  { value: "packed", label: "Packed (Ready to Dispatch)" },
-  { value: "dispatched", label: "Dispatched" },
-  { value: "on_hold", label: "On Hold" },
+  { value: "DRAFT", label: "Draft" },
+  { value: "PENDING", label: "Pending" },
+  { value: "DISPATCHED", label: "Dispatched" },
+  { value: "IN_TRANSIT", label: "In Transit" },
+  { value: "DELIVERED", label: "Delivered" },
+  { value: "CANCELLED", label: "Cancelled" },
+  { value: "RETURNED", label: "Returned" },
 ];
 
 const DISPATCH_TYPES = [
   { value: "all", label: "All Types" },
-  { value: "customer_delivery", label: "Customer Delivery" },
-  { value: "sample_dispatch", label: "Sample Dispatch" },
-  { value: "inter_plant", label: "Inter-Plant Transfer" },
-  { value: "return_to_vendor", label: "Return to Vendor" },
+  { value: "STANDARD", label: "Standard" },
+  { value: "EXPRESS", label: "Express" },
+  { value: "OVERNIGHT", label: "Overnight" },
+  { value: "FREIGHT", label: "Freight" },
 ];
 
 const CARRIERS = [
@@ -90,65 +94,25 @@ const CARRIERS = [
   { value: "Other", label: "Other" },
 ];
 
-// Mock queue rows (replace with API)
-const MOCK = [
-  {
-    id: "dq-1001",
-    dispatchNo: "DSP-000214",
-    dispatchDate: "2026-01-05",
-    customer: "Apex Instruments",
-    type: "customer_delivery",
-    carrier: "Blue Dart",
-    trackingNo: "BD123456789",
-    invoiceNo: "INV-00921",
-    items: 3,
-    qty: 250,
-    status: "pending_pack",
-    priority: "high",
-  },
-  {
-    id: "dq-1002",
-    dispatchNo: "DSP-000215",
-    dispatchDate: "2026-01-05",
-    customer: "Nova Robotics",
-    type: "sample_dispatch",
-    carrier: "Customer Pickup",
-    trackingNo: "",
-    invoiceNo: "INV-00922",
-    items: 1,
-    qty: 10,
-    status: "packed",
-    priority: "normal",
-  },
-  {
-    id: "dq-1003",
-    dispatchNo: "DSP-000212",
-    dispatchDate: "2026-01-03",
-    customer: "Kite Electronics",
-    type: "customer_delivery",
-    carrier: "DHL",
-    trackingNo: "DHL99220011",
-    invoiceNo: "INV-00919",
-    items: 4,
-    qty: 1200,
-    status: "dispatched",
-    priority: "normal",
-  },
-  {
-    id: "dq-1004",
-    dispatchNo: "DSP-000211",
-    dispatchDate: "2026-01-02",
-    customer: "Orbit EMS",
-    type: "inter_plant",
-    carrier: "Other",
-    trackingNo: "INT-TRK-44",
-    invoiceNo: "",
-    items: 2,
-    qty: 480,
-    status: "on_hold",
-    priority: "high",
-  },
-];
+/**
+ * Map a DispatchDto from the backend to the row shape used in the table.
+ */
+function mapDispatchToRow(d) {
+  return {
+    id: d.id,
+    dispatchNo: d.code || "—",
+    dispatchDate: d.dispatchDate ? d.dispatchDate.substring(0, 10) : "—",
+    customer: d.customerName || "—",
+    type: d.dispatchType || "STANDARD",
+    carrier: d.carrierName || "—",
+    trackingNo: d.trackingNumber || "",
+    invoiceNo: d.orderCode || "",
+    items: 0,  // backend doesn't track item count on the dispatch itself
+    qty: 0,    // backend doesn't track qty on the dispatch itself
+    status: d.status || "DRAFT",
+    priority: d.priority ? d.priority.toLowerCase() : "normal",
+  };
+}
 
 function Badge({ tone = "gray", children }) {
   const base = "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset";
@@ -165,25 +129,31 @@ function Badge({ tone = "gray", children }) {
 
 function statusMeta(status) {
   switch (status) {
-    case "pending_pack":
-      return { label: "Pending Packing", tone: "amber", icon: Clock3 };
-    case "packed":
-      return { label: "Packed", tone: "blue", icon: PackageCheck };
-    case "dispatched":
+    case "DRAFT":
+      return { label: "Draft", tone: "gray", icon: Clock3 };
+    case "PENDING":
+      return { label: "Pending", tone: "amber", icon: Clock3 };
+    case "DISPATCHED":
       return { label: "Dispatched", tone: "green", icon: Truck };
-    case "on_hold":
-      return { label: "On Hold", tone: "red", icon: XCircle };
+    case "IN_TRANSIT":
+      return { label: "In Transit", tone: "blue", icon: Truck };
+    case "DELIVERED":
+      return { label: "Delivered", tone: "green", icon: PackageCheck };
+    case "CANCELLED":
+      return { label: "Cancelled", tone: "red", icon: XCircle };
+    case "RETURNED":
+      return { label: "Returned", tone: "red", icon: XCircle };
     default:
-      return { label: "Unknown", tone: "gray", icon: Clock3 };
+      return { label: status || "Unknown", tone: "gray", icon: Clock3 };
   }
 }
 
 function typeLabel(v) {
   const map = {
-    customer_delivery: "Customer Delivery",
-    sample_dispatch: "Sample Dispatch",
-    inter_plant: "Inter-Plant Transfer",
-    return_to_vendor: "Return to Vendor",
+    STANDARD: "Standard",
+    EXPRESS: "Express",
+    OVERNIGHT: "Overnight",
+    FREIGHT: "Freight",
   };
   return map[v] || v;
 }
@@ -207,17 +177,34 @@ export default function DispatchQueue() {
   const [selected, setSelected] = useState(new Set());
   const [confirm, setConfirm] = useState({ open: false, action: null });
 
-  useEffect(() => {
-    // TODO: Replace with API fetch:
-    // const res = await dispatchService.getQueue({ q, status, type, carrier, from, to });
-    // setRows(res.data)
+  const fetchDispatches = useCallback(async () => {
     setLoading(true);
-    const t = setTimeout(() => {
-      setRows(MOCK);
+    try {
+      const params = {};
+      if (q.trim()) params.query = q.trim();
+      if (status !== "all") params.status = status;
+      if (type !== "all") params.dispatchType = type;
+      // carrier filter is applied client-side since backend filters by carrierId (UUID)
+
+      const data = await dispatchService.getAll(params);
+      const list = Array.isArray(data) ? data : (data?.content || []);
+      setRows(list.map(mapDispatchToRow));
+    } catch (err) {
+      console.error("Failed to fetch dispatches:", err);
+      toast({
+        title: "Failed to load dispatches",
+        description: err?.response?.data?.message || err.message || "Please try again.",
+        variant: "destructive",
+      });
+      setRows([]);
+    } finally {
       setLoading(false);
-    }, 250);
-    return () => clearTimeout(t);
-  }, []);
+    }
+  }, [q, status, type, toast]);
+
+  useEffect(() => {
+    fetchDispatches();
+  }, [fetchDispatches]);
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -253,10 +240,10 @@ export default function DispatchQueue() {
     const by = (s) => filtered.filter((r) => r.status === s).length;
     return {
       total: filtered.length,
-      pending: by("pending_pack"),
-      packed: by("packed"),
-      dispatched: by("dispatched"),
-      hold: by("on_hold"),
+      pending: by("PENDING") + by("DRAFT"),
+      inTransit: by("IN_TRANSIT"),
+      dispatched: by("DISPATCHED"),
+      delivered: by("DELIVERED"),
     };
   }, [filtered]);
 
@@ -287,17 +274,8 @@ export default function DispatchQueue() {
   const clearSelection = () => setSelected(new Set());
 
   const refresh = async () => {
-    setLoading(true);
-    try {
-      // TODO: fetch again
-      await new Promise((r) => setTimeout(r, 300));
-      setRows(MOCK);
-      toast({ title: "Queue refreshed", description: "Latest dispatch queue loaded." });
-    } catch {
-      toast({ title: "Refresh failed", description: "Please try again.", variant: "destructive" });
-    } finally {
-      setLoading(false);
-    }
+    await fetchDispatches();
+    toast({ title: "Queue refreshed", description: "Latest dispatch queue loaded." });
   };
 
   const requestBulk = (action) => {
@@ -322,9 +300,9 @@ export default function DispatchQueue() {
       setRows((prev) =>
         prev.map((r) => {
           if (!selected.has(r.id)) return r;
-          if (action === "mark_packed") return { ...r, status: "packed" };
-          if (action === "mark_dispatched") return { ...r, status: "dispatched" };
-          if (action === "release_hold") return { ...r, status: "pending_pack" };
+          if (action === "mark_packed") return { ...r, status: "DISPATCHED" };
+          if (action === "mark_dispatched") return { ...r, status: "DISPATCHED" };
+          if (action === "release_hold") return { ...r, status: "PENDING" };
           return r;
         })
       );
@@ -335,8 +313,8 @@ export default function DispatchQueue() {
           action === "mark_packed"
             ? "Selected dispatches marked as packed."
             : action === "mark_dispatched"
-            ? "Selected dispatches marked as dispatched."
-            : "Selected dispatches moved back to pending packing.",
+              ? "Selected dispatches marked as dispatched."
+              : "Selected dispatches moved back to pending packing.",
       });
 
       clearSelection();
@@ -400,20 +378,20 @@ export default function DispatchQueue() {
           <p className="mt-1 text-2xl font-bold text-gray-900">{stats.total}</p>
         </Card>
         <Card className="p-4">
-          <p className="text-xs font-semibold text-gray-600">Pending Packing</p>
+          <p className="text-xs font-semibold text-gray-600">Pending</p>
           <p className="mt-1 text-2xl font-bold text-gray-900">{stats.pending}</p>
         </Card>
         <Card className="p-4">
-          <p className="text-xs font-semibold text-gray-600">Packed</p>
-          <p className="mt-1 text-2xl font-bold text-gray-900">{stats.packed}</p>
+          <p className="text-xs font-semibold text-gray-600">In Transit</p>
+          <p className="mt-1 text-2xl font-bold text-gray-900">{stats.inTransit}</p>
         </Card>
         <Card className="p-4">
           <p className="text-xs font-semibold text-gray-600">Dispatched</p>
           <p className="mt-1 text-2xl font-bold text-gray-900">{stats.dispatched}</p>
         </Card>
         <Card className="p-4">
-          <p className="text-xs font-semibold text-gray-600">On Hold</p>
-          <p className="mt-1 text-2xl font-bold text-gray-900">{stats.hold}</p>
+          <p className="text-xs font-semibold text-gray-600">Delivered</p>
+          <p className="mt-1 text-2xl font-bold text-gray-900">{stats.delivered}</p>
         </Card>
       </div>
 
@@ -701,7 +679,7 @@ export default function DispatchQueue() {
                             <Button
                               variant="secondary"
                               className="gap-2"
-                              onClick={() => navigate(`/logistics/dispatch/${r.id}`)}
+                              onClick={() => navigate(`/dashboard/logistics/dispatch/${r.id}`)}
                             >
                               <Eye className="h-4 w-4" />
                               View

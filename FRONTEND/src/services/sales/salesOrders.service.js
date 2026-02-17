@@ -1,7 +1,7 @@
 // src/services/sales/salesOrders.service.js
 import http from "@/lib/axios";
 
-const API_BASE = "/sales/orders";
+const API_BASE = "/api/sales/orders";
 
 /**
  * Service for handling sales orders API operations
@@ -23,7 +23,7 @@ const salesOrdersService = {
   async list(params = {}) {
     try {
       const response = await http.get(API_BASE, { params });
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error fetching sales orders:", error);
       throw error;
@@ -38,7 +38,7 @@ const salesOrdersService = {
   async getById(id) {
     try {
       const response = await http.get(`${API_BASE}/${id}`);
-      return response;
+      return response.data;
     } catch (error) {
       console.error(`Error fetching sales order ${id}:`, error);
       throw error;
@@ -53,7 +53,7 @@ const salesOrdersService = {
   async create(payload) {
     try {
       const response = await http.post(API_BASE, payload);
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error creating sales order:", error);
       throw error;
@@ -69,7 +69,7 @@ const salesOrdersService = {
   async update(id, payload) {
     try {
       const response = await http.put(`${API_BASE}/${id}`, payload);
-      return response;
+      return response.data;
     } catch (error) {
       console.error(`Error updating sales order ${id}:`, error);
       throw error;
@@ -84,7 +84,7 @@ const salesOrdersService = {
   async remove(id) {
     try {
       const response = await http.delete(`${API_BASE}/${id}`);
-      return response;
+      return response.data;
     } catch (error) {
       console.error(`Error deleting sales order ${id}:`, error);
       throw error;
@@ -100,7 +100,7 @@ const salesOrdersService = {
   async updateStatus(id, status) {
     try {
       const response = await http.patch(`${API_BASE}/${id}/status`, { status });
-      return response;
+      return response.data;
     } catch (error) {
       console.error(`Error updating sales order ${id} status:`, error);
       throw error;
@@ -115,7 +115,7 @@ const salesOrdersService = {
   async getItems(id) {
     try {
       const response = await http.get(`${API_BASE}/${id}/items`);
-      return response;
+      return response.data;
     } catch (error) {
       console.error(`Error fetching sales order ${id} items:`, error);
       throw error;
@@ -131,7 +131,7 @@ const salesOrdersService = {
   async addItem(id, itemData) {
     try {
       const response = await http.post(`${API_BASE}/${id}/items`, itemData);
-      return response;
+      return response.data;
     } catch (error) {
       console.error(`Error adding item to sales order ${id}:`, error);
       throw error;
@@ -148,7 +148,7 @@ const salesOrdersService = {
   async updateItem(orderId, itemId, itemData) {
     try {
       const response = await http.put(`${API_BASE}/${orderId}/items/${itemId}`, itemData);
-      return response;
+      return response.data;
     } catch (error) {
       console.error(`Error updating item ${itemId} in sales order ${orderId}:`, error);
       throw error;
@@ -164,7 +164,7 @@ const salesOrdersService = {
   async removeItem(orderId, itemId) {
     try {
       const response = await http.delete(`${API_BASE}/${orderId}/items/${itemId}`);
-      return response;
+      return response.data;
     } catch (error) {
       console.error(`Error removing item ${itemId} from sales order ${orderId}:`, error);
       throw error;
@@ -179,7 +179,7 @@ const salesOrdersService = {
   async getHistory(id) {
     try {
       const response = await http.get(`${API_BASE}/${id}/history`);
-      return response;
+      return response.data;
     } catch (error) {
       console.error(`Error fetching sales order ${id} history:`, error);
       throw error;
@@ -211,7 +211,7 @@ const salesOrdersService = {
   async getStats() {
     try {
       const response = await http.get(`${API_BASE}/stats`);
-      return response;
+      return response.data;
     } catch (error) {
       console.error("Error fetching sales order stats:", error);
       throw error;

@@ -11,18 +11,19 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/settings/plants")
+@RequestMapping("/settings/plants")
 public class PlantController {
-    
+
     private final PlantService plantService;
-    
+
     @Autowired
     public PlantController(PlantService plantService) {
         this.plantService = plantService;
     }
-    
+
     /**
      * Get all plants
+     * 
      * @return List of all plant DTOs
      */
     @GetMapping
@@ -30,9 +31,10 @@ public class PlantController {
         List<PlantDto> plants = plantService.getAllPlants();
         return ResponseEntity.ok(plants);
     }
-    
+
     /**
      * Get enabled plants
+     * 
      * @return List of enabled plant DTOs
      */
     @GetMapping("/enabled")
@@ -40,9 +42,10 @@ public class PlantController {
         List<PlantDto> plants = plantService.getEnabledPlants();
         return ResponseEntity.ok(plants);
     }
-    
+
     /**
      * Get plants by enabled status
+     * 
      * @param enabled the enabled status
      * @return List of plant DTOs with the specified enabled status
      */
@@ -51,9 +54,10 @@ public class PlantController {
         List<PlantDto> plants = plantService.getPlantsByEnabled(enabled);
         return ResponseEntity.ok(plants);
     }
-    
+
     /**
      * Get plants by city
+     * 
      * @param city the city
      * @return List of plant DTOs in the specified city
      */
@@ -62,9 +66,10 @@ public class PlantController {
         List<PlantDto> plants = plantService.getPlantsByCity(city);
         return ResponseEntity.ok(plants);
     }
-    
+
     /**
      * Get plants by state
+     * 
      * @param state the state
      * @return List of plant DTOs in the specified state
      */
@@ -73,9 +78,10 @@ public class PlantController {
         List<PlantDto> plants = plantService.getPlantsByState(state);
         return ResponseEntity.ok(plants);
     }
-    
+
     /**
      * Get plants by country
+     * 
      * @param country the country
      * @return List of plant DTOs in the specified country
      */
@@ -84,9 +90,10 @@ public class PlantController {
         List<PlantDto> plants = plantService.getPlantsByCountry(country);
         return ResponseEntity.ok(plants);
     }
-    
+
     /**
      * Get plants by timezone
+     * 
      * @param timezone the timezone
      * @return List of plant DTOs in the specified timezone
      */
@@ -95,9 +102,10 @@ public class PlantController {
         List<PlantDto> plants = plantService.getPlantsByTimezone(timezone);
         return ResponseEntity.ok(plants);
     }
-    
+
     /**
      * Get plant by ID
+     * 
      * @param id the plant ID
      * @return Plant DTO
      */
@@ -107,9 +115,10 @@ public class PlantController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    
+
     /**
      * Get plant by plant code
+     * 
      * @param code the plant code
      * @return Plant DTO
      */
@@ -119,9 +128,10 @@ public class PlantController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    
+
     /**
      * Get plant by plant name
+     * 
      * @param name the plant name
      * @return Plant DTO
      */
@@ -131,9 +141,10 @@ public class PlantController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    
+
     /**
      * Get plant by manager email
+     * 
      * @param email the manager email
      * @return Plant DTO
      */
@@ -143,9 +154,10 @@ public class PlantController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    
+
     /**
      * Create new plant
+     * 
      * @param payload the plant payload
      * @return Created plant DTO
      */
@@ -154,10 +166,11 @@ public class PlantController {
         PlantDto createdPlant = plantService.createPlant(payload);
         return ResponseEntity.ok(createdPlant);
     }
-    
+
     /**
      * Update plant
-     * @param id the plant ID
+     * 
+     * @param id      the plant ID
      * @param payload the plant payload
      * @return Updated plant DTO
      */
@@ -166,9 +179,10 @@ public class PlantController {
         PlantDto updatedPlant = plantService.updatePlant(id, payload);
         return ResponseEntity.ok(updatedPlant);
     }
-    
+
     /**
      * Delete plant
+     * 
      * @param id the plant ID
      * @return No content response
      */
@@ -177,10 +191,11 @@ public class PlantController {
         plantService.deletePlant(id);
         return ResponseEntity.noContent().build();
     }
-    
+
     /**
      * Enable/disable plant
-     * @param id the plant ID
+     * 
+     * @param id      the plant ID
      * @param enabled the enabled status
      * @return No content response
      */

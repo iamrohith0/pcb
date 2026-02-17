@@ -1,7 +1,7 @@
 // src/services/sales/quotations.service.js
 import http from "@/lib/axios";
 
-const API_BASE = "/sales/quotations";
+const API_BASE = "/api/sales/quotations";
 
 /**
  * Service for handling quotations API operations

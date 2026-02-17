@@ -245,10 +245,9 @@ export default function DashboardLayout() {
       title: "Logistics",
       items: [
         { to: "/dashboard/logistics/dispatch", label: "Dispatch", icon: Truck },
-        { to: "/dashboard/logistics/dispatch/queue", label: "Dispatch Queue", icon: LayoutGrid },
-        { to: "/dashboard/logistics/dispatch/details", label: "Dispatch Details", icon: FileText },
+        { to: "/dashboard/logistics/dispatch/create", label: "Create Dispatch", icon: Plus },
         { to: "/dashboard/logistics/shipments", label: "Shipments", icon: Ship },
-        { to: "/dashboard/logistics/shipments/details", label: "Shipment Details", icon: FileText },
+        { to: "/dashboard/logistics/shipments/create", label: "Create Shipment", icon: Plus },
         { to: "/dashboard/logistics/shipments/documents", label: "Shipment Documents", icon: FileText },
         { to: "/dashboard/logistics/tracking", label: "Tracking Dashboard", icon: MapPin },
         { to: "/dashboard/logistics/tracking/status", label: "Delivery Status", icon: Clock },
@@ -299,18 +298,18 @@ export default function DashboardLayout() {
         { to: "/settings/company/profile", label: "Company Profile", icon: Building2 },
         { to: "/settings/company/branding", label: "Branding", icon: Palette },
         { to: "/settings/company/working-hours", label: "Working Hours", icon: Clock },
-        
+
         // Integrations
         { to: "/settings/integrations/email", label: "Email SMTP", icon: Mail },
         { to: "/settings/integrations/webhooks", label: "ERP Webhooks", icon: Webhook },
         { to: "/settings/integrations/accounting", label: "Accounting Sync", icon: DollarSign },
         { to: "/settings/integrations/barcode", label: "Barcode", icon: QrCode },
-        
+
         // Numbering
         { to: "/settings/numbering/documents", label: "Document Series", icon: Hash },
         { to: "/settings/numbering/lots", label: "Lot Numbering", icon: Tag },
         { to: "/settings/numbering/work-orders", label: "Work Order Numbering", icon: FileText },
-        
+
         // Plants
         { to: "/settings/plants/list", label: "Plants", icon: Factory },
         { to: "/settings/plants/create", label: "Create Plant", icon: Plus },

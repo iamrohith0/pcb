@@ -1,17 +1,17 @@
 // src/pages/sales/orders/SalesOrdersList.jsx
 import { motion } from "framer-motion";
 import {
-    ArrowUpDown,
-    Building2,
-    CalendarDays,
-    Eye,
-    FileText,
-    Filter,
-    Loader2,
-    Plus,
-    RefreshCw,
-    Search,
-    X,
+  ArrowUpDown,
+  Building2,
+  CalendarDays,
+  Eye,
+  FileText,
+  Filter,
+  Loader2,
+  Plus,
+  RefreshCw,
+  Search,
+  X,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -125,10 +125,11 @@ export default function SalesOrdersList() {
 
       const res = await salesOrdersApi.list(params);
 
-      // Support common response shapes
-      const data = res?.data ?? {};
-      const items = data?.items ?? data?.data ?? data?.orders ?? [];
-      const m = data?.meta ?? data?.pagination ?? data ?? {};
+      // salesOrdersApi.list() already returns response.data,
+      // so `res` is the unwrapped object: { items, data, meta }
+      // Access items and meta directly from res.
+      const items = res?.items ?? res?.data ?? res?.orders ?? [];
+      const m = res?.meta ?? res?.pagination ?? {};
 
       const normalized = Array.isArray(items) ? items.map(normalizeRow) : [];
       setRows(normalized);

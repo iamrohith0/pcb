@@ -101,17 +101,26 @@ function todayISO() {
  * - Remove keys with null, undefined, or empty string values
  * - Recursively clean nested objects
  * - Remove empty nested objects entirely
+ * - NEVER remove keys listed in protectedKeys (required UUID fields)
  * This prevents sending placeholder data to the backend.
+ *
+ * @param {object} obj - The payload object to sanitize
+ * @param {Set<string>} [protectedKeys] - Keys that must NEVER be stripped, even if null/empty
  */
-function sanitizePayload(obj) {
+function sanitizePayload(obj, protectedKeys) {
   if (obj === null || obj === undefined) return undefined;
   if (typeof obj !== "object") return obj;
   if (Array.isArray(obj)) {
-    return obj.map(sanitizePayload).filter((v) => v !== undefined);
+    return obj.map((item) => sanitizePayload(item)).filter((v) => v !== undefined);
   }
   const cleaned = {};
   for (const [key, value] of Object.entries(obj)) {
-    // Skip null, undefined, and empty strings
+    // ALWAYS keep protected keys (required UUID fields) regardless of value
+    if (protectedKeys && protectedKeys.has(key)) {
+      cleaned[key] = value;
+      continue;
+    }
+    // Skip null, undefined, and empty strings for non-protected keys
     if (value === null || value === undefined || value === "") continue;
     // Recursively clean nested objects
     if (typeof value === "object" && !Array.isArray(value)) {
@@ -230,10 +239,13 @@ export default function DispatchCreate() {
           warehousesService.getAll({ limit: 100 }),
         ]);
 
-        // Extract data from responses (handle different response formats)
-        const ordersData = ordersRes?.data?.data || ordersRes?.data || [];
-        const customersData = customersRes?.data?.data || customersRes?.data || [];
-        const warehousesData = warehousesRes?.data || warehousesRes || [];
+        // Extract data from responses (handle different response formats/paged structures)
+        // salesOrdersService.list -> { items: [...], data: [...] }
+        // customersService.list -> { items: [...] }
+        // warehousesService.getAll -> [...]
+        const ordersData = ordersRes?.items || ordersRes?.data || ordersRes || [];
+        const customersData = customersRes?.items || customersRes || [];
+        const warehousesData = warehousesRes || [];
 
         setOrders(Array.isArray(ordersData) ? ordersData : []);
         setCustomers(Array.isArray(customersData) ? customersData : []);
@@ -259,16 +271,19 @@ export default function DispatchCreate() {
    * Backend requires: orderId, customerId, warehouseId
    * Without these, the API will return HTTP 400
    */
+  const isRequiredFieldsSelected = useMemo(() => {
+    return !!(orderId && customerId && warehouseId);
+  }, [orderId, customerId, warehouseId]);
+
   const canSaveDraft = useMemo(() => {
-    // Required UUID fields (API contract)
-    if (!orderId) return false;
-    if (!customerId) return false;
-    if (!warehouseId) return false;
+    // Required UUID fields (API contract) - ALWAYS required
+    if (!isRequiredFieldsSelected) return false;
+
     // Required form fields
     if (!dispatchType) return false;
     if (!items.length) return false;
     return true;
-  }, [orderId, customerId, warehouseId, dispatchType, items]);
+  }, [isRequiredFieldsSelected, dispatchType, items]);
 
   /**
    * Validation for finalizing dispatch (status = DISPATCHED/SHIPPED):
@@ -293,10 +308,11 @@ export default function DispatchCreate() {
    * Get user-friendly validation message explaining why action is blocked
    */
   const getValidationMessage = () => {
-    // Required UUID fields first (most important)
+    // Required UUID fields first - ALWAYS required to prevent HTTP 400
     if (!orderId) return "Select an Order to continue";
     if (!customerId) return "Select a Customer to continue";
     if (!warehouseId) return "Select a Warehouse to continue";
+
     // Then form fields
     if (!dispatchType) return "Select Dispatch Type to continue";
     if (!items.length) return "Add at least one dispatch item";
@@ -356,7 +372,7 @@ export default function DispatchCreate() {
    */
   const validateBeforeSave = () => {
     // === REQUIRED UUID FIELDS (API Contract) ===
-    // These MUST be present or backend will reject with HTTP 400
+    // ALWAYS enforced to prevent 400 errors from backend
     if (!orderId) return "Order is required. Please select a valid order.";
     if (!customerId) return "Customer is required. Please select a valid customer.";
     if (!warehouseId) return "Warehouse is required. Please select a valid warehouse.";
@@ -423,11 +439,28 @@ export default function DispatchCreate() {
       priority: "NORMAL",
     };
 
-    // Sanitize entire payload to remove null/undefined/empty values
-    return sanitizePayload(rawPayload);
+    // Required UUID fields that must NEVER be stripped by sanitizePayload.
+    // These are validated by the backend and must always be present in the JSON.
+    const REQUIRED_KEYS = new Set(["orderId", "customerId", "warehouseId"]);
+
+    // Sanitize payload — protectedKeys ensures orderId/customerId/warehouseId are
+    // never removed, even if they are null (backend returns a clear 400 message).
+    const cleanedPayload = sanitizePayload(rawPayload, REQUIRED_KEYS);
+
+    return cleanedPayload;
   };
 
   const handleSave = async () => {
+    // HARD GUARD: Prevent any API call if backend-required UUIDs are missing
+    if (!orderId || !customerId || !warehouseId) {
+      toast({
+        title: "Selection required",
+        description: "Order, Customer, and Warehouse are required before saving.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const err = validateBeforeSave();
     if (err) {
       toast({ title: "Fix required", description: err, variant: "destructive" });
@@ -450,15 +483,17 @@ export default function DispatchCreate() {
       navigate("/logistics/dispatch");
     } catch (e) {
       console.error("Dispatch save error:", e);
-      // Extract error message from API response if available
-      const errorMessage = e?.response?.data?.message
-        || e?.response?.data?.error
-        || e?.message
-        || "Unable to create dispatch. Please try again.";
+
+      // Handle backend validation message (400) or generic error (500)
+      const isValidationError = e?.response?.status === 400;
+      const errorMessage = (isValidationError && e?.response?.data?.message)
+        ? e.response.data.message
+        : "Unable to create dispatch. Please try again.";
+
       toast({
-        title: "Save failed",
+        title: isValidationError ? "Validation Error" : "Save failed",
         description: errorMessage,
-        variant: "destructive",
+        variant: isValidationError ? "default" : "destructive",
       });
     } finally {
       setIsSaving(false);
@@ -466,10 +501,7 @@ export default function DispatchCreate() {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setConfirmOpen(true);
-  };
+
 
   return (
     <div className="space-y-5">
@@ -510,7 +542,7 @@ export default function DispatchCreate() {
       </div>
 
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form className="space-y-5">
           {/* Dispatch meta */}
           <Card className="p-4 sm:p-5">
             <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-800">
@@ -582,16 +614,20 @@ export default function DispatchCreate() {
                     Sales Order <span className="text-red-500">*</span>
                   </Label>
                   <Select
-                    value={orderId || ""}
+                    value={orderId || undefined}
                     onValueChange={(val) => {
-                      setOrderId(val);
+                      // Normalize: empty/whitespace → null, otherwise keep UUID string
+                      const normalized = (val && val.trim()) ? val.trim() : null;
+                      setOrderId(normalized);
                       // Auto-populate order code and customer if available
-                      const selectedOrder = orders.find((o) => (o.id || o.orderId) === val);
-                      if (selectedOrder) {
-                        // If order has customer info, auto-select it
-                        if (selectedOrder.customerId && !customerId) {
-                          setCustomerId(selectedOrder.customerId);
-                          setCustomerName(selectedOrder.customerName || "");
+                      if (normalized) {
+                        const selectedOrder = orders.find((o) => (o.id || o.orderId) === normalized);
+                        if (selectedOrder) {
+                          // If order has customer info, auto-select it
+                          if (selectedOrder.customerId && !customerId) {
+                            setCustomerId(String(selectedOrder.customerId));
+                            setCustomerName(selectedOrder.customer?.name || selectedOrder.customerName || "");
+                          }
                         }
                       }
                     }}
@@ -604,8 +640,8 @@ export default function DispatchCreate() {
                         <SelectItem value="__none__" disabled>No orders available</SelectItem>
                       ) : (
                         orders.map((order) => (
-                          <SelectItem key={order.id || order.orderId} value={order.id || order.orderId}>
-                            {order.orderNumber || order.code || order.id} - {order.customerName || "N/A"}
+                          <SelectItem key={order.id || order.orderId} value={String(order.id || order.orderId)}>
+                            {order.orderNo || order.orderNumber || order.code || order.id} - {order.customer?.name || order.customerName || "N/A"}
                           </SelectItem>
                         ))
                       )}
@@ -621,14 +657,18 @@ export default function DispatchCreate() {
                     Customer <span className="text-red-500">*</span>
                   </Label>
                   <Select
-                    value={customerId || ""}
+                    value={customerId || undefined}
                     onValueChange={(val) => {
-                      setCustomerId(val);
+                      // Normalize: empty/whitespace → null, otherwise keep UUID string
+                      const normalized = (val && val.trim()) ? val.trim() : null;
+                      setCustomerId(normalized);
                       // Auto-populate customer name
-                      const selectedCustomer = customers.find((c) => (c.id || c.customerId) === val);
-                      if (selectedCustomer) {
-                        setCustomerName(selectedCustomer.name || selectedCustomer.customerName || "");
-                        setCustomerCode(selectedCustomer.code || selectedCustomer.customerCode || "");
+                      if (normalized) {
+                        const selectedCustomer = customers.find((c) => (c.id || c.customerId) === normalized);
+                        if (selectedCustomer) {
+                          setCustomerName(selectedCustomer.name || selectedCustomer.customerName || "");
+                          setCustomerCode(selectedCustomer.code || selectedCustomer.customerCode || "");
+                        }
                       }
                     }}
                   >
@@ -640,7 +680,7 @@ export default function DispatchCreate() {
                         <SelectItem value="__none__" disabled>No customers available</SelectItem>
                       ) : (
                         customers.map((customer) => (
-                          <SelectItem key={customer.id || customer.customerId} value={customer.id || customer.customerId}>
+                          <SelectItem key={customer.id || customer.customerId} value={String(customer.id || customer.customerId)}>
                             {customer.name || customer.customerName} {customer.code ? `(${customer.code})` : ""}
                           </SelectItem>
                         ))
@@ -657,9 +697,11 @@ export default function DispatchCreate() {
                     Warehouse <span className="text-red-500">*</span>
                   </Label>
                   <Select
-                    value={warehouseId || ""}
+                    value={warehouseId || undefined}
                     onValueChange={(val) => {
-                      setWarehouseId(val);
+                      // Normalize: empty/whitespace → null, otherwise keep UUID string
+                      const normalized = (val && val.trim()) ? val.trim() : null;
+                      setWarehouseId(normalized);
                     }}
                   >
                     <SelectTrigger className={!warehouseId ? "border-red-300 bg-red-50" : "border-green-300 bg-green-50"}>
@@ -670,7 +712,7 @@ export default function DispatchCreate() {
                         <SelectItem value="__none__" disabled>No warehouses available</SelectItem>
                       ) : (
                         warehouses.map((warehouse) => (
-                          <SelectItem key={warehouse.id || warehouse.warehouseId} value={warehouse.id || warehouse.warehouseId}>
+                          <SelectItem key={warehouse.id || warehouse.warehouseId} value={String(warehouse.id || warehouse.warehouseId)}>
                             {warehouse.name || warehouse.warehouseName} {warehouse.code ? `(${warehouse.code})` : ""}
                           </SelectItem>
                         ))
@@ -1080,9 +1122,10 @@ export default function DispatchCreate() {
 
             <div className="relative group">
               <Button
-                type="submit"
+                type="button"
                 disabled={!canSubmit || isSaving}
                 className="gap-2 bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50"
+                onClick={() => setConfirmOpen(true)}
               >
                 <Save className="h-4 w-4" />
                 {isSaving ? "Saving..." : "Create Dispatch"}

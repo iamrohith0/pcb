@@ -3,8 +3,23 @@ import axios from "@/lib/axios";
 const API_BASE = "/api/logistics/tracking";
 
 export default {
+  async getAll(params = {}) {
+    const response = await axios.get(API_BASE, { params });
+    return response.data;
+  },
+
   async getTrackingInfo(trackingId) {
     const response = await axios.get(`${API_BASE}/${trackingId}`);
+    return response.data;
+  },
+
+  async create(payload) {
+    const response = await axios.post(API_BASE, payload);
+    return response.data;
+  },
+
+  async delete(id) {
+    const response = await axios.delete(`${API_BASE}/${id}`);
     return response.data;
   },
 

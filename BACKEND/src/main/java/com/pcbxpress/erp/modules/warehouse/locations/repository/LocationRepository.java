@@ -150,9 +150,9 @@ public interface LocationRepository extends JpaRepository<Location, UUID> {
         */
        @Query("SELECT l FROM Location l WHERE " +
                      "(:warehouseId IS NULL OR l.warehouseId = :warehouseId) " +
-                     "AND (:locationType IS NULL OR l.locationType = :locationType) " +
-                     "AND (:isActive IS NULL OR l.isActive = :isActive) " +
-                     "AND (:status IS NULL OR l.status = :status) " +
+                     "AND (CAST(:locationType AS text) IS NULL OR l.locationType = :locationType) " +
+                     "AND (CAST(:isActive AS text) IS NULL OR l.isActive = :isActive) " +
+                     "AND (CAST(:status AS text) IS NULL OR l.status = :status) " +
                      "AND (:zone IS NULL OR (l.zone IS NOT NULL AND LOWER(l.zone) = LOWER(:zone))) " +
                      "AND (:aisle IS NULL OR (l.aisle IS NOT NULL AND LOWER(l.aisle) = LOWER(:aisle))) " +
                      "AND (:rack IS NULL OR (l.rack IS NOT NULL AND LOWER(l.rack) = LOWER(:rack))) " +

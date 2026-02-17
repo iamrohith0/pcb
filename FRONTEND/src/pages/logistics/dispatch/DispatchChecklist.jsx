@@ -216,6 +216,10 @@ async function fetchDispatchFromBackend(dispatchId) {
     // Return empty template for new dispatch
     return {
       id: null,
+      // === REQUIRED UUID FIELDS (must be present for save) ===
+      orderId: null,
+      customerId: null,
+      warehouseId: null,
       status: "Draft",
       customer: {},
       order: {},
@@ -227,8 +231,13 @@ async function fetchDispatchFromBackend(dispatchId) {
   }
   const response = await dispatchService.getById(dispatchId);
   // Map backend response to frontend format
+  // CRITICAL: Preserve orderId, customerId, warehouseId UUIDs from backend
   return {
     id: response.id,
+    // === REQUIRED UUID FIELDS (preserved from backend) ===
+    orderId: response.orderId || null,
+    customerId: response.customerId || null,
+    warehouseId: response.warehouseId || null,
     status: response.status || "Draft",
     customer: {
       name: response.customerName || "",
@@ -335,60 +344,99 @@ export default function DispatchChecklist() {
     });
   };
 
+  /**
+   * Check if this is an existing dispatch (already saved in DB).
+   * Existing dispatches can be updated with just checklist fields.
+   * New dispatches (no id) require orderId/customerId/warehouseId and should
+   * be created via the Create Dispatch page.
+   */
+  const isExistingDispatch = !!dispatch?.id;
+
+  /**
+   * For NEW dispatches only: check if required UUID fields are present.
+   * Existing dispatches already have these UUIDs in the DB — the backend
+   * applyPayload() preserves existing values via null-safe merge.
+   */
+  const canSaveNewDispatch = isExistingDispatch || !!(dispatch?.orderId && dispatch?.customerId && dispatch?.warehouseId);
+
   const handleSave = async () => {
+    // GUARD for new dispatches: Require UUIDs
+    if (!isExistingDispatch && (!dispatch?.orderId || !dispatch?.customerId || !dispatch?.warehouseId)) {
+      toast({
+        title: "Missing required data",
+        description: "Order, Customer, and Warehouse are required. Please create dispatches via the Create Dispatch page.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setSaving(true);
     try {
-      // Build a complete payload matching DispatchPayload structure
-      // Use data from UI context (dispatch state contains order/customer/shipment info)
       const customer = dispatch?.customer || {};
       const order = dispatch?.order || {};
       const shipment = dispatch?.shipment || {};
 
-      // Generate a unique dispatch code if creating new
-      const dispatchCode = dispatch?.id ? undefined : `DSP-${Date.now()}`;
-
-      const payload = {
-        // Dispatch identification
-        code: dispatchCode,
-        description: `Dispatch checklist for ${order.soNo || 'order'}`,
-
-        // Order context - safe defaults if empty
-        orderCode: order.soNo || order.woNo || 'UNLINKED',
-
-        // Customer context - safe default if empty
-        customerName: customer.name || 'UNKNOWN',
-
-        // Warehouse context - safe default if empty
-        warehouseName: order.shipTo || 'DEFAULT',
-
-        // Shipment/carrier info - can be empty
-        carrierName: shipment.carrier || '',
-        trackingNumber: shipment.trackingNo || '',
-
-        // Dispatch date - always set to now
-        dispatchDate: new Date().toISOString(),
-
-        // Valid status: DRAFT when first saving (safest enum value)
-        status: "DRAFT",
-
-        // Priority and type - always provide valid enums
-        priority: "NORMAL",
-        dispatchType: "STANDARD",
-
-        // Weight info - ensure numeric, never null
-        weight: shipment.weightKg ? Number(shipment.weightKg) : 0,
-        weightUnit: "kg",
-
-        // Notes - safe empty string if null
-        notes: notes || '',
-      };
-
       let savedDispatch;
-      if (dispatch?.id) {
-        // UPDATE existing dispatch via PUT /api/logistics/dispatch/{id}
+
+      if (isExistingDispatch) {
+        // === UPDATE EXISTING DISPATCH ===
+        // Only send checklist-relevant fields. The backend applyPayload()
+        // uses null-safe merge — it preserves existing orderId/customerId/
+        // warehouseId values in the DB. We don't re-send them.
+        const payload = {
+          // Notes (primary checklist data)
+          notes: notes || null,
+
+          // Carrier/shipment info the user may have updated
+          carrierName: shipment.carrier || null,
+          trackingNumber: shipment.trackingNo || null,
+
+          // Weight
+          weight: shipment.weightKg ? Number(shipment.weightKg) : null,
+          weightUnit: shipment.weightKg ? "kg" : null,
+
+          // Dispatch date
+          dispatchDate: new Date().toISOString(),
+        };
+
+        console.log("[DispatchChecklist] Update payload for", dispatch.id, ":", JSON.stringify(payload, null, 2));
+
         savedDispatch = await dispatchService.update(dispatch.id, payload);
       } else {
-        // CREATE new dispatch via POST /api/logistics/dispatch
+        // === CREATE NEW DISPATCH ===
+        // Must include all required UUID fields
+        const payload = {
+          code: `DSP-${Date.now()}`,
+          description: `Dispatch checklist for ${order.soNo || 'order'}`,
+
+          // Required UUID fields
+          orderId: dispatch.orderId,
+          customerId: dispatch.customerId,
+          warehouseId: dispatch.warehouseId,
+
+          // Display fields
+          orderCode: order.soNo || order.woNo || null,
+          customerName: customer.name || null,
+          warehouseName: order.shipTo || null,
+
+          // Shipment/carrier info
+          carrierName: shipment.carrier || null,
+          trackingNumber: shipment.trackingNo || null,
+
+          dispatchDate: new Date().toISOString(),
+          status: "DRAFT",
+          priority: "NORMAL",
+          dispatchType: "STANDARD",
+
+          weight: shipment.weightKg ? Number(shipment.weightKg) : null,
+          weightUnit: shipment.weightKg ? "kg" : null,
+
+          notes: notes || null,
+        };
+
+        console.log("[DispatchChecklist] Create payload:", JSON.stringify(payload, null, 2));
+        console.log("[DispatchChecklist] Required UUIDs → orderId:", payload.orderId, "customerId:", payload.customerId, "warehouseId:", payload.warehouseId);
+
         savedDispatch = await dispatchService.create(payload);
       }
 
@@ -402,10 +450,16 @@ export default function DispatchChecklist() {
           : { id: savedDispatch.id, checklist: checks, notes, status: isReadyToDispatch ? "Ready" : "Pending", updatedAt: new Date().toISOString() }
       );
     } catch (e) {
-      console.error(e);
+      console.error("[DispatchChecklist] Save error:", e);
+
+      const isValidationError = e?.response?.status === 400;
+      const errorMessage = (isValidationError && e?.response?.data?.message)
+        ? e.response.data.message
+        : "Could not save checklist. Please try again.";
+
       toast({
-        title: "Save failed",
-        description: "Could not save checklist. Please try again.",
+        title: isValidationError ? "Validation Error" : "Save failed",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -520,7 +574,7 @@ export default function DispatchChecklist() {
               <h1 className="text-lg font-bold text-gray-900">Dispatch Checklist</h1>
               <StatusPill status={meta.status} />
               <Badge variant="secondary" className="bg-gray-100 text-gray-700">
-                {meta.id}
+                {meta.id || "NEW"}
               </Badge>
             </div>
             <p className="text-sm text-gray-500">
@@ -540,7 +594,7 @@ export default function DispatchChecklist() {
             Export
           </Button>
 
-          <Button onClick={handleSave} disabled={saving} className="gap-2 bg-cyan-600 hover:bg-cyan-500">
+          <Button onClick={handleSave} disabled={saving || !canSaveNewDispatch} className="gap-2 bg-cyan-600 hover:bg-cyan-500" title={!canSaveNewDispatch ? "Missing required Order/Customer/Warehouse. Create dispatch via Create Dispatch page." : "Save checklist"}>
             <ClipboardCheck className="h-4 w-4" />
             {saving ? "Saving..." : "Save"}
           </Button>
@@ -643,7 +697,7 @@ export default function DispatchChecklist() {
 
         <div className="flex flex-wrap items-center gap-2">
           <Button variant="outline" className="gap-2" asChild>
-            <Link to="/logistics/shipments">
+            <Link to="/dashboard/logistics/shipments">
               <Truck className="h-4 w-4" />
               Shipments
             </Link>

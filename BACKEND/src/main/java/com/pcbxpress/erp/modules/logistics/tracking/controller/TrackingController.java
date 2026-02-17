@@ -20,7 +20,7 @@ import java.util.UUID;
  * REST Controller for Tracking operations
  */
 @RestController
-@RequestMapping("/api/logistics/tracking")
+@RequestMapping("/logistics/tracking")
 public class TrackingController {
 
     private final TrackingService trackingService;
@@ -44,9 +44,9 @@ public class TrackingController {
             @RequestParam(required = false) Boolean isActive,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
-        List<TrackingDto> trackings = trackingService.list(query, shipmentId, packageId, carrierId, 
-            status, trackingType, isActive, startDate, endDate);
+
+        List<TrackingDto> trackings = trackingService.list(query, shipmentId, packageId, carrierId,
+                status, trackingType, isActive, startDate, endDate);
         return ResponseEntity.ok(trackings);
     }
 
@@ -65,9 +65,9 @@ public class TrackingController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate,
             Pageable pageable) {
-        
-        Page<TrackingDto> trackings = trackingService.listWithPagination(query, shipmentId, packageId, carrierId, 
-            status, trackingType, isActive, startDate, endDate, pageable);
+
+        Page<TrackingDto> trackings = trackingService.listWithPagination(query, shipmentId, packageId, carrierId,
+                status, trackingType, isActive, startDate, endDate, pageable);
         return ResponseEntity.ok(trackings);
     }
 
@@ -143,7 +143,7 @@ public class TrackingController {
             @RequestParam(required = false) String status,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
+
         List<TrackingDto> trackings = trackingService.getTrackingHistory(trackingId, status, startDate, endDate);
         return ResponseEntity.ok(trackings);
     }
@@ -155,11 +155,11 @@ public class TrackingController {
     public ResponseEntity<TrackingDto> updateStatus(@PathVariable String id, @RequestBody Map<String, String> request) {
         String status = request.get("status");
         String statusDescription = request.get("statusDescription");
-        
+
         if (status == null) {
             return ResponseEntity.badRequest().build();
         }
-        
+
         Tracking.TrackingStatus trackingStatus = Tracking.TrackingStatus.valueOf(status.toUpperCase());
         TrackingDto updated = trackingService.updateStatus(id, trackingStatus, statusDescription);
         return ResponseEntity.ok(updated);
@@ -169,20 +169,23 @@ public class TrackingController {
      * Update tracking location
      */
     @PatchMapping("/{id}/location")
-    public ResponseEntity<TrackingDto> updateLocation(@PathVariable String id, @RequestBody Map<String, Object> request) {
+    public ResponseEntity<TrackingDto> updateLocation(@PathVariable String id,
+            @RequestBody Map<String, Object> request) {
         String locationName = (String) request.get("locationName");
         String locationAddress = (String) request.get("locationAddress");
         String locationCity = (String) request.get("locationCity");
         String locationState = (String) request.get("locationState");
         String locationCountry = (String) request.get("locationCountry");
         String locationPostalCode = (String) request.get("locationPostalCode");
-        Double latitude = request.get("latitude") != null ? Double.parseDouble(request.get("latitude").toString()) : null;
-        Double longitude = request.get("longitude") != null ? Double.parseDouble(request.get("longitude").toString()) : null;
-        
-        TrackingDto updated = trackingService.updateLocation(id, locationName, locationAddress, locationCity, 
-            locationState, locationCountry, locationPostalCode, 
-            latitude != null ? java.math.BigDecimal.valueOf(latitude) : null,
-            longitude != null ? java.math.BigDecimal.valueOf(longitude) : null);
+        Double latitude = request.get("latitude") != null ? Double.parseDouble(request.get("latitude").toString())
+                : null;
+        Double longitude = request.get("longitude") != null ? Double.parseDouble(request.get("longitude").toString())
+                : null;
+
+        TrackingDto updated = trackingService.updateLocation(id, locationName, locationAddress, locationCity,
+                locationState, locationCountry, locationPostalCode,
+                latitude != null ? java.math.BigDecimal.valueOf(latitude) : null,
+                longitude != null ? java.math.BigDecimal.valueOf(longitude) : null);
         return ResponseEntity.ok(updated);
     }
 
@@ -190,13 +193,14 @@ public class TrackingController {
      * Update tracking event time
      */
     @PatchMapping("/{id}/event-time")
-    public ResponseEntity<TrackingDto> updateEventTime(@PathVariable String id, @RequestBody Map<String, String> request) {
+    public ResponseEntity<TrackingDto> updateEventTime(@PathVariable String id,
+            @RequestBody Map<String, String> request) {
         String eventTime = request.get("eventTime");
-        
+
         if (eventTime == null) {
             return ResponseEntity.badRequest().build();
         }
-        
+
         TrackingDto updated = trackingService.updateEventTime(id, OffsetDateTime.parse(eventTime));
         return ResponseEntity.ok(updated);
     }
@@ -205,23 +209,26 @@ public class TrackingController {
      * Update tracking delivery information
      */
     @PatchMapping("/{id}/delivery")
-    public ResponseEntity<TrackingDto> updateDelivery(@PathVariable String id, @RequestBody Map<String, Object> request) {
+    public ResponseEntity<TrackingDto> updateDelivery(@PathVariable String id,
+            @RequestBody Map<String, Object> request) {
         String actualDelivery = (String) request.get("actualDelivery");
         String deliverySignature = (String) request.get("deliverySignature");
         String deliveryNotes = (String) request.get("deliveryNotes");
-        Integer deliveryAttemptCount = request.get("deliveryAttemptCount") != null ? Integer.parseInt(request.get("deliveryAttemptCount").toString()) : null;
+        Integer deliveryAttemptCount = request.get("deliveryAttemptCount") != null
+                ? Integer.parseInt(request.get("deliveryAttemptCount").toString())
+                : null;
         String deliveryContactName = (String) request.get("deliveryContactName");
         String deliveryContactPhone = (String) request.get("deliveryContactPhone");
         String deliveryContactEmail = (String) request.get("deliveryContactEmail");
-        
-        TrackingDto updated = trackingService.updateDelivery(id, 
-            actualDelivery != null ? OffsetDateTime.parse(actualDelivery) : null,
-            deliverySignature,
-            deliveryNotes,
-            deliveryAttemptCount,
-            deliveryContactName,
-            deliveryContactPhone,
-            deliveryContactEmail);
+
+        TrackingDto updated = trackingService.updateDelivery(id,
+                actualDelivery != null ? OffsetDateTime.parse(actualDelivery) : null,
+                deliverySignature,
+                deliveryNotes,
+                deliveryAttemptCount,
+                deliveryContactName,
+                deliveryContactPhone,
+                deliveryContactEmail);
         return ResponseEntity.ok(updated);
     }
 
@@ -229,13 +236,16 @@ public class TrackingController {
      * Update tracking coordinates
      */
     @PatchMapping("/{id}/coordinates")
-    public ResponseEntity<TrackingDto> updateCoordinates(@PathVariable String id, @RequestBody Map<String, Object> request) {
-        Double latitude = request.get("latitude") != null ? Double.parseDouble(request.get("latitude").toString()) : null;
-        Double longitude = request.get("longitude") != null ? Double.parseDouble(request.get("longitude").toString()) : null;
-        
-        TrackingDto updated = trackingService.updateCoordinates(id, 
-            latitude != null ? java.math.BigDecimal.valueOf(latitude) : null,
-            longitude != null ? java.math.BigDecimal.valueOf(longitude) : null);
+    public ResponseEntity<TrackingDto> updateCoordinates(@PathVariable String id,
+            @RequestBody Map<String, Object> request) {
+        Double latitude = request.get("latitude") != null ? Double.parseDouble(request.get("latitude").toString())
+                : null;
+        Double longitude = request.get("longitude") != null ? Double.parseDouble(request.get("longitude").toString())
+                : null;
+
+        TrackingDto updated = trackingService.updateCoordinates(id,
+                latitude != null ? java.math.BigDecimal.valueOf(latitude) : null,
+                longitude != null ? java.math.BigDecimal.valueOf(longitude) : null);
         return ResponseEntity.ok(updated);
     }
 
@@ -265,7 +275,7 @@ public class TrackingController {
             @RequestParam(required = false) String status,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
+
         Map<String, Object> report = trackingService.getTrackingReport(status, startDate, endDate);
         return ResponseEntity.ok(report);
     }
@@ -284,15 +294,15 @@ public class TrackingController {
             @RequestParam(required = false) Boolean isActive,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
-        List<TrackingDto> trackings = trackingService.list(query, shipmentId, packageId, carrierId, 
-            status, trackingType, isActive, startDate, endDate);
-        
+
+        List<TrackingDto> trackings = trackingService.list(query, shipmentId, packageId, carrierId,
+                status, trackingType, isActive, startDate, endDate);
+
         String csv = trackingService.exportCsv(trackings);
         return ResponseEntity.ok()
-            .header("Content-Type", "text/csv")
-            .header("Content-Disposition", "attachment; filename=tracking.csv")
-            .body(csv);
+                .header("Content-Type", "text/csv")
+                .header("Content-Disposition", "attachment; filename=tracking.csv")
+                .body(csv);
     }
 
     /**
@@ -374,7 +384,7 @@ public class TrackingController {
     public ResponseEntity<List<TrackingDto>> getByDateRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
+
         List<TrackingDto> trackings = trackingService.getByDateRange(startDate, endDate);
         return ResponseEntity.ok(trackings);
     }
@@ -386,7 +396,7 @@ public class TrackingController {
     public ResponseEntity<List<TrackingDto>> getByEstimatedDeliveryRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
+
         List<TrackingDto> trackings = trackingService.getByEstimatedDeliveryRange(startDate, endDate);
         return ResponseEntity.ok(trackings);
     }
@@ -398,7 +408,7 @@ public class TrackingController {
     public ResponseEntity<List<TrackingDto>> getByActualDeliveryRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
+
         List<TrackingDto> trackings = trackingService.getByActualDeliveryRange(startDate, endDate);
         return ResponseEntity.ok(trackings);
     }

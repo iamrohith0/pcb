@@ -21,7 +21,7 @@ import java.util.UUID;
  * REST Controller for Shipment operations
  */
 @RestController
-@RequestMapping("/api/logistics/shipments")
+@RequestMapping("/logistics/shipments")
 public class ShipmentController {
 
     private final ShipmentService shipmentService;
@@ -47,9 +47,9 @@ public class ShipmentController {
             @RequestParam(required = false) Shipment.ServiceLevel serviceLevel,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
-        List<ShipmentDto> shipments = shipmentService.list(query, orderId, customerId, warehouseId, 
-            carrierId, status, priority, shipmentType, serviceLevel, startDate, endDate);
+
+        List<ShipmentDto> shipments = shipmentService.list(query, orderId, customerId, warehouseId,
+                carrierId, status, priority, shipmentType, serviceLevel, startDate, endDate);
         return ResponseEntity.ok(shipments);
     }
 
@@ -70,9 +70,9 @@ public class ShipmentController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate,
             Pageable pageable) {
-        
-        Page<ShipmentDto> shipments = shipmentService.listWithPagination(query, orderId, customerId, warehouseId, 
-            carrierId, status, priority, shipmentType, serviceLevel, startDate, endDate, pageable);
+
+        Page<ShipmentDto> shipments = shipmentService.listWithPagination(query, orderId, customerId, warehouseId,
+                carrierId, status, priority, shipmentType, serviceLevel, startDate, endDate, pageable);
         return ResponseEntity.ok(shipments);
     }
 
@@ -139,7 +139,7 @@ public class ShipmentController {
             @RequestParam(required = false) String status,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
+
         List<ShipmentDto> shipments = shipmentService.getShipmentHistory(orderId, status, startDate, endDate);
         return ResponseEntity.ok(shipments);
     }
@@ -153,7 +153,7 @@ public class ShipmentController {
         if (status == null) {
             return ResponseEntity.badRequest().build();
         }
-        
+
         Shipment.ShipmentStatus shipmentStatus = Shipment.ShipmentStatus.valueOf(status.toUpperCase());
         ShipmentDto updated = shipmentService.updateStatus(id, shipmentStatus);
         return ResponseEntity.ok(updated);
@@ -163,11 +163,13 @@ public class ShipmentController {
      * Update shipment tracking information
      */
     @PatchMapping("/{id}/tracking")
-    public ResponseEntity<ShipmentDto> updateTracking(@PathVariable String id, @RequestBody Map<String, Object> request) {
+    public ResponseEntity<ShipmentDto> updateTracking(@PathVariable String id,
+            @RequestBody Map<String, Object> request) {
         String trackingNumber = (String) request.get("trackingNumber");
-        OffsetDateTime estimatedDelivery = request.get("estimatedDelivery") != null ? 
-            OffsetDateTime.parse(request.get("estimatedDelivery").toString()) : null;
-        
+        OffsetDateTime estimatedDelivery = request.get("estimatedDelivery") != null
+                ? OffsetDateTime.parse(request.get("estimatedDelivery").toString())
+                : null;
+
         ShipmentDto updated = shipmentService.updateTracking(id, trackingNumber, estimatedDelivery);
         return ResponseEntity.ok(updated);
     }
@@ -176,11 +178,13 @@ public class ShipmentController {
      * Update shipment delivery information
      */
     @PatchMapping("/{id}/delivery")
-    public ResponseEntity<ShipmentDto> updateDelivery(@PathVariable String id, @RequestBody Map<String, Object> request) {
-        OffsetDateTime actualDelivery = request.get("actualDelivery") != null ? 
-            OffsetDateTime.parse(request.get("actualDelivery").toString()) : null;
+    public ResponseEntity<ShipmentDto> updateDelivery(@PathVariable String id,
+            @RequestBody Map<String, Object> request) {
+        OffsetDateTime actualDelivery = request.get("actualDelivery") != null
+                ? OffsetDateTime.parse(request.get("actualDelivery").toString())
+                : null;
         String receivedBy = (String) request.get("receivedBy");
-        
+
         ShipmentDto updated = shipmentService.updateDelivery(id, actualDelivery, receivedBy);
         return ResponseEntity.ok(updated);
     }
@@ -189,10 +193,11 @@ public class ShipmentController {
      * Assign carrier to shipment
      */
     @PatchMapping("/{id}/carrier")
-    public ResponseEntity<ShipmentDto> assignCarrier(@PathVariable String id, @RequestBody Map<String, Object> request) {
+    public ResponseEntity<ShipmentDto> assignCarrier(@PathVariable String id,
+            @RequestBody Map<String, Object> request) {
         UUID carrierId = request.get("carrierId") != null ? UUID.fromString(request.get("carrierId").toString()) : null;
         String carrierName = (String) request.get("carrierName");
-        
+
         ShipmentDto updated = shipmentService.assignCarrier(id, carrierId, carrierName);
         return ResponseEntity.ok(updated);
     }
@@ -201,9 +206,10 @@ public class ShipmentController {
      * Mark shipment as shipped
      */
     @PatchMapping("/{id}/shipped")
-    public ResponseEntity<ShipmentDto> markAsShipped(@PathVariable String id, @RequestBody Map<String, String> request) {
+    public ResponseEntity<ShipmentDto> markAsShipped(@PathVariable String id,
+            @RequestBody Map<String, String> request) {
         String shippedBy = request.get("shippedBy");
-        
+
         ShipmentDto updated = shipmentService.markAsShipped(id, shippedBy);
         return ResponseEntity.ok(updated);
     }
@@ -212,17 +218,23 @@ public class ShipmentController {
      * Update shipment charges
      */
     @PatchMapping("/{id}/charges")
-    public ResponseEntity<ShipmentDto> updateCharges(@PathVariable String id, @RequestBody Map<String, Object> request) {
-        BigDecimal freightCharge = request.get("freightCharge") != null ? 
-            new BigDecimal(request.get("freightCharge").toString()) : null;
-        BigDecimal handlingCharge = request.get("handlingCharge") != null ? 
-            new BigDecimal(request.get("handlingCharge").toString()) : null;
-        BigDecimal customsCharge = request.get("customsCharge") != null ? 
-            new BigDecimal(request.get("customsCharge").toString()) : null;
-        BigDecimal insuranceValue = request.get("insuranceValue") != null ? 
-            new BigDecimal(request.get("insuranceValue").toString()) : null;
-        
-        ShipmentDto updated = shipmentService.updateCharges(id, freightCharge, handlingCharge, customsCharge, insuranceValue);
+    public ResponseEntity<ShipmentDto> updateCharges(@PathVariable String id,
+            @RequestBody Map<String, Object> request) {
+        BigDecimal freightCharge = request.get("freightCharge") != null
+                ? new BigDecimal(request.get("freightCharge").toString())
+                : null;
+        BigDecimal handlingCharge = request.get("handlingCharge") != null
+                ? new BigDecimal(request.get("handlingCharge").toString())
+                : null;
+        BigDecimal customsCharge = request.get("customsCharge") != null
+                ? new BigDecimal(request.get("customsCharge").toString())
+                : null;
+        BigDecimal insuranceValue = request.get("insuranceValue") != null
+                ? new BigDecimal(request.get("insuranceValue").toString())
+                : null;
+
+        ShipmentDto updated = shipmentService.updateCharges(id, freightCharge, handlingCharge, customsCharge,
+                insuranceValue);
         return ResponseEntity.ok(updated);
     }
 
@@ -234,7 +246,7 @@ public class ShipmentController {
             @RequestParam(required = false) String status,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
+
         Map<String, Object> report = shipmentService.getShipmentReport(status, startDate, endDate);
         return ResponseEntity.ok(report);
     }
@@ -247,7 +259,7 @@ public class ShipmentController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate,
             @RequestParam(required = false) Shipment.ShipmentStatus status) {
-        
+
         List<ShipmentDto> shipments = shipmentService.getUpcomingShipments(startDate, endDate, status);
         return ResponseEntity.ok(shipments);
     }
@@ -268,15 +280,15 @@ public class ShipmentController {
             @RequestParam(required = false) Shipment.ServiceLevel serviceLevel,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
-        List<ShipmentDto> shipments = shipmentService.list(query, orderId, customerId, warehouseId, 
-            carrierId, status, priority, shipmentType, serviceLevel, startDate, endDate);
-        
+
+        List<ShipmentDto> shipments = shipmentService.list(query, orderId, customerId, warehouseId,
+                carrierId, status, priority, shipmentType, serviceLevel, startDate, endDate);
+
         String csv = shipmentService.exportCsv(shipments);
         return ResponseEntity.ok()
-            .header("Content-Type", "text/csv")
-            .header("Content-Disposition", "attachment; filename=shipments.csv")
-            .body(csv);
+                .header("Content-Type", "text/csv")
+                .header("Content-Disposition", "attachment; filename=shipments.csv")
+                .body(csv);
     }
 
     /**
@@ -367,7 +379,7 @@ public class ShipmentController {
     public ResponseEntity<List<ShipmentDto>> getByDateRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
+
         List<ShipmentDto> shipments = shipmentService.getByDateRange(startDate, endDate);
         return ResponseEntity.ok(shipments);
     }
@@ -379,7 +391,7 @@ public class ShipmentController {
     public ResponseEntity<List<ShipmentDto>> getByEstimatedDeliveryRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
+
         List<ShipmentDto> shipments = shipmentService.getByEstimatedDeliveryRange(startDate, endDate);
         return ResponseEntity.ok(shipments);
     }
@@ -391,7 +403,7 @@ public class ShipmentController {
     public ResponseEntity<List<ShipmentDto>> getByActualDeliveryRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
+
         List<ShipmentDto> shipments = shipmentService.getByActualDeliveryRange(startDate, endDate);
         return ResponseEntity.ok(shipments);
     }

@@ -5,32 +5,35 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 import {
-    ArrowLeft,
-    ClipboardCopy,
-    Download,
-    Eye,
-    FileDown,
-    FileText,
-    Image as ImageIcon,
-    Link2,
-    Plus,
-    Printer,
-    RefreshCcw,
-    ShieldCheck,
-    Trash2,
-    UploadCloud,
+  ArrowLeft,
+  ClipboardCopy,
+  Download,
+  Eye,
+  FileDown,
+  FileText,
+  Image as ImageIcon,
+  Link2,
+  Plus,
+  Printer,
+  RefreshCcw,
+  ShieldCheck,
+  Trash2,
+  UploadCloud,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+
+import shipmentService from "@/services/logistics/shipments.service";
+import trackingService from "@/services/logistics/tracking.service";
 
 /**
  * ShipmentDocuments.jsx (PCBxpress)
@@ -67,57 +70,21 @@ const VISIBILITY = [
   { value: "customer", label: "Customer-visible" },
 ];
 
-const MOCK_SHIPMENT = {
-  id: "shp-2011",
-  shipmentNo: "SHP-000311",
-  dispatchNo: "DSP-000214",
-  dispatchId: "dq-1001",
-  carrier: "Blue Dart",
-  trackingNo: "BD123456789",
-};
-
-const MOCK_DOCS = [
-  {
-    id: "doc-1",
-    type: "packing_list",
-    name: "Packing_List_SHP-000311.pdf",
-    source: "generated",
-    visibility: "customer",
-    sizeKb: 186,
-    createdAt: "2026-01-05 11:40",
-    url: "#",
-  },
-  {
-    id: "doc-2",
-    type: "invoice",
-    name: "Invoice_INV-00912.pdf",
-    source: "uploaded",
-    visibility: "customer",
-    sizeKb: 244,
-    createdAt: "2026-01-05 12:05",
-    url: "#",
-  },
-  {
-    id: "doc-3",
-    type: "coc",
-    name: "CoC_Batch-LOT-1182.pdf",
-    source: "uploaded",
-    visibility: "customer",
-    sizeKb: 92,
-    createdAt: "2026-01-05 13:10",
-    url: "#",
-  },
-  {
-    id: "doc-4",
-    type: "photos",
-    name: "Packing_Photos_Gallery",
-    source: "link",
-    visibility: "internal",
+/**
+ * Map a backend TrackingDto into the document row structure the table expects.
+ */
+function trackingToDoc(t) {
+  return {
+    id: t.id,
+    type: t.statusCode || "other",
+    name: t.trackingId || t.notes || "Document",
+    source: t.statusDescription || "uploaded",
+    visibility: (t.locationName || "internal").toLowerCase(),
     sizeKb: 0,
-    createdAt: "2026-01-05 14:02",
-    url: "#",
-  },
-];
+    createdAt: t.createdAt ? new Date(t.createdAt).toISOString().slice(0, 16).replace("T", " ") : "",
+    url: t.carrierTrackingUrl || "#",
+  };
+}
 
 function Badge({ tone = "gray", children }) {
   const base = "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset";
@@ -186,19 +153,51 @@ export default function ShipmentDocuments() {
   // confirmation
   const [confirm, setConfirm] = useState({ open: false, docId: null });
 
-  useEffect(() => {
-    // TODO: Replace with API calls
-    // shipmentService.getById(id)
-    // shipmentDocsService.list(id)
+  const loadData = useCallback(async () => {
     setLoading(true);
-    const t = setTimeout(() => {
-      setShipment({ ...MOCK_SHIPMENT, id: id || MOCK_SHIPMENT.id });
-      setDocs(MOCK_DOCS);
-      setLoading(false);
-    }, 250);
+    try {
+      // Fetch the real shipment from backend
+      const shipData = await shipmentService.getById(id);
+      setShipment({
+        id: shipData.id,
+        shipmentNo: shipData.code || shipData.id,
+        dispatchNo: shipData.orderCode || "—",
+        dispatchId: shipData.orderId || "",
+        carrier: shipData.carrierName || "—",
+        carrierId: shipData.carrierId || null,
+        trackingNo: shipData.trackingNumber || "—",
+      });
 
-    return () => clearTimeout(t);
+      // Fetch tracking records (documents) for this shipment
+      try {
+        const trackingData = await trackingService.getShipmentTracking(id);
+        const list = Array.isArray(trackingData) ? trackingData : [];
+        setDocs(list.map(trackingToDoc));
+      } catch {
+        // No tracking records yet — that's fine
+        setDocs([]);
+      }
+    } catch (err) {
+      console.error("[ShipmentDocuments] Failed to load shipment:", err);
+      // Fallback so the page doesn't break
+      setShipment({
+        id: id,
+        shipmentNo: id,
+        dispatchNo: "—",
+        dispatchId: "",
+        carrier: "—",
+        carrierId: null,
+        trackingNo: "—",
+      });
+      setDocs([]);
+    } finally {
+      setLoading(false);
+    }
   }, [id]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const filteredDocs = useMemo(() => {
     const query = q.trim().toLowerCase();
@@ -261,44 +260,46 @@ export default function ShipmentDocuments() {
     }
 
     try {
-      // TODO:
-      // if upload => shipmentDocsService.upload(id, file, { type: docType, visibility })
-      // if link => shipmentDocsService.addLink(id, { name: linkName, url: linkUrl, type: docType, visibility })
-      await new Promise((r) => setTimeout(r, 250));
+      const docName = mode === "upload" ? (file?.name || "Document") : linkName.trim();
+      const docSource = mode === "upload" ? "uploaded" : "link";
 
-      const now = new Date().toISOString().slice(0, 16).replace("T", " ");
-      const newDoc =
-        mode === "upload"
-          ? {
-              id: `doc-${Date.now()}`,
-              type: docType,
-              name: file?.name || "Document",
-              source: "uploaded",
-              visibility,
-              sizeKb: Math.max(1, Math.round((file?.size || 1024) / 1024)),
-              createdAt: now,
-              url: "#",
-            }
-          : {
-              id: `doc-${Date.now()}`,
-              type: docType,
-              name: linkName.trim(),
-              source: "link",
-              visibility,
-              sizeKb: 0,
-              createdAt: now,
-              url: linkUrl.trim(),
-            };
+      // Build tracking payload
+      // carrierId is optional for document-type records; backend defaults to nil UUID
+      if (!shipment?.carrierId) {
+        console.warn("[ShipmentDocuments] No carrierId on shipment — backend will default to nil UUID");
+      }
+      const payload = {
+        trackingId: `DOC-${Date.now()}`,
+        shipmentId: id,
+        shipmentCode: shipment?.shipmentNo || null,
+        carrierId: shipment?.carrierId || null,
+        carrierName: shipment?.carrier || null,
+        carrierTrackingUrl: mode === "link" ? linkUrl.trim() : null,
+        status: "CREATED",
+        statusCode: docType,
+        statusDescription: docSource,
+        locationName: visibility,
+        trackingType: "SHIPMENT",
+        isActive: true,
+        notes: docName,
+        eventTime: new Date().toISOString(),
+      };
 
-      setDocs((prev) => [newDoc, ...prev]);
+      console.log("[ShipmentDocuments] Creating tracking record:", payload);
+      const created = await trackingService.create(payload);
+
+      // Add the new doc to local state immediately
+      setDocs((prev) => [trackingToDoc(created), ...prev]);
       resetForm();
 
       toast({
         title: "Added",
         description: mode === "upload" ? "Document uploaded successfully." : "Link added successfully.",
       });
-    } catch {
-      toast({ title: "Failed", description: "Could not add document. Try again.", variant: "destructive" });
+    } catch (err) {
+      console.error("[ShipmentDocuments] Create failed:", err);
+      const msg = err?.response?.data?.message || "Could not add document. Try again.";
+      toast({ title: "Failed", description: msg, variant: "destructive" });
     }
   };
 
@@ -310,11 +311,11 @@ export default function ShipmentDocuments() {
     if (!docId) return;
 
     try {
-      // TODO: shipmentDocsService.remove(id, docId)
-      await new Promise((r) => setTimeout(r, 250));
+      await trackingService.delete(docId);
       setDocs((prev) => prev.filter((d) => d.id !== docId));
       toast({ title: "Deleted", description: "Document removed from shipment." });
-    } catch {
+    } catch (err) {
+      console.error("[ShipmentDocuments] Delete failed:", err);
       toast({ title: "Delete failed", description: "Please try again.", variant: "destructive" });
     }
   };

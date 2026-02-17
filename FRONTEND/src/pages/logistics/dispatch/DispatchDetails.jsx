@@ -446,7 +446,7 @@ export default function DispatchDetails() {
           </Button>
 
           <Button variant="outline" className="gap-2" asChild>
-            <Link to={`/logistics/dispatch/${meta.id}/checklist`}>
+            <Link to={`/dashboard/logistics/dispatch/${meta.id}/checklist`}>
               <ClipboardCheck className="h-4 w-4" />
               Open Checklist
             </Link>
@@ -695,7 +695,7 @@ export default function DispatchDetails() {
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                   <Button variant="outline" size="sm" className="gap-2" asChild>
-                    <Link to={`/logistics/dispatch/${meta.id}/checklist`}>
+                    <Link to={`/dashboard/logistics/dispatch/${meta.id}/checklist`}>
                       <ClipboardCheck className="h-4 w-4" />
                       Checklist
                     </Link>

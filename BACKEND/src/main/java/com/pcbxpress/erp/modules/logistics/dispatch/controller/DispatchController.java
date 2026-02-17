@@ -20,7 +20,7 @@ import java.util.UUID;
  * REST Controller for Dispatch operations
  */
 @RestController
-@RequestMapping("/api/logistics/dispatch")
+@RequestMapping("/logistics/dispatch")
 public class DispatchController {
 
     private final DispatchService dispatchService;
@@ -45,9 +45,9 @@ public class DispatchController {
             @RequestParam(required = false) Dispatch.DispatchType dispatchType,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
-        List<DispatchDto> dispatches = dispatchService.list(query, orderId, customerId, warehouseId, 
-            carrierId, status, priority, dispatchType, startDate, endDate);
+
+        List<DispatchDto> dispatches = dispatchService.list(query, orderId, customerId, warehouseId,
+                carrierId, status, priority, dispatchType, startDate, endDate);
         return ResponseEntity.ok(dispatches);
     }
 
@@ -67,9 +67,9 @@ public class DispatchController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate,
             Pageable pageable) {
-        
-        Page<DispatchDto> dispatches = dispatchService.listWithPagination(query, orderId, customerId, warehouseId, 
-            carrierId, status, priority, dispatchType, startDate, endDate, pageable);
+
+        Page<DispatchDto> dispatches = dispatchService.listWithPagination(query, orderId, customerId, warehouseId,
+                carrierId, status, priority, dispatchType, startDate, endDate, pageable);
         return ResponseEntity.ok(dispatches);
     }
 
@@ -136,7 +136,7 @@ public class DispatchController {
             @RequestParam(required = false) String status,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
+
         List<DispatchDto> dispatches = dispatchService.getDispatchHistory(orderId, status, startDate, endDate);
         return ResponseEntity.ok(dispatches);
     }
@@ -150,7 +150,7 @@ public class DispatchController {
         if (status == null) {
             return ResponseEntity.badRequest().build();
         }
-        
+
         Dispatch.DispatchStatus dispatchStatus = Dispatch.DispatchStatus.valueOf(status.toUpperCase());
         DispatchDto updated = dispatchService.updateStatus(id, dispatchStatus);
         return ResponseEntity.ok(updated);
@@ -160,11 +160,13 @@ public class DispatchController {
      * Update dispatch tracking information
      */
     @PatchMapping("/{id}/tracking")
-    public ResponseEntity<DispatchDto> updateTracking(@PathVariable String id, @RequestBody Map<String, Object> request) {
+    public ResponseEntity<DispatchDto> updateTracking(@PathVariable String id,
+            @RequestBody Map<String, Object> request) {
         String trackingNumber = (String) request.get("trackingNumber");
-        OffsetDateTime estimatedDelivery = request.get("estimatedDelivery") != null ? 
-            OffsetDateTime.parse(request.get("estimatedDelivery").toString()) : null;
-        
+        OffsetDateTime estimatedDelivery = request.get("estimatedDelivery") != null
+                ? OffsetDateTime.parse(request.get("estimatedDelivery").toString())
+                : null;
+
         DispatchDto updated = dispatchService.updateTracking(id, trackingNumber, estimatedDelivery);
         return ResponseEntity.ok(updated);
     }
@@ -173,11 +175,13 @@ public class DispatchController {
      * Update dispatch delivery information
      */
     @PatchMapping("/{id}/delivery")
-    public ResponseEntity<DispatchDto> updateDelivery(@PathVariable String id, @RequestBody Map<String, Object> request) {
-        OffsetDateTime actualDelivery = request.get("actualDelivery") != null ? 
-            OffsetDateTime.parse(request.get("actualDelivery").toString()) : null;
+    public ResponseEntity<DispatchDto> updateDelivery(@PathVariable String id,
+            @RequestBody Map<String, Object> request) {
+        OffsetDateTime actualDelivery = request.get("actualDelivery") != null
+                ? OffsetDateTime.parse(request.get("actualDelivery").toString())
+                : null;
         String receivedBy = (String) request.get("receivedBy");
-        
+
         DispatchDto updated = dispatchService.updateDelivery(id, actualDelivery, receivedBy);
         return ResponseEntity.ok(updated);
     }
@@ -186,10 +190,11 @@ public class DispatchController {
      * Assign carrier to dispatch
      */
     @PatchMapping("/{id}/carrier")
-    public ResponseEntity<DispatchDto> assignCarrier(@PathVariable String id, @RequestBody Map<String, Object> request) {
+    public ResponseEntity<DispatchDto> assignCarrier(@PathVariable String id,
+            @RequestBody Map<String, Object> request) {
         UUID carrierId = request.get("carrierId") != null ? UUID.fromString(request.get("carrierId").toString()) : null;
         String carrierName = (String) request.get("carrierName");
-        
+
         DispatchDto updated = dispatchService.assignCarrier(id, carrierId, carrierName);
         return ResponseEntity.ok(updated);
     }
@@ -198,9 +203,10 @@ public class DispatchController {
      * Mark dispatch as dispatched
      */
     @PatchMapping("/{id}/dispatched")
-    public ResponseEntity<DispatchDto> markAsDispatched(@PathVariable String id, @RequestBody Map<String, String> request) {
+    public ResponseEntity<DispatchDto> markAsDispatched(@PathVariable String id,
+            @RequestBody Map<String, String> request) {
         String dispatchedBy = request.get("dispatchedBy");
-        
+
         DispatchDto updated = dispatchService.markAsDispatched(id, dispatchedBy);
         return ResponseEntity.ok(updated);
     }
@@ -213,7 +219,7 @@ public class DispatchController {
             @RequestParam(required = false) String status,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
+
         Map<String, Object> report = dispatchService.getDispatchReport(status, startDate, endDate);
         return ResponseEntity.ok(report);
     }
@@ -226,7 +232,7 @@ public class DispatchController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate,
             @RequestParam(required = false) Dispatch.DispatchStatus status) {
-        
+
         List<DispatchDto> dispatches = dispatchService.getUpcomingDispatches(startDate, endDate, status);
         return ResponseEntity.ok(dispatches);
     }
@@ -246,15 +252,15 @@ public class DispatchController {
             @RequestParam(required = false) Dispatch.DispatchType dispatchType,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
-        List<DispatchDto> dispatches = dispatchService.list(query, orderId, customerId, warehouseId, 
-            carrierId, status, priority, dispatchType, startDate, endDate);
-        
+
+        List<DispatchDto> dispatches = dispatchService.list(query, orderId, customerId, warehouseId,
+                carrierId, status, priority, dispatchType, startDate, endDate);
+
         String csv = dispatchService.exportCsv(dispatches);
         return ResponseEntity.ok()
-            .header("Content-Type", "text/csv")
-            .header("Content-Disposition", "attachment; filename=dispatches.csv")
-            .body(csv);
+                .header("Content-Type", "text/csv")
+                .header("Content-Disposition", "attachment; filename=dispatches.csv")
+                .body(csv);
     }
 
     /**
@@ -345,7 +351,7 @@ public class DispatchController {
     public ResponseEntity<List<DispatchDto>> getByDateRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
+
         List<DispatchDto> dispatches = dispatchService.getByDateRange(startDate, endDate);
         return ResponseEntity.ok(dispatches);
     }
@@ -357,7 +363,7 @@ public class DispatchController {
     public ResponseEntity<List<DispatchDto>> getByEstimatedDeliveryRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
+
         List<DispatchDto> dispatches = dispatchService.getByEstimatedDeliveryRange(startDate, endDate);
         return ResponseEntity.ok(dispatches);
     }
@@ -369,7 +375,7 @@ public class DispatchController {
     public ResponseEntity<List<DispatchDto>> getByActualDeliveryRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime endDate) {
-        
+
         List<DispatchDto> dispatches = dispatchService.getByActualDeliveryRange(startDate, endDate);
         return ResponseEntity.ok(dispatches);
     }

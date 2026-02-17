@@ -20,15 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
  * REST Controller for Warehouse management
  */
 @RestController
-@RequestMapping("/api/warehouse/warehouses")
+@RequestMapping("/warehouse/warehouses")
 public class WarehouseController {
-    
+
     private final WarehouseService warehouseService;
-    
+
     public WarehouseController(WarehouseService warehouseService) {
         this.warehouseService = warehouseService;
     }
-    
+
     /**
      * GET /api/warehouse/warehouses - List warehouses with optional filters
      */
@@ -39,18 +39,17 @@ public class WarehouseController {
             @RequestParam(required = false) String warehouseType,
             @RequestParam(required = false) Boolean isActive,
             @RequestParam(required = false) Boolean isDefault) {
-        
+
         List<WarehouseDto> warehouses = warehouseService.list(
-            q,
-            parseUUID(plantId),
-            parseWarehouseType(warehouseType),
-            isActive,
-            isDefault
-        );
-        
+                q,
+                parseUUID(plantId),
+                parseWarehouseType(warehouseType),
+                isActive,
+                isDefault);
+
         return ResponseEntity.ok(warehouses);
     }
-    
+
     /**
      * GET /api/warehouse/warehouses/{id} - Get warehouse by ID
      */
@@ -59,7 +58,7 @@ public class WarehouseController {
         WarehouseDto warehouse = warehouseService.get(id);
         return ResponseEntity.ok(warehouse);
     }
-    
+
     /**
      * POST /api/warehouse/warehouses - Create new warehouse
      */
@@ -68,7 +67,7 @@ public class WarehouseController {
         WarehouseDto created = warehouseService.create(payload);
         return ResponseEntity.ok(created);
     }
-    
+
     /**
      * PUT /api/warehouse/warehouses/{id} - Update warehouse
      */
@@ -77,7 +76,7 @@ public class WarehouseController {
         WarehouseDto updated = warehouseService.update(id, payload);
         return ResponseEntity.ok(updated);
     }
-    
+
     /**
      * DELETE /api/warehouse/warehouses/{id} - Delete warehouse
      */
@@ -86,7 +85,7 @@ public class WarehouseController {
         warehouseService.delete(id);
         return ResponseEntity.noContent().build();
     }
-    
+
     /**
      * POST /api/warehouse/warehouses/bulk-delete - Delete multiple warehouses
      */
@@ -95,7 +94,7 @@ public class WarehouseController {
         warehouseService.deleteBulk(ids);
         return ResponseEntity.noContent().build();
     }
-    
+
     /**
      * GET /api/warehouse/warehouses/search - Search warehouses
      */
@@ -104,7 +103,7 @@ public class WarehouseController {
         List<WarehouseDto> warehouses = warehouseService.search(q);
         return ResponseEntity.ok(warehouses);
     }
-    
+
     /**
      * GET /api/warehouse/warehouses/default - Get default warehouse
      */
@@ -113,7 +112,7 @@ public class WarehouseController {
         WarehouseDto defaultWarehouse = warehouseService.getDefaultWarehouse();
         return ResponseEntity.ok(defaultWarehouse);
     }
-    
+
     /**
      * GET /api/warehouse/warehouses/plant/{plantId} - Get warehouses by plant
      */
@@ -122,7 +121,7 @@ public class WarehouseController {
         List<WarehouseDto> warehouses = warehouseService.getByPlant(parseUUID(plantId));
         return ResponseEntity.ok(warehouses);
     }
-    
+
     /**
      * GET /api/warehouse/warehouses/type/{warehouseType} - Get warehouses by type
      */
@@ -131,7 +130,7 @@ public class WarehouseController {
         List<WarehouseDto> warehouses = warehouseService.getByType(parseWarehouseType(warehouseType));
         return ResponseEntity.ok(warehouses);
     }
-    
+
     /**
      * GET /api/warehouse/warehouses/stats - Get warehouse statistics
      */
@@ -140,7 +139,7 @@ public class WarehouseController {
         Map<String, Object> stats = warehouseService.getStats();
         return ResponseEntity.ok(stats);
     }
-    
+
     /**
      * GET /api/warehouse/warehouses/export/csv - Export warehouses to CSV
      */
@@ -149,13 +148,13 @@ public class WarehouseController {
         List<WarehouseDto> warehouses = warehouseService.search(q != null ? q : "");
         String csv = warehouseService.exportCsv(warehouses);
         return ResponseEntity.ok()
-            .header("Content-Type", "text/csv")
-            .header("Content-Disposition", "attachment; filename=warehouses.csv")
-            .body(csv);
+                .header("Content-Type", "text/csv")
+                .header("Content-Disposition", "attachment; filename=warehouses.csv")
+                .body(csv);
     }
-    
+
     // Helper methods
-    
+
     private java.util.UUID parseUUID(String uuidStr) {
         if (uuidStr == null || uuidStr.trim().isEmpty()) {
             return null;
@@ -166,13 +165,15 @@ public class WarehouseController {
             return null;
         }
     }
-    
-    private com.pcbxpress.erp.modules.warehouse.warehouses.model.Warehouse.WarehouseType parseWarehouseType(String typeStr) {
+
+    private com.pcbxpress.erp.modules.warehouse.warehouses.model.Warehouse.WarehouseType parseWarehouseType(
+            String typeStr) {
         if (typeStr == null || typeStr.trim().isEmpty()) {
             return null;
         }
         try {
-            return com.pcbxpress.erp.modules.warehouse.warehouses.model.Warehouse.WarehouseType.valueOf(typeStr.toUpperCase());
+            return com.pcbxpress.erp.modules.warehouse.warehouses.model.Warehouse.WarehouseType
+                    .valueOf(typeStr.toUpperCase());
         } catch (IllegalArgumentException e) {
             return null;
         }

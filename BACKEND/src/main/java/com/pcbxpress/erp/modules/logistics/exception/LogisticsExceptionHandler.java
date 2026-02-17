@@ -1,6 +1,10 @@
 package com.pcbxpress.erp.modules.logistics.exception;
 
 import com.pcbxpress.erp.modules.logistics.dto.ApiResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import jakarta.validation.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -20,7 +25,10 @@ import java.util.stream.Collectors;
  * errors.
  */
 @RestControllerAdvice(basePackages = "com.pcbxpress.erp.modules.logistics")
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class LogisticsExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(LogisticsExceptionHandler.class);
 
     /**
      * Handle LogisticsException
@@ -40,6 +48,14 @@ public class LogisticsExceptionHandler {
         List<String> errors = ex.getDetails() != null ? Arrays.asList(ex.getDetails()) : null;
         ApiResponse<Object> response = ApiResponse.error(ex.getMessage(), errors);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    /**
+     * Handle Dispatch ValidationException separately for simple response structure
+     */
+    @ExceptionHandler(DispatchException.ValidationException.class)
+    public ResponseEntity<Map<String, String>> handleDispatchValidation(DispatchException.ValidationException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", ex.getMessage()));
     }
 
     /**
@@ -71,13 +87,9 @@ public class LogisticsExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
-    /**
-     * Handle IllegalArgumentException
-     */
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiResponse<Object>> handleIllegalArgumentException(IllegalArgumentException ex) {
-        ApiResponse<Object> response = ApiResponse.error("Invalid argument: " + ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", ex.getMessage()));
     }
 
     /**
@@ -147,18 +159,4 @@ public class LogisticsExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-    /**
-     * Handle Exception (fallback) - LAST RESORT
-     * This should rarely be reached if all specific handlers are in place.
-     */
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Object>> handleGenericException(Exception ex) {
-        // Log the full exception for debugging
-        ex.printStackTrace();
-
-        ApiResponse<Object> response = ApiResponse.error(
-                "An unexpected error occurred. Please try again or contact support. " +
-                        "Error: " + ex.getClass().getSimpleName());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-    }
 }

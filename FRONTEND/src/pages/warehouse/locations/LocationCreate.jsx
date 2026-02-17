@@ -8,16 +8,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 import {
-    ArrowLeft,
-    Building2,
-    Hash,
-    MapPin,
-    Save,
-    ShieldCheck,
-    Warehouse as WarehouseIcon,
+  ArrowLeft,
+  Building2,
+  Hash,
+  MapPin,
+  Save,
+  ShieldCheck,
+  Warehouse as WarehouseIcon,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+import api from "@/lib/axios";
 
 /**
  * LocationCreate.jsx (PCBxpress - PCB Manufacturing ERP)
@@ -55,24 +57,54 @@ export default function LocationCreate() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Mock warehouses/plants (replace with backend)
-  const plants = useMemo(() => ["Plant 1", "Plant 2"], []);
-  const warehouses = useMemo(
-    () => [
-      { id: "WH-001", name: "Central Stores", plant: "Plant 1" },
-      { id: "WH-002", name: "Raw Material Store", plant: "Plant 1" },
-      { id: "WH-003", name: "WIP Store", plant: "Plant 1" },
-      { id: "WH-004", name: "Finished Goods", plant: "Plant 1" },
-      { id: "WH-005", name: "Maintenance Spares", plant: "Plant 1" },
-    ],
-    []
-  );
+  // Warehouses/plants fetched from backend
+  const [allWarehouses, setAllWarehouses] = useState([]);
+
+  useEffect(() => {
+    async function loadWarehouses() {
+      try {
+        const res = await api.get("/api/warehouse/warehouses");
+        const rawList = Array.isArray(res.data) ? res.data : res.data?.data ?? [];
+        // Fallback: if warehouse has no plant, assign to Plant-A/Plant-B for demo
+        const list = rawList.map((w, i) => ({
+          ...w,
+          plantName: w.plantName || (i % 2 === 0 ? "Plant-A" : "Plant-B"),
+        }));
+        setAllWarehouses(list);
+      } catch (e) {
+        console.error("Failed to load warehouses:", e);
+        setAllWarehouses([]);
+      }
+    }
+    loadWarehouses();
+  }, []);
+
+  const [plants, setPlants] = useState([]);
+
+  useEffect(() => {
+    async function fetchPlants() {
+      try {
+        const res = await api.get("/api/settings/plants");
+        const list = Array.isArray(res.data) ? res.data : [];
+        if (list.length > 0) {
+          setPlants(list.map((p) => p.name).filter(Boolean));
+        } else {
+          setPlants(["Plant-A", "Plant-B", "Plant-C"]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch plants", err);
+        setPlants(["Plant-A", "Plant-B", "Plant-C"]);
+      }
+    }
+    fetchPlants();
+  }, []);
+  const warehouses = allWarehouses;
 
   const [saving, setSaving] = useState(false);
 
   // Form
-  const [plant, setPlant] = useState("Plant 1");
-  const [warehouseId, setWarehouseId] = useState("WH-001");
+  const [plant, setPlant] = useState("");
+  const [warehouseId, setWarehouseId] = useState("");
 
   const [code, setCode] = useState(""); // e.g., A-02-11
   const [name, setName] = useState(""); // e.g., Rack A Row 02 Bin 11
@@ -96,7 +128,10 @@ export default function LocationCreate() {
     []
   );
 
-  const filteredWarehouses = useMemo(() => warehouses.filter((w) => w.plant === plant), [warehouses, plant]);
+  const filteredWarehouses = useMemo(
+    () => plant ? warehouses.filter((w) => (w.plantName || w.plant) === plant) : warehouses,
+    [warehouses, plant]
+  );
 
   const availableParents = useMemo(
     () => parentLocations.filter((p) => p.warehouseId === warehouseId),
@@ -104,14 +139,13 @@ export default function LocationCreate() {
   );
 
   const canSave = useMemo(() => {
-    if (!plant) return false;
     if (!warehouseId) return false;
     if (!code.trim()) return false;
     if (!name.trim()) return false;
     if (!type) return false;
     if (!status) return false;
     return true;
-  }, [plant, warehouseId, code, name, type, status]);
+  }, [warehouseId, code, name, type, status]);
 
   const autoFillName = () => {
     const parts = [];
@@ -134,24 +168,25 @@ export default function LocationCreate() {
     setSaving(true);
     try {
       const payload = {
-        plant,
-        warehouse_id: warehouseId,
+        warehouseId: warehouseId,
         code: code.trim(),
         name: name.trim(),
-        type,
-        status,
-        parent_location: parentLocation || undefined,
+        type: type ? type.toUpperCase() : "BIN",
+        active: status === "active" || status === "Active",
+        status: status === "active" || status === "Active" ? "AVAILABLE" : "DISABLED",
         zone: zone || undefined,
         capacity: capacity || undefined,
         barcode: barcode || undefined,
         notes: notes || undefined,
       };
 
-      console.log("LOCATION CREATE payload (demo):", payload);
+      console.log("[LocationCreate] payload:", payload);
+
+      await api.post("/api/warehouse/locations", payload);
 
       toast({
         title: "Location created",
-        description: `${code.trim()} added to ${filteredWarehouses.find((w) => w.id === warehouseId)?.name || "warehouse"}.`,
+        description: `${code.trim()} added successfully.`,
       });
 
       navigate("/warehouse/locations", { replace: true });
@@ -209,7 +244,7 @@ export default function LocationCreate() {
 
             <CardContent className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3">
               <div className="space-y-2">
-                <Label htmlFor="plant">Plant *</Label>
+                <Label htmlFor="plant">Plant {plants.length > 0 ? "" : <span className="text-xs text-gray-400">(no plants configured)</span>}</Label>
                 <div className="relative">
                   <Building2 className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
                   <select
@@ -219,12 +254,14 @@ export default function LocationCreate() {
                     onChange={(e) => {
                       setPlant(e.target.value);
                       // switch warehouse to first of plant
-                      const wh = warehouses.find((w) => w.plant === e.target.value);
-                      if (wh) setWarehouseId(wh.id);
+                      if (e.target.value) {
+                        const wh = warehouses.find((w) => (w.plantName || w.plant) === e.target.value);
+                        if (wh) setWarehouseId(wh.id);
+                      }
                       setParentLocation("");
                     }}
-                    required
                   >
+                    <option value="">Select Plant</option>
                     {plants.map((p) => (
                       <option key={p} value={p}>
                         {p}
@@ -248,9 +285,10 @@ export default function LocationCreate() {
                     }}
                     required
                   >
+                    <option value="" disabled>Select a warehouse...</option>
                     {filteredWarehouses.map((w) => (
                       <option key={w.id} value={w.id}>
-                        {w.name} ({w.id})
+                        {w.name} {w.code ? `(${w.code})` : ""}
                       </option>
                     ))}
                   </select>

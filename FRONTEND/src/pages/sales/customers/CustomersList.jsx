@@ -1,20 +1,20 @@
 // src/pages/sales/customers/CustomersList.jsx
 import { motion } from "framer-motion";
 import {
-    Building2,
-    ChevronLeft,
-    ChevronRight,
-    Download,
-    Filter,
-    Loader2,
-    Mail,
-    MapPin,
-    Phone,
-    Plus,
-    RefreshCw,
-    Search,
-    Trash2,
-    User2,
+  Building2,
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  Filter,
+  Loader2,
+  Mail,
+  MapPin,
+  Phone,
+  Plus,
+  RefreshCw,
+  Search,
+  Trash2,
+  User2,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
@@ -87,17 +87,15 @@ export default function CustomersList() {
   const fetchCustomers = async () => {
     setLoading(true);
     try {
-      // Expected response shape (recommended):
-      // { data: { items: [], page: 1, size: 10, total: 0, totalPages: 1 } }
-      // Fallback supported: { data: { content: [], number: 0, size: 10, totalElements: 0, totalPages: 1 } } (Spring pageable)
+      // customersService.list() already returns response.data,
+      // so `res` is the unwrapped object: { items, page, size, total, totalPages }
+      // Access fields directly from res.
       const res = await customersService.list(queryParams);
-      const data = res?.data ?? {};
-
-      const items = data.items ?? data.content ?? data.data ?? [];
-      const page = data.page ?? (typeof data.number === "number" ? data.number + 1 : pageParam);
-      const size = data.size ?? sizeParam;
-      const total = data.total ?? data.totalElements ?? items.length ?? 0;
-      const totalPages = data.totalPages ?? Math.max(1, Math.ceil((total || 0) / (size || 10)));
+      const items = res?.items ?? res?.content ?? res?.data ?? [];
+      const page = res?.page ?? (typeof res?.number === "number" ? res.number + 1 : pageParam);
+      const size = res?.size ?? sizeParam;
+      const total = res?.total ?? res?.totalElements ?? (Array.isArray(items) ? items.length : 0);
+      const totalPages = res?.totalPages ?? Math.max(1, Math.ceil((total || 0) / (size || 10)));
 
       setRows(Array.isArray(items) ? items : []);
       setMeta({ page, size, total, totalPages });

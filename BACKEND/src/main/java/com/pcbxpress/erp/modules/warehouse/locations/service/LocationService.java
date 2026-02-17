@@ -36,8 +36,26 @@ public class LocationService {
             Boolean isActive, Location.LocationStatus status, String zone,
             String aisle, String rack, String shelf, String bin,
             Integer page, Integer limit) {
-        List<LocationDto> list = locationRepository
-                .findByCriteria(warehouseId, locationType, isActive, status, zone, aisle, rack, shelf, bin, query)
+
+        // Determine if any filter is actually set
+        boolean hasFilters = warehouseId != null || locationType != null || isActive != null
+                || status != null
+                || (zone != null && !zone.isBlank())
+                || (aisle != null && !aisle.isBlank())
+                || (rack != null && !rack.isBlank())
+                || (shelf != null && !shelf.isBlank())
+                || (bin != null && !bin.isBlank())
+                || (query != null && !query.isBlank());
+
+        List<Location> locations;
+        if (hasFilters) {
+            locations = locationRepository
+                    .findByCriteria(warehouseId, locationType, isActive, status, zone, aisle, rack, shelf, bin, query);
+        } else {
+            locations = locationRepository.findAll();
+        }
+
+        List<LocationDto> list = locations
                 .stream()
                 .sorted(Comparator.comparing(Location::getUpdatedAt, Comparator.nullsLast(Comparator.naturalOrder()))
                         .reversed())
